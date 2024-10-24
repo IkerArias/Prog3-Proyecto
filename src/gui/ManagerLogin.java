@@ -1,4 +1,5 @@
-package fatasy.gui;
+package gui;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,7 +8,9 @@ import java.awt.event.ActionListener;
 
 public class ManagerLogin extends JFrame {
 
-    // Constructor de la ventana
+    private static final long serialVersionUID = 1L;
+
+	// Constructor de la ventana
     public ManagerLogin() {
         // Configuración de la ventana
         setTitle("Fantasy Manager - Iniciar sesión");

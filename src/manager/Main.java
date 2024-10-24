@@ -1,6 +1,6 @@
-package fantasy.manager;
+package manager;
 
-import fatasy.gui.ManagerLogin;
+import gui.ManagerLogin;
 
 public class Main {
 	
