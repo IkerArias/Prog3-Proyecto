@@ -83,6 +83,9 @@ public class ManagerLogin extends JFrame {
                 // Lógica para el registro de un nuevo usuario
                 JOptionPane.showMessageDialog(null, "Redirigiendo al registro de nuevo usuario...");
                 // Aquí abriremos otra ventana o un formulario para crear una cuenta nueva.
+                dispose();
+                ManagerRegister v = new ManagerRegister();
+                v.setVisible(true);
             }
         });
     }

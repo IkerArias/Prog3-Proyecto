@@ -86,6 +86,8 @@ public class ManagerWelcome extends JFrame {
                 return false; 
             }
         };
+        
+        
         // Set preferred size to ensure scrolling when necessary
         tablaPartidos.setPreferredScrollableViewportSize(new Dimension(450, 200)); // Adjust dimensions as needed
         tablaPartidos.setFillsViewportHeight(true); // Fill the viewport height
