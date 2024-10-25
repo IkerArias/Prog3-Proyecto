@@ -17,7 +17,7 @@ public class ManagerLogin extends JFrame {
         setSize(450, 200); 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); 
-        setResizable(false); 
+        setResizable(true); 
 
         // Panel principal
         JPanel panel = new JPanel();

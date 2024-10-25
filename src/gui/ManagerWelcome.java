@@ -13,10 +13,10 @@ public class ManagerWelcome extends JFrame {
     public ManagerWelcome() {
         // Configuración de la ventana principal
         setTitle("Fantasy Manager - Ventana Principal");
-        setSize(1000, 600);
+        setSize(1000, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
        
         // Panel principal con un BorderLayout y márgenes
         JPanel panelPrincipal = new JPanel();
