@@ -1,10 +1,14 @@
 package gui;
 
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 
 public class ManagerWelcome extends JFrame {
 
@@ -13,20 +17,30 @@ public class ManagerWelcome extends JFrame {
     public ManagerWelcome() {
         // Configuración de la ventana principal
         setTitle("Fantasy Manager - Ventana Principal");
-        setSize(1000, 750);
+        setSize(1100, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(true);
+        setResizable(false);
+        
+        
        
         // Panel principal con un BorderLayout y márgenes
         JPanel panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new BorderLayout());
         panelPrincipal.setBorder(new EmptyBorder(10, 10, 10, 10)); 
+        panelPrincipal.setBackground(new Color(196, 238, 255));
         
         // Panel superior para el título y logo
         JPanel panelSuperior = new JPanel();
         panelSuperior.setLayout(new BorderLayout());
-        panelSuperior.setBorder(new EmptyBorder(10, 10, 10, 10));  
+        panelSuperior.setBorder(new EmptyBorder(10, 10, 10, 10)); 
+        panelSuperior.setBackground(new Color(196, 238, 255));
+        
+        
+        // Añadir logotipo en el lado izquierdo
+        ImageIcon logoIcon = new ImageIcon("logo.png"); 
+        JLabel logoLabel = new JLabel(logoIcon);
+        panelSuperior.add(logoLabel, BorderLayout.WEST);
         
         // Título
         JLabel labelBienvenida = new JLabel("Bienvenido a Fantasy Manager", SwingConstants.CENTER);
@@ -38,7 +52,8 @@ public class ManagerWelcome extends JFrame {
         
         // Panel para el contenido central
         JPanel panelCentral = new JPanel();
-        panelCentral.setLayout(new GridLayout(1, 2, 10, 0));  
+        panelCentral.setLayout(new GridLayout(1, 2, 0, 0)); 
+        panelCentral.setBackground(Color.WHITE);
         
         //Panel para las tablas de partidos y clasificacion
         JPanel panelPartidosClasificacion = new JPanel();
@@ -51,6 +66,7 @@ public class ManagerWelcome extends JFrame {
         JLabel labelPartidos = new JLabel("Partidos", SwingConstants.CENTER);
         labelPartidos.setFont(new Font("Serif", Font.BOLD, 20));
         panelPartidos.add(labelPartidos);
+        
         
         // DATOS DE EJEMPLO PARA LA TABLA
         String[] nombreColumnas = {"Equipo Local", "Equipo Visitante", "Fecha", "Hora"};
@@ -79,13 +95,24 @@ public class ManagerWelcome extends JFrame {
         	    
         };
         
-     // Crear la tabla de partidos no editable
+        // Crear la tabla de partidos no editable
         JTable tablaPartidos = new JTable(data, nombreColumnas) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; 
             }
         };
+        
+        //Renderizado para que las filas pares e impares se vean de diferentes colores 
+        tablaPartidos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                c.setBackground(row % 2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
+                c.setForeground(Color.BLACK);
+                return c;
+            }
+        });
         
         
         // Set preferred size to ensure scrolling when necessary
@@ -94,6 +121,7 @@ public class ManagerWelcome extends JFrame {
 
         JScrollPane tableScrollPanePartidos = new JScrollPane(tablaPartidos);
         panelPartidos.add(tableScrollPanePartidos);
+        panelPartidos.setBackground(new Color(196, 238, 255));
         
         // Panel para la tabla de clasificación
         JPanel panelClasificacion = new JPanel();
@@ -101,6 +129,7 @@ public class ManagerWelcome extends JFrame {
         JLabel labelClasificacion = new JLabel("Clasificación", SwingConstants.CENTER);
         labelClasificacion.setFont(new Font("Serif", Font.BOLD, 20));
         panelClasificacion.add(labelClasificacion);
+        panelClasificacion.setBackground(new Color(196, 238, 255));
         
         
         // DATOS DE EJEMPLO PARA LA TABLA DE CLASIFICACIÓN
@@ -136,6 +165,29 @@ public class ManagerWelcome extends JFrame {
             }
         };
         
+        //Renderizado para marcar con diferentes colores a los clasificados a las competiciones europeas
+        tablaClasificacion.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (row < 4) {
+                    c.setBackground(new Color(167, 206, 255));
+                } else if (row == 4) {
+                    c.setBackground(new Color(255, 198, 167));
+                } else if (row == 5) {
+                    c.setBackground(new Color(175, 255, 167)); 
+                } else if (row > 16) {
+                    c.setBackground(new Color(255, 167, 167)); 
+                } else if (row == 16) {
+                	c.setBackground(new Color(255, 251, 167 ));
+                } else {
+                    c.setBackground(Color.WHITE);
+                }
+                c.setForeground(Color.BLACK);
+                return c;
+            }
+        });
+        
         tablaClasificacion.setPreferredScrollableViewportSize(new Dimension(450, 200)); 
         tablaClasificacion.setFillsViewportHeight(true);
         
@@ -144,6 +196,7 @@ public class ManagerWelcome extends JFrame {
         
         panelPartidosClasificacion.add(panelPartidos);
         panelPartidosClasificacion.add(panelClasificacion);
+        panelPartidosClasificacion.setBackground(new Color(196, 238, 255));
         
         // Añadir el panel de partidos y clasificación al panel central
         panelCentral.add(panelPartidosClasificacion);
@@ -151,7 +204,8 @@ public class ManagerWelcome extends JFrame {
         // Panel para noticias
         JPanel panelNoticias = new JPanel();
         panelNoticias.setLayout(new BorderLayout());
-        panelNoticias.setBorder(new EmptyBorder(10, 10, 10, 10));  
+        panelNoticias.setBorder(new EmptyBorder(10, 10, 10, 10)); 
+        panelNoticias.setBackground(new Color(196, 238, 255));
         
         JLabel labelNoticias = new JLabel("Noticias", SwingConstants.CENTER);
         labelNoticias.setFont(new Font("Serif", Font.BOLD, 20));
@@ -189,6 +243,7 @@ public class ManagerWelcome extends JFrame {
         JPanel panelBotones = new JPanel();
         panelBotones.setLayout(new GridLayout(1, 7, 10, 0));  
         panelBotones.setBorder(new EmptyBorder(10, 10, 10, 10));  
+        panelBotones.setBackground(new Color(196, 238, 255));
         
         // Crear botones
         JButton btnClasificacion = new JButton("Clasificación");
@@ -268,7 +323,7 @@ public class ManagerWelcome extends JFrame {
     
     // Método para implementar el diseño estándar de los botones
     private void disenyiarBotones(JButton button) {
-        button.setFont(new Font("Serif", Font.BOLD, 16)); 
+        button.setFont(new Font("Serif", Font.BOLD, 16));
         button.setPreferredSize(new Dimension(120, 40)); 
         button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
     }

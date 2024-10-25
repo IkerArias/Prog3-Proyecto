@@ -24,9 +24,6 @@ public class ManagerLogin extends JFrame {
         panel.setLayout(new GridLayout(3, 2, 10, 10)); 
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes
 
-        // Colores
-        panel.setBackground(new Color(240, 240, 240)); 
-
         // Componentes de la ventana
         JLabel userLabel = new JLabel("Usuario o Email:");
         JTextField userText = new JTextField(20);
@@ -40,12 +37,10 @@ public class ManagerLogin extends JFrame {
         JButton registerButton = new JButton("Crear cuenta");
 
         // Estilo de los botones
-        loginButton.setBackground(new Color(100, 150, 255));
         loginButton.setForeground(Color.BLACK);
-        loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
-        registerButton.setBackground(new Color(100, 150, 255));
+        loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
         registerButton.setForeground(Color.BLACK);
-        registerButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2));
+        registerButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
         // Añadiendo componentes al panel
         panel.add(userLabel);
