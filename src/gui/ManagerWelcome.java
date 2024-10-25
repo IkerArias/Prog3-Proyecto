@@ -69,7 +69,7 @@ public class ManagerWelcome extends JFrame {
  
         
         // Título
-        JLabel labelBienvenida = new JLabel("Bienvenido a Fantasy Manager", SwingConstants.CENTER);
+        JLabel labelBienvenida = new JLabel("Fantasy Manager", SwingConstants.CENTER);
         labelBienvenida.setFont(new Font("Serif", Font.BOLD, 34));
         panelSuperior.add(labelBienvenida, BorderLayout.CENTER);
         
@@ -293,6 +293,7 @@ public class ManagerWelcome extends JFrame {
         btnClasificacion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a la clasificación...");
+               
             }
         });
 
@@ -311,6 +312,7 @@ public class ManagerWelcome extends JFrame {
         btnResultados.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a los resultados...");
+                
             }
         });
 
@@ -323,6 +325,9 @@ public class ManagerWelcome extends JFrame {
         btnForoChat.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a foro...");
+                dispose();
+            	ManagerForo v = new ManagerForo();
+                v.setVisible(true);
             }
         });
 
