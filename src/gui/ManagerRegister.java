@@ -54,7 +54,7 @@ public class ManagerRegister extends JFrame {
 
         // Configuración del selector de fecha de nacimiento con JSpinner
         JSpinner dateSpinner = new JSpinner(new SpinnerDateModel());
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "dd-MM-yyyy");
         dateSpinner.setEditor(dateEditor);
         dateSpinner.setValue(new Date()); // Establece la fecha actual
         gbc.gridx = 1;
@@ -171,11 +171,16 @@ public class ManagerRegister extends JFrame {
                     JOptionPane.showMessageDialog(panel, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else if (!password.equals(confirmPassword)) {
                     JOptionPane.showMessageDialog(panel, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (!isValidEmail(email)) {
+                    JOptionPane.showMessageDialog(panel, "Por favor, ingrese un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     if (age < 18) {
-                        JOptionPane.showMessageDialog(panel, "Para menores de edad se requiere el consentimiento de un tutor legal.", "Consentimiento", JOptionPane.WARNING_MESSAGE);
+                        showConsentDialog();
                     } else {
                         JOptionPane.showMessageDialog(panel, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                        ManagerLogin v = new ManagerLogin();
+                        v.setVisible(true); // Cierra la ventana principal y vuelve a la ventana de login
                     }
                 }
             }
@@ -183,6 +188,65 @@ public class ManagerRegister extends JFrame {
 
         // Añadir el panel al JFrame
         add(panel);
+    }
+
+    // Método para validar el correo electrónico
+    private boolean isValidEmail(String email) {
+        return email.contains("@") && (email.endsWith(".com") || email.endsWith(".es"));
+    }
+
+    // Método para mostrar la ventana de consentimiento
+    private void showConsentDialog() {
+        JDialog consentDialog = new JDialog(this, "Consentimiento del Tutor Legal", true);
+        consentDialog.setSize(400, 300);
+        consentDialog.setLayout(new BorderLayout());
+
+        // Texto de términos y condiciones
+        JTextArea termsArea = new JTextArea("Términos y Condiciones:\n\n"
+                + "1. El usuario debe ser responsable de su cuenta.\n"
+                + "2. No se permite el uso de lenguaje ofensivo.\n"
+                + "3. El usuario debe cumplir con las normas establecidas.\n\n"
+                + "Al marcar la casilla, el tutor legal acepta los términos anteriores.");
+        termsArea.setLineWrap(true);
+        termsArea.setWrapStyleWord(true);
+        termsArea.setEditable(false);
+        termsArea.setBackground(consentDialog.getBackground());
+        termsArea.setMargin(new Insets(10, 10, 10, 10));
+        termsArea.setFocusable(false); // Evitar la barra de desplazamiento
+        consentDialog.add(termsArea, BorderLayout.CENTER);
+
+        // Panel para el checkbox y botón de aceptar
+        JPanel consentPanel = new JPanel();
+        consentPanel.setLayout(new BoxLayout(consentPanel, BoxLayout.Y_AXIS));
+
+        // Casilla de verificación para el consentimiento
+        JCheckBox consentCheckBox = new JCheckBox("Confirmo que soy el tutor legal y acepto los términos.");
+        consentPanel.add(consentCheckBox); // Añadir checkbox al panel
+
+        // Botón para aceptar (más pequeño y centrado)
+        JButton acceptButton = new JButton("Aceptar");
+        acceptButton.setPreferredSize(new Dimension(100, 30)); // Ajusta el tamaño del botón
+        acceptButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (consentCheckBox.isSelected()) {
+                    JOptionPane.showMessageDialog(consentDialog, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    consentDialog.dispose(); // Cerrar el diálogo de consentimiento
+                    dispose();
+                    ManagerLogin v = new ManagerLogin();
+                    v.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(consentDialog, "Debe aceptar los términos para continuar.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Añadir checkbox y botón al panel de consentimiento
+        consentPanel.add(acceptButton);
+        consentDialog.add(consentPanel, BorderLayout.SOUTH);
+        
+        consentDialog.setLocationRelativeTo(this);
+        consentDialog.setVisible(true); // Muestra el diálogo
     }
 
     public static void main(String[] args) {
