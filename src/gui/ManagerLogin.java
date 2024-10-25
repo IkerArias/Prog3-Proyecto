@@ -5,6 +5,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class ManagerLogin extends JFrame {
 
@@ -53,21 +56,25 @@ public class ManagerLogin extends JFrame {
         // Añadir el panel a la ventana
         add(panel);
 
-        // Acciones de los botones
+        // Boton inciar sesion: Valirdar que el usuario esta regustrado en fiuchero csv
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String username = userText.getText();
                 String password = new String(passwordText.getPassword());
-                // Lógica de inicio de sesión
+                // Comprobar inicio de sesión
                 if (username.isEmpty() || password.isEmpty()) {
                     JOptionPane.showMessageDialog(null, "Por favor, completa todos los campos.");
                 } else {
-                    // Aquí es donde haremos la verificación de la base de datos
-                    JOptionPane.showMessageDialog(null, "Iniciando sesión con el usuario: " + username);
-                    dispose();
-                    ManagerWelcome v = new ManagerWelcome();
-                    v.setVisible(true);
+                    // Verificación de usuario
+                    if (validateLogin(username, password)) {
+                        JOptionPane.showMessageDialog(null, "Bienvenido, " + username + "!");
+                        dispose();
+                        ManagerWelcome v = new ManagerWelcome();
+                        v.setVisible(true);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Credenciales incorrectas. Inténtalo de nuevo.");
+                    }
                 }
             }
         });
@@ -83,6 +90,23 @@ public class ManagerLogin extends JFrame {
                 v.setVisible(true);
             }
         });
+    }
+    
+    
+    // Metodo para validar el login: comprueba que el ususario y la contraseña son correctos
+    private boolean validateLogin(String username, String password) {
+        try (BufferedReader br = new BufferedReader(new FileReader("usuarios.csv"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(";");
+                if (data[0].equals(username) && data[1].equals(password)) {
+                    return true; 
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; 
     }
 
     public static void main(String[] args) {
