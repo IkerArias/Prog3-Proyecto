@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 
 public class ManagerWelcome extends JFrame {
@@ -38,13 +39,38 @@ public class ManagerWelcome extends JFrame {
         
         
         // Añadir logotipo en el lado izquierdo
-        ImageIcon logoIcon = new ImageIcon("logo.png"); 
-        JLabel logoLabel = new JLabel(logoIcon);
-        panelSuperior.add(logoLabel, BorderLayout.WEST);
+        URL imageUrl = getClass().getResource("/imagenes/logo.png");
+        if (imageUrl == null) {
+            System.err.println("Image not found: /imagenes/logo.png");
+        } else {
+            ImageIcon icono = new ImageIcon(imageUrl);
+            Image image = icono.getImage(); 
+            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH); 
+            ImageIcon resizedIcon = new ImageIcon(resizedImage); 
+            
+            JLabel labelLogo = new JLabel(resizedIcon); 
+            panelSuperior.add(labelLogo, BorderLayout.WEST);
+        }
+        
+        // Añadir logotipo en el lado derecho
+        URL image2Url = getClass().getResource("/imagenes/logo2.png");
+        if (image2Url == null) {
+            System.err.println("Image not found: /imagenes/logo2.png");
+        } else {
+            ImageIcon icono = new ImageIcon(image2Url);
+            Image image = icono.getImage(); 
+            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH); 
+            ImageIcon resizedIcon = new ImageIcon(resizedImage); 
+            
+            JLabel labelLogo = new JLabel(resizedIcon); 
+            panelSuperior.add(labelLogo, BorderLayout.EAST);
+        }
+
+ 
         
         // Título
         JLabel labelBienvenida = new JLabel("Bienvenido a Fantasy Manager", SwingConstants.CENTER);
-        labelBienvenida.setFont(new Font("Serif", Font.BOLD, 24));
+        labelBienvenida.setFont(new Font("Serif", Font.BOLD, 34));
         panelSuperior.add(labelBienvenida, BorderLayout.CENTER);
         
         // Añadir el panel de encabezado al panel principal
@@ -326,6 +352,8 @@ public class ManagerWelcome extends JFrame {
         button.setFont(new Font("Serif", Font.BOLD, 16));
         button.setPreferredSize(new Dimension(120, 40)); 
         button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+        button.setBackground(Color.WHITE);
+        button.setOpaque(true);
     }
 
     public static void main(String[] args) {
