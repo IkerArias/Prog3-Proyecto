@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -177,6 +180,8 @@ public class ManagerRegister extends JFrame {
                     if (age < 18) {
                         showConsentDialog();
                     } else {
+                    	//SE REGISTRA EL USUARIO EN EL FICHERO
+                    	registerUser(username, password, email, phone, address, postalCode, selectedTeam, selectedDate);
                         JOptionPane.showMessageDialog(panel, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                         dispose();
                         ManagerLogin v = new ManagerLogin();
@@ -247,6 +252,19 @@ public class ManagerRegister extends JFrame {
         
         consentDialog.setLocationRelativeTo(this);
         consentDialog.setVisible(true); // Muestra el diálogo
+    }
+    
+ // Método para registrar al usuario en el archivo
+    private void registerUser(String username, String password, String email, String phone, String address, String postalCode, String selectedTeam, Date birthDate) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("usuarios.csv", true))) {
+            // Guardar datos en el fichero csv
+            bw.write(username + ";" + password + ";" + email + ";" + phone + ";" + address + ";" + postalCode + ";" + selectedTeam + ";" + birthDate);
+            bw.newLine(); 
+            bw.flush();
+            System.out.println("Usuario guardado"); //Linea para comprobar por la consola
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
