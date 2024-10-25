@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +20,7 @@ public class ManagerForo extends JFrame {
     public ManagerForo() {
         setTitle("Foro/Chat");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // No cerrar directamente
         setLocationRelativeTo(null);
         
         // Configuración del panel principal
@@ -55,6 +57,14 @@ public class ManagerForo extends JFrame {
         
         // Cargar mensajes al iniciar
         cargarMensajes();
+
+        // Listener para manejar el cierre de la ventana
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                mostrarVentanaAnterior();
+            }
+        });
     }
 
     private void enviarMensaje() {
@@ -94,6 +104,14 @@ public class ManagerForo extends JFrame {
                 JOptionPane.showMessageDialog(this, "Error al cargar los mensajes.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void mostrarVentanaAnterior() {
+        // Cierra la ventana actual
+        dispose();
+        // Crea y muestra la ventana anterior
+        ManagerWelcome v = new ManagerWelcome(); 
+        v.setVisible(true);
     }
 
     public static void main(String[] args) {

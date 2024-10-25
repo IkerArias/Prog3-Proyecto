@@ -69,7 +69,7 @@ public class ManagerWelcome extends JFrame {
  
         
         // Título
-        JLabel labelBienvenida = new JLabel("Fantasy Manager", SwingConstants.CENTER);
+        JLabel labelBienvenida = new JLabel("Liga hypertension", SwingConstants.CENTER);
         labelBienvenida.setFont(new Font("Serif", Font.BOLD, 34));
         panelSuperior.add(labelBienvenida, BorderLayout.CENTER);
         
@@ -319,6 +319,9 @@ public class ManagerWelcome extends JFrame {
         btnConfiguracion.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a configuración...");
+                dispose();
+                ManagerConfig v = new ManagerConfig();
+                v.setVisible(true);
             }
         });
 
