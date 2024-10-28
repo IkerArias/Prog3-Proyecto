@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class ManagerRegister extends JFrame {
     public ManagerRegister() {
         setTitle("Fantasy Manager - Crear Cuenta");
         setSize(600, 600);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -144,6 +146,18 @@ public class ManagerRegister extends JFrame {
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.CENTER;
         panel.add(createAccountButton, gbc);
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Abrir la ventana de ManagerLogin cuando se cierra esta ventana
+            	dispose();
+                ManagerLogin loginFrame = new ManagerLogin();
+                loginFrame.setVisible(true);
+            }
+        });
+        
+
 
         // Acción para el botón de crear cuenta
         createAccountButton.addActionListener(new ActionListener() {
@@ -207,11 +221,12 @@ public class ManagerRegister extends JFrame {
         consentDialog.setLayout(new BorderLayout());
 
         // Texto de términos y condiciones
-        JTextArea termsArea = new JTextArea("Términos y Condiciones:\n\n"
-                + "1. El usuario debe ser responsable de su cuenta.\n"
-                + "2. No se permite el uso de lenguaje ofensivo.\n"
-                + "3. El usuario debe cumplir con las normas establecidas.\n\n"
-                + "Al marcar la casilla, el tutor legal acepta los términos anteriores.");
+        JTextArea termsArea = new JTextArea("Autorización para el uso de la cuenta:\n\n"
+                + "1. El tutor legal autoriza al menor a crear y usar una cuenta en esta plataforma.\n"
+                + "2. El menor se compromete a utilizar la cuenta de manera responsable y adecuada.\n"
+                + "3. No se permitirá el uso de lenguaje ofensivo ni el incumplimiento de las normas de la plataforma.\n\n"
+                + "Al marcar la casilla, el tutor legal acepta los términos y condiciones y autoriza al menor a usar la cuenta.");
+
         termsArea.setLineWrap(true);
         termsArea.setWrapStyleWord(true);
         termsArea.setEditable(false);
@@ -252,6 +267,11 @@ public class ManagerRegister extends JFrame {
         
         consentDialog.setLocationRelativeTo(this);
         consentDialog.setVisible(true); // Muestra el diálogo
+        
+        // Listener para manejar el cierre de la ventana
+
+        
+        
     }
     
  // Método para registrar al usuario en el archivo
@@ -266,6 +286,8 @@ public class ManagerRegister extends JFrame {
             e.printStackTrace();
         }
     }
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
@@ -273,4 +295,6 @@ public class ManagerRegister extends JFrame {
             frame.setVisible(true);
         });
     }
+    
+    
 }
