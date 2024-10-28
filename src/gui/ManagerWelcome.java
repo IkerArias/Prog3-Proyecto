@@ -274,80 +274,68 @@ public class ManagerWelcome extends JFrame {
         // Crear botones
         JButton btnClasificacion = new JButton("Clasificación");
         JButton btnPlantilla = new JButton("Mi Plantilla");
-        JButton btnEstadisticas = new JButton("Estadísticas");
-        JButton btnResultados = new JButton("Resultados");
-        JButton btnConfiguracion = new JButton("Configuración");
-        JButton btnForoChat = new JButton("Foro/Chat");
-        JButton btnNotificaciones = new JButton("Notificaciones");
+        JButton btnMercado = new JButton("Mercado");
+        JButton btnPerfil = new JButton("Perfil");
         
         // Ajustar tamaño y borde de los botones
         disenyiarBotones(btnClasificacion);
         disenyiarBotones(btnPlantilla);
-        disenyiarBotones(btnEstadisticas);
-        disenyiarBotones(btnResultados);
-        disenyiarBotones(btnConfiguracion);
-        disenyiarBotones(btnForoChat);
-        disenyiarBotones(btnNotificaciones);
+        disenyiarBotones(btnMercado);
+        disenyiarBotones(btnPerfil);
+        
 
         // Añadir listeners a los botones
         btnClasificacion.addActionListener(new ActionListener() {
+        	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a la clasificación...");
+                ManagerClasificacion clasificacion = new ManagerClasificacion();
+                clasificacion.setVisible(true);
                
             }
         });
 
         btnPlantilla.addActionListener(new ActionListener() {
+        	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a mi plantilla...");
-            }
-        });
-
-        btnEstadisticas.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a las estadísticas...");
-            }
-        });
-
-        btnResultados.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a los resultados...");
+                ManagerPlantilla plantilla = new ManagerPlantilla();
+                plantilla.setVisible(true);
                 
             }
         });
 
-        btnConfiguracion.addActionListener(new ActionListener() {
+        btnMercado.addActionListener(new ActionListener() {
+        	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a configuración...");
-                dispose();
-                ManagerConfig v = new ManagerConfig();
-                v.setVisible(true);
+                JOptionPane.showMessageDialog(null, "Accediendo al mercado...");
+                ManagerMercado mercado = new ManagerMercado();
+                mercado.setVisible(true);
             }
         });
 
-        btnForoChat.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a foro...");
-                dispose();
-            	ManagerForo v = new ManagerForo();
-                v.setVisible(true);
-            }
-        });
+       
 
-        btnNotificaciones.addActionListener(new ActionListener() {
+        
+
+ 
+
+        btnPerfil.addActionListener(new ActionListener() {
+        	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a notificaciones...");
+                JOptionPane.showMessageDialog(null, "Accediendo al perfil...");
+                ManagerPerfil perfil = new ManagerPerfil();
+                perfil.setVisible(true);
+                
             }
         });
 
         // Añadir botones al panel
         panelBotones.add(btnClasificacion);
         panelBotones.add(btnPlantilla);
-        panelBotones.add(btnEstadisticas);
-        panelBotones.add(btnResultados);
-        panelBotones.add(btnConfiguracion);
-        panelBotones.add(btnForoChat);
-        panelBotones.add(btnNotificaciones);
+        panelBotones.add(btnMercado);
+        panelBotones.add(btnPerfil);
+      
 
         // Añadir el panel de botones a la ventana principal
         panelPrincipal.add(panelBotones, BorderLayout.SOUTH);
