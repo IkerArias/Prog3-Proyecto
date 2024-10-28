@@ -128,7 +128,7 @@ public class ManagerWelcome extends JFrame {
                 return false; 
             }
         };
-        
+
         //Renderizado para que las filas pares e impares se vean de diferentes colores 
         tablaPartidos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
@@ -241,6 +241,7 @@ public class ManagerWelcome extends JFrame {
         JTextPane noticiasArea = new JTextPane();
         noticiasArea.setContentType("text/html"); 
         noticiasArea.setEditable(false);
+        noticiasArea.setFocusable(false);
         
         // Crear el contenido de noticias con separadores
         String noticiasHTML = "<html>" +
@@ -260,10 +261,13 @@ public class ManagerWelcome extends JFrame {
         noticiasArea.setText(noticiasHTML);
         JScrollPane noticiasScrollPane = new JScrollPane(noticiasArea);
         panelNoticias.add(noticiasScrollPane, BorderLayout.CENTER);
+         
         
         panelCentral.add(panelNoticias);
         
         panelPrincipal.add(panelCentral, BorderLayout.CENTER);
+        
+        
         
         // Panel para los botones
         JPanel panelBotones = new JPanel();
@@ -289,6 +293,7 @@ public class ManagerWelcome extends JFrame {
         	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a la clasificación...");
+                dispose();
                 ManagerClasificacion clasificacion = new ManagerClasificacion();
                 clasificacion.setVisible(true);
                
@@ -299,6 +304,7 @@ public class ManagerWelcome extends JFrame {
         	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo a mi plantilla...");
+                dispose();
                 ManagerPlantilla plantilla = new ManagerPlantilla();
                 plantilla.setVisible(true);
                 
@@ -309,6 +315,7 @@ public class ManagerWelcome extends JFrame {
         	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo al mercado...");
+                dispose();
                 ManagerMercado mercado = new ManagerMercado();
                 mercado.setVisible(true);
             }
@@ -324,6 +331,7 @@ public class ManagerWelcome extends JFrame {
         	@Override
             public void actionPerformed(ActionEvent e) {
                 JOptionPane.showMessageDialog(null, "Accediendo al perfil...");
+                dispose();
                 ManagerPerfil perfil = new ManagerPerfil();
                 perfil.setVisible(true);
                 

@@ -88,6 +88,7 @@ public class ManagerConfig extends JFrame {
         // Añadir el panel al JFrame
         add(panel);
     }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
