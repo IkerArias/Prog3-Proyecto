@@ -12,7 +12,7 @@ public class ManagerConfig extends JFrame {
     public ManagerConfig() {
         setTitle("Configuración del Gestor de Plantillas");
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 

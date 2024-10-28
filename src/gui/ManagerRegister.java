@@ -268,7 +268,6 @@ public class ManagerRegister extends JFrame {
         consentDialog.setLocationRelativeTo(this);
         consentDialog.setVisible(true); // Muestra el diálogo
         
-        // Listener para manejar el cierre de la ventana
 
         
         
