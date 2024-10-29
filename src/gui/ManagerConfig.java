@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class ManagerConfig extends JFrame {
 
@@ -87,7 +89,18 @@ public class ManagerConfig extends JFrame {
 
         // Añadir el panel al JFrame
         add(panel);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+            	dispose();
+            	ManagerPerfil perf = new ManagerPerfil();            
+            	perf.setVisible(true);
+            
+            }
+        });
     }
+    
+ 
     
 
     public static void main(String[] args) {
