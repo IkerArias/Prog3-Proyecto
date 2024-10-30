@@ -1,4 +1,7 @@
-/Main.class
-/main.class
-/mainWindow.class
-/bin/
+# Configuración de Eclipse
+.classpath
+.project
+.settings/
+
+# Código compilado
+bin/
