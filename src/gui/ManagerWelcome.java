@@ -323,9 +323,6 @@ public class ManagerWelcome extends JFrame {
 
        
 
-        
-
- 
 
         btnPerfil.addActionListener(new ActionListener() {
         	@Override
