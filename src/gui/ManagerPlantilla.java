@@ -8,6 +8,8 @@ import javax.swing.SwingUtilities;
 
 public class ManagerPlantilla extends JFrame{
 	
+	
+	//
 	public ManagerPlantilla() {
 		setSize(300,300);
 		setTitle("Plantilla");
