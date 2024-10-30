@@ -84,6 +84,11 @@ public class ManagerConfig extends JFrame {
                 
                 JOptionPane.showMessageDialog(panel, message, "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 dispose(); // Cierra la ventana de configuración
+                
+                //Vuelta a la ventana del perfil
+                ManagerPerfil perfil = new ManagerPerfil();
+                perfil.setVisible(true);
+                
             }
         });
 
