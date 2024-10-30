@@ -43,12 +43,12 @@ public class ManagerPerfil extends JFrame {
         }*/
 
         // Etiquetas y datos del usuario
-        JLabel labelNombre = new JLabel("Nombre:");        
-        JLabel labelEmail = new JLabel("Email:");        
-        JLabel labelNumero = new JLabel("Número:");        
-        JLabel labelAddress = new JLabel("Dirección:");        
-        JLabel labelPostal = new JLabel("Código Postal:");
-        JLabel labelEquipo = new JLabel("Equipo:");
+        JLabel labelNombre = new JLabel("NOMBRE:");        
+        JLabel labelEmail = new JLabel("EMAIL:");        
+        JLabel labelNumero = new JLabel("NÚMERO:");        
+        JLabel labelAddress = new JLabel("DIRECCIÓN:");        
+        JLabel labelPostal = new JLabel("CÓDIGO POSTAL:");
+        JLabel labelEquipo = new JLabel("EQUIPO:");
         
         /*JLabel fieldNombre = new JLabel(userData[0]);
         JLabel fieldEmail = new JLabel(userData[2]);

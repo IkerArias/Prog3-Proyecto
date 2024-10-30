@@ -28,33 +28,44 @@ public class ManagerRegister extends JFrame {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Espacio entre componentes
+        
+     // Título de la ventana
+        JLabel titleLabel = new JLabel("Registro de Usuario");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24)); // Estilo del título
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2; // Ocupa dos columnas
+        panel.add(titleLabel, gbc);
+
+        // Ajustar el GridBagConstraints para el resto de componentes
+        gbc.gridwidth = 1; // Restablecer a una columna
 
         // Etiqueta y campo para el nombre de usuario
         JLabel userLabel = new JLabel("Nombre de Usuario:");
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         panel.add(userLabel, gbc);
 
         JTextField userField = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         panel.add(userField, gbc);
 
         // Etiqueta y campo para el correo electrónico
         JLabel emailLabel = new JLabel("Correo Electrónico:");
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2; // Cambiar a nueva fila
         panel.add(emailLabel, gbc);
 
         JTextField emailField = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         panel.add(emailField, gbc);
 
         // Etiqueta y campo para la fecha de nacimiento
         JLabel birthDateLabel = new JLabel("Fecha de Nacimiento:");
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3; // Cambiar a nueva fila
         panel.add(birthDateLabel, gbc);
 
         // Configuración del selector de fecha de nacimiento con JSpinner
@@ -63,68 +74,68 @@ public class ManagerRegister extends JFrame {
         dateSpinner.setEditor(dateEditor);
         dateSpinner.setValue(new Date()); // Establece la fecha actual
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         panel.add(dateSpinner, gbc);
 
         // Etiqueta y campo para el número de teléfono
         JLabel phoneLabel = new JLabel("Número de Teléfono:");
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4; // Cambiar a nueva fila
         panel.add(phoneLabel, gbc);
 
         JTextField phoneField = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panel.add(phoneField, gbc);
 
         // Etiqueta y campo para la dirección
         JLabel addressLabel = new JLabel("Dirección:");
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5; // Cambiar a nueva fila
         panel.add(addressLabel, gbc);
 
         JTextField addressField = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         panel.add(addressField, gbc);
 
         // Etiqueta y campo para el código postal
         JLabel postalCodeLabel = new JLabel("Código Postal:");
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6; // Cambiar a nueva fila
         panel.add(postalCodeLabel, gbc);
 
         JTextField postalCodeField = new JTextField(20);
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         panel.add(postalCodeField, gbc);
 
         // Etiqueta y campo para la contraseña
         JLabel passLabel = new JLabel("Contraseña:");
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7; // Cambiar a nueva fila
         panel.add(passLabel, gbc);
 
         JPasswordField passField = new JPasswordField(20);
         gbc.gridx = 1;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         panel.add(passField, gbc);
 
         // Etiqueta y campo para confirmar la contraseña
         JLabel confirmPassLabel = new JLabel("Confirmar Contraseña:");
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8; // Cambiar a nueva fila
         panel.add(confirmPassLabel, gbc);
 
         JPasswordField confirmPassField = new JPasswordField(20);
         gbc.gridx = 1;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         panel.add(confirmPassField, gbc);
 
         // Etiqueta y JComboBox para el equipo favorito
         JLabel teamLabel = new JLabel("Equipo Favorito:");
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9; // Cambiar a nueva fila
         panel.add(teamLabel, gbc);
 
         // Lista de equipos únicos
@@ -136,13 +147,13 @@ public class ManagerRegister extends JFrame {
         };
         JComboBox<String> teamComboBox = new JComboBox<>(equipos);
         gbc.gridx = 1;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         panel.add(teamComboBox, gbc);
 
         // Botón de Crear Cuenta
         JButton createAccountButton = new JButton("Crear Cuenta");
         gbc.gridx = 0;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.CENTER;
         panel.add(createAccountButton, gbc);
@@ -202,6 +213,21 @@ public class ManagerRegister extends JFrame {
                         v.setVisible(true); // Cierra la ventana principal y vuelve a la ventana de login
                     }
                 }
+            }
+        });
+        
+        // Botón de Volver
+        JButton backButton = new JButton("Atrás");
+        gbc.gridy = 11; // Nueva fila para el botón Atrás
+        panel.add(backButton, gbc);
+        
+        // Acción para el botón Atrás
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dispose(); // Cierra la ventana actual
+                ManagerLogin loginFrame = new ManagerLogin();
+                loginFrame.setVisible(true); // Muestra la ventana de inicio de sesión
             }
         });
 
