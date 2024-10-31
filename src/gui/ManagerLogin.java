@@ -68,6 +68,7 @@ public class ManagerLogin extends JFrame {
                 } else {
                     // Verificación de usuario
                     if (validateLogin(username, password)) {
+                    	UserData.setUsername(username);
                         JOptionPane.showMessageDialog(null, "Bienvenido, " + username + "!");
                         dispose();
                         ManagerWelcome v = new ManagerWelcome();
