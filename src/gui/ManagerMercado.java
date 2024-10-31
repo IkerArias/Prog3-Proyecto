@@ -1,11 +1,9 @@
 package gui;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,178 +15,135 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import basicas.Jugador;
 
-public class ManagerMercado extends JFrame{
-	private static final long serialVersionUID = 1L;
-	private JTextField textField;
-	
-	private ArrayList<Jugador> resultado;
-	
-	public ManagerMercado() {
-		
-		
-		//Ajustes de la ventana
-			
-		setSize(1100,750);
-		setTitle("Mercado");
-		setResizable(false);
-		setLocationRelativeTo(null);
+public class ManagerMercado extends JFrame {
+    private static final long serialVersionUID = 1L;
+    private JTextField textField;
+    private JPanel panelResultados;
+    private ArrayList<Jugador> resultado;
+
+    private String equipoFiltro = "";
+    private String posicionFiltro = "";
+
+    public ManagerMercado() {
+        // Configuración de la ventana principal
+        setSize(1100, 750);
+        setTitle("Mercado");
+        setResizable(false);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
-		
-		//Paneles 
-		   	
+
+        // Paneles
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         JPanel panelSuperior = new JPanel(new GridBagLayout());
-		
-		//JTextField
-		
-		textField = new JTextField();
-		textField.setFont(new Font("Courier", Font.BOLD, 24));
-		textField.setPreferredSize(new java.awt.Dimension(600, 50));
-		
-		//Botones
-		JButton btnBuscar = new JButton("Buscar");
-		JButton btnFiltro = new JButton("Filtros");
-		
-		
-		
-		//Configuracion panel superior
-		
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.fill = GridBagConstraints.HORIZONTAL; // Rellenar horizontalmente
-        gbc.gridx = 0; // Columna 0
-        gbc.gridy = 0; // Fila 0
-        gbc.weightx = 1.0; // Peso para que ocupe el espacio
-        gbc.insets = new Insets(10, 10, 10, 10); // Espaciado
-        panelSuperior.add(textField, gbc); // Añadir el JTextField al panel
-        
-         // Configurar GridBagConstraints para los botones
-        gbc.fill = GridBagConstraints.NONE; // Sin relleno
-        gbc.gridx = 1; // Columna 1
-        gbc.weightx = 0; // Sin peso
-        gbc.insets = new Insets(10, 10, 10, 10); // Espaciado
-        panelSuperior.add(btnFiltro, gbc); // Añadir el botón Filtros
 
-        gbc.gridx = 2; // Columna 2
-        panelSuperior.add(btnBuscar, gbc); // Añadir el botón Buscar
-		
-		//Añadimos el panel Superior a la ventana
-		
-		add(panelSuperior, BorderLayout.NORTH);
-		
-		//Panel de resultados
-		
-		JPanel panelResultados = new JPanel();
-		add(new JScrollPane(panelResultados), BorderLayout.CENTER);
-		
-		
-		
-		
-		
-		
-		//Eventos
-		
-		
-           textField.getDocument().addDocumentListener(new DocumentListener() {
-			
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				buscarJugador(textField.getText());
-				
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				buscarJugador(textField.getText());
-				
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				// TODO Auto-generated method stub
-				buscarJugador(textField.getText());
-				
-			}
-		});
-           
-           btnBuscar.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				buscarJugador(textField.getText());
-				
-			}
-		});
-		
-		
-		
-		btnFiltro.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-				mostrarFiltros();
-				
-			}
-		});
-		
-		addWindowListener(new WindowAdapter() {
+        // JTextField de búsqueda
+        textField = new JTextField();
+        textField.setFont(new Font("Courier", Font.BOLD, 24));
+        textField.setPreferredSize(new java.awt.Dimension(600, 50));
+
+        // Botones
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnFiltro = new JButton("Filtros");
+
+        // Configuración del panel superior
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        panelSuperior.add(textField, gbc);
+
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.gridx = 1;
+        panelSuperior.add(btnFiltro, gbc);
+
+        gbc.gridx = 2;
+        panelSuperior.add(btnBuscar, gbc);
+
+        add(panelSuperior, BorderLayout.NORTH);
+
+        // Panel de resultados
+        panelResultados = new JPanel();
+        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+        add(new JScrollPane(panelResultados), BorderLayout.CENTER);
+
+        // Eventos
+        textField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                buscarJugador(textField.getText());
+            }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                buscarJugador(textField.getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                buscarJugador(textField.getText());
+            }
+        });
+
+        btnBuscar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buscarJugador(textField.getText());
+            }
+        });
+
+        btnFiltro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mostrarFiltros();
+            }
+        });
+
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                // Abrir la ventana de ManagerLogin cuando se cierra esta ventana
-            	dispose();
+                dispose();
                 ManagerWelcome wel = new ManagerWelcome();
                 wel.setVisible(true);
             }
         });
+    }
 
-	}
-	
-	//Metodos
-	
-	
-	//Metodo que se conecta a la base de datos y busca jugadores
-	private void buscarJugador(String textoBuscar) {
+    // Método para buscar jugadores con filtros aplicados
+    private void buscarJugador(String textoBuscar) {
         resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM jugadores WHERE LOWER(nombre) LIKE ?")) {
-            
+                 PreparedStatement stmt = conn.prepareStatement(
+                         "SELECT nombre, posicion, equipo_id, pais, valor " +
+                         "FROM Jugadores " + // Utiliza el nombre exacto de tu tabla
+                         "WHERE LOWER(nombre) LIKE ?")) {
+
             stmt.setString(1, "%" + textoBuscar.toLowerCase() + "%");
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
-                String equipo = rs.getString("equipo");
+                int equipoId = rs.getInt("equipo_id");
                 String posicion = rs.getString("posicion");
-                int edad = rs.getInt("edad");
-                resultado.add(new Jugador(nombre, equipo, posicion,edad));
+                String pais = rs.getString("pais");
+                double valor = rs.getDouble("valor");
+                resultado.add(new Jugador(nombre, equipoId,  posicion, pais, valor));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         mostrarResultados();
     }
-	
-	//Metodo que muestra los resultados de la busqueda
-	private void mostrarResultados() {
-        JPanel panelResultados = new JPanel();
-        panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
+
+
+
+    // Método que muestra los resultados de la búsqueda en el panel de resultados
+    private void mostrarResultados() {
+        panelResultados.removeAll();
 
         if (resultado.isEmpty()) {
             panelResultados.add(new JLabel("No se encontraron jugadores."));
@@ -197,56 +152,58 @@ public class ManagerMercado extends JFrame{
                 panelResultados.add(new JLabel(jugador.toString()));
             }
         }
-
-        getContentPane().add(new JScrollPane(panelResultados), BorderLayout.CENTER);
         revalidate();
         repaint();
     }
-	
-	//Metodo que muestra las opciones de busqueda
-	 private void mostrarFiltros() {
-	        JTextField equipoField = new JTextField();
-	        JTextField posicionField = new JTextField();
 
-	        Object[] message = {
-	            "Equipo:", equipoField,
-	            "Posición:", posicionField
-	        };
+    // Método para mostrar el diálogo de filtros
+    private void mostrarFiltros() {
+        JTextField equipoField = new JTextField();
+        JTextField posicionField = new JTextField();
 
-	        int option = JOptionPane.showConfirmDialog(this, message, "Filtrar Jugadores", JOptionPane.OK_CANCEL_OPTION);
-	        if (option == JOptionPane.OK_OPTION) {
-	            String equipoFiltro = equipoField.getText().trim().toLowerCase();
-	            String posicionFiltro = posicionField.getText().trim().toLowerCase();
-	            resultado = new ArrayList<>();
+        Object[] message = {
+            "Equipo:", equipoField,
+            "Posición:", posicionField
+        };
 
-	            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
-	                 PreparedStatement stmt = conn.prepareStatement("SELECT * FROM jugadores WHERE (equipo LIKE ?) AND (posicion LIKE ?)")) {
-	                
-	                stmt.setString(1, "%" + equipoFiltro + "%");
-	                stmt.setString(2, "%" + posicionFiltro + "%");
+        int option = JOptionPane.showConfirmDialog(this, message, "Filtrar Jugadores", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION) {
+            String equipoFiltro = equipoField.getText().trim().toLowerCase();
+            String posicionFiltro = posicionField.getText().trim().toLowerCase();
+            resultado = new ArrayList<>();
 
-	                ResultSet rs = stmt.executeQuery();
-	                while (rs.next()) {
-	                    String nombre = rs.getString("nombre");
-	                    String equipo = rs.getString("equipo");
-	                    String posicion = rs.getString("posicion");
-	                    int edad = rs.getInt("edad");
-	                    resultado.add(new Jugador(nombre, equipo, posicion,edad));
-	                }
-	            } catch (SQLException e) {
-	                e.printStackTrace();
-	            }
+            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
+                 PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT jugadores.nombre, equipos.nombre_equipo, jugadores.posicion, jugadores.edad " +
+                     "FROM jugadores " +
+                     "JOIN equipos ON jugadores.equipo_id = equipos.equipo_id " +
+                     "WHERE LOWER(equipos.nombre_equipo) LIKE ? AND LOWER(jugadores.posicion) LIKE ?")) {
+                
+                stmt.setString(1, "%" + equipoFiltro + "%");
+                stmt.setString(2, "%" + posicionFiltro + "%");
 
-	            mostrarResultados();
-	        }
-	    }
+                ResultSet rs = stmt.executeQuery();
+                while (rs.next()) {
+                	String nombre = rs.getString("nombre");
+                    int equipo = rs.getInt("equipo");
+                    String posicion = rs.getString("posicion");
+                    String pais = rs.getString("pais");
+                    Double valor = rs.getDouble("valor");
+                    resultado.add(new Jugador(nombre, equipo, posicion, pais,valor));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            mostrarResultados();
+        }
+    }
+
+
     public static void main(String[] args) {
-        
         SwingUtilities.invokeLater(() -> {
-        	ManagerMercado frame = new ManagerMercado();
+            ManagerMercado frame = new ManagerMercado();
             frame.setVisible(true);
         });
     }
-
-	
 }
