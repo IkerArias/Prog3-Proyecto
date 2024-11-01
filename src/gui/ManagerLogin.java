@@ -1,11 +1,13 @@
 package gui;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -55,6 +57,17 @@ public class ManagerLogin extends JFrame {
 
         // Añadir el panel a la ventana
         add(panel);
+        
+        //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
+
+        setVisible(true);
+    
 
         // Boton inciar sesion: Valirdar que el usuario esta regustrado en fiuchero csv
         loginButton.addActionListener(new ActionListener() {

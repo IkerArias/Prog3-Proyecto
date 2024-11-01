@@ -1,5 +1,6 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -46,6 +48,14 @@ public class ManagerPerfil extends JFrame {
                 BorderFactory.createLineBorder(new Color(200, 200, 200)),
                 BorderFactory.createEmptyBorder(10, 10, 10, 10)
         ));
+        
+      //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
 
         // Cargar datos del usuario
         String[] userData = cargarDatosUsuario(username);

@@ -1,6 +1,7 @@
 package gui;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -8,6 +9,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 
 
@@ -128,6 +131,14 @@ public class ManagerWelcome extends JFrame {
                 return false; 
             }
         };
+        
+      //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
 
         //Renderizado para que las filas pares e impares se vean de diferentes colores 
         tablaPartidos.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {

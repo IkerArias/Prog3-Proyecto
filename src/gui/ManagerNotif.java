@@ -1,11 +1,14 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 
 public class ManagerNotif extends JFrame {
 
@@ -47,6 +50,14 @@ public class ManagerNotif extends JFrame {
 
         styleButton(markAsReadButton);
         styleButton(deleteAllButton);
+        
+       //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
 
         // Acción para "Marcar como leídas"
         markAsReadButton.addActionListener(new ActionListener() {

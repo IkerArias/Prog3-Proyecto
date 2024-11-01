@@ -4,17 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -72,6 +77,15 @@ public class ManagerMercado extends JFrame {
         panelResultados = new JPanel();
         panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
         add(new JScrollPane(panelResultados), BorderLayout.CENTER);
+        
+        
+      //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
 
         // Eventos
         textField.getDocument().addDocumentListener(new DocumentListener() {

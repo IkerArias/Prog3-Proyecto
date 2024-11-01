@@ -1,5 +1,6 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,6 +39,15 @@ public class ManagerForo extends JFrame {
         // Panel para la entrada de mensajes
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
+        
+        
+      //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
         
         messageInput = new JTextField();
         inputPanel.add(messageInput, BorderLayout.CENTER);
