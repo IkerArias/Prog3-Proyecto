@@ -122,7 +122,7 @@ public class ManagerMercado extends JFrame {
                          "FROM Jugadores " + // Utiliza el nombre exacto de tu tabla
                          "WHERE LOWER(nombre) LIKE ?")) {
 
-            stmt.setString(1, "%" + textoBuscar.toLowerCase() + "%");
+            stmt.setString(1, textoBuscar.toLowerCase() + "%"); // Set the wildcard at the beginning
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -131,7 +131,7 @@ public class ManagerMercado extends JFrame {
                 String posicion = rs.getString("posicion");
                 String pais = rs.getString("pais");
                 double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoId,  posicion, pais, valor));
+                resultado.add(new Jugador(nombre, equipoId, posicion, pais, valor));
             }
         } catch (SQLException e) {
             e.printStackTrace();
