@@ -58,6 +58,16 @@ public class ManagerNotif extends JFrame {
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
         }
+        
+        // Botón Atrás
+        JButton btnAtras = new JButton("Atrás");
+        styleButton(btnAtras);
+
+        btnAtras.addActionListener(e -> {
+            dispose();
+            ManagerPerfil per = new ManagerPerfil();
+            per.setVisible(true);
+        });
 
         // Acción para "Marcar como leídas"
         markAsReadButton.addActionListener(new ActionListener() {
@@ -76,6 +86,7 @@ public class ManagerNotif extends JFrame {
             }
         });
 
+        buttonPanel.add(btnAtras);
         buttonPanel.add(markAsReadButton);
         buttonPanel.add(deleteAllButton);
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
