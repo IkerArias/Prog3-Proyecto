@@ -17,6 +17,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -103,12 +104,11 @@ public class ManagerMercado extends JFrame {
             }
         });
 
-        btnBuscar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                buscarJugador(textField.getText());
-            }
+        btnBuscar.addActionListener(e -> {
+            String textoBusqueda = textField.getText(); // Obtener el texto del JTextField
+            buscarJugadorConFiltros(textoBusqueda);     // Llamar al nuevo método con filtros
         });
+
 
         btnFiltro.addActionListener(new ActionListener() {
             @Override
@@ -152,6 +152,57 @@ public class ManagerMercado extends JFrame {
         }
         mostrarResultados();
     }
+    
+    private void buscarJugadorConFiltros(String nombreJugador) {
+        StringBuilder query = new StringBuilder("SELECT * FROM Jugadores WHERE 1=1");
+        
+        
+        
+        // Agregar filtro por equipo si se ha seleccionado uno en el JComboBox
+        if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
+            query.append(" AND equipo_id = ?");
+        }
+        
+        // Agregar filtro por posición si se ha seleccionado una en el JComboBox
+        if (posicionFiltro != null && !posicionFiltro.isEmpty() && !posicionFiltro.equals("Seleccione una posicion:")) {
+            query.append(" AND posicion = ?");
+        }
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
+             PreparedStatement pstmt = conn.prepareStatement(query.toString())) {
+
+            int paramIndex = 1;
+
+            // Establecer el valor del filtro de nombre
+            if (nombreJugador != null && !nombreJugador.isEmpty()) {
+                pstmt.setString(paramIndex++, "%" + nombreJugador + "%");
+            }
+
+            // Establecer el valor del filtro de equipo
+            if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
+                pstmt.setInt(paramIndex++, Integer.parseInt(equipoFiltro));
+            }
+
+            // Establecer el valor del filtro de posición
+            if (posicionFiltro != null && !posicionFiltro.isEmpty() && !posicionFiltro.equals("Seleccione una posicion:")) {
+                pstmt.setString(paramIndex++, posicionFiltro);
+            }
+
+            ResultSet rs = pstmt.executeQuery();
+
+            // Procesar los resultados de la consulta
+            while (rs.next()) {
+                String nombre = rs.getString("nombre");
+                String posicion = rs.getString("posicion");
+                int equipoId = rs.getInt("equipo_id");
+
+                System.out.println("Jugador: " + nombre + ", Posición: " + posicion + ", Equipo ID: " + equipoId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
 
@@ -170,48 +221,89 @@ public class ManagerMercado extends JFrame {
         repaint();
     }
 
-    // Método para mostrar el diálogo de filtros
+   
+ // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
     private void mostrarFiltros() {
-        JTextField equipoField = new JTextField();
-        JTextField posicionField = new JTextField();
+        JComboBox<ComboItem> comboEquipo = new JComboBox<>();
+        JComboBox<String> comboPosicion = new JComboBox<>();
 
-        Object[] message = {
-            "Equipo:", equipoField,
-            "Posición:", posicionField
-        };
+        // Cargar equipos desde la base de datos y añadirlos al comboBox
+        comboEquipo.addItem(new ComboItem("Seleccione un equipo:", -1));
 
-        int option = JOptionPane.showConfirmDialog(this, message, "Filtrar Jugadores", JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-            String equipoFiltro = equipoField.getText().trim().toLowerCase();
-            String posicionFiltro = posicionField.getText().trim().toLowerCase();
-            resultado = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT id, nombre FROM Equipos")) {
+            
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String nombreEquipo = rs.getString("nombre");
 
-            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
-                 PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT jugadores.nombre, equipos.nombre_equipo, jugadores.posicion, jugadores.edad " +
-                     "FROM jugadores " +
-                     "JOIN equipos ON jugadores.equipo_id = equipos.equipo_id " +
-                     "WHERE LOWER(equipos.nombre_equipo) LIKE ? AND LOWER(jugadores.posicion) LIKE ?")) {
-                
-                stmt.setString(1, "%" + equipoFiltro + "%");
-                stmt.setString(2, "%" + posicionFiltro + "%");
-
-                ResultSet rs = stmt.executeQuery();
-                while (rs.next()) {
-                	String nombre = rs.getString("nombre");
-                    int equipo = rs.getInt("equipo");
-                    String posicion = rs.getString("posicion");
-                    String pais = rs.getString("pais");
-                    Double valor = rs.getDouble("valor");
-                    resultado.add(new Jugador(nombre, equipo, posicion, pais,valor));
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                // Aquí se agrega el nombre del equipo al JComboBox, y podemos almacenar el ID en el "Item"
+                comboEquipo.addItem(new ComboItem(nombreEquipo, id));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-            mostrarResultados();
+        // Opciones estáticas de posición
+        comboPosicion.addItem("Seleccione una posicion:");
+        comboPosicion.addItem("Portero");
+        comboPosicion.addItem("Defensa");
+        comboPosicion.addItem("Medio");
+        comboPosicion.addItem("Delantero");
+
+        // Mostrar un cuadro de diálogo con los JComboBox de filtros
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Equipo:"), gbc);
+        gbc.gridx = 1;
+        panel.add(comboEquipo, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Posición:"), gbc);
+        gbc.gridx = 1;
+        panel.add(comboPosicion, gbc);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Seleccione los filtros", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            // Guardar la selección de equipo y posición
+            ComboItem selectedEquipo = (ComboItem) comboEquipo.getSelectedItem();
+            String selectedPosicion = (String) comboPosicion.getSelectedItem();
+            
+            // Guardar los filtros
+            equipoFiltro = selectedEquipo != null && selectedEquipo.getId() != -1 ? String.valueOf(selectedEquipo.getId()) : "";
+            posicionFiltro = selectedPosicion != null && !selectedPosicion.equals("Seleccione una posicion:") ? selectedPosicion : "";
+
+            buscarJugador(textField.getText()); // Realizar búsqueda con filtros
         }
     }
+
+
+    // Clase interna ComboItem para almacenar nombres y IDs en el JComboBox
+    private class ComboItem {
+        private String name;
+        private int id;
+
+        public ComboItem(String name, int id) {
+            this.name = name;
+            this.id = id;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return name;
+        }
+    }
+
 
 
     public static void main(String[] args) {
