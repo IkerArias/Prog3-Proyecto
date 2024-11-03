@@ -221,7 +221,7 @@ public class ManagerMercado extends JFrame {
         repaint();
     }
 
-   
+    // Método para mostrar el diálogo de filtros
  // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
     private void mostrarFiltros() {
         JComboBox<ComboItem> comboEquipo = new JComboBox<>();
