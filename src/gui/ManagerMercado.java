@@ -133,10 +133,10 @@ public class ManagerMercado extends JFrame {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
                  PreparedStatement stmt = conn.prepareStatement(
                          "SELECT nombre, posicion, equipo_id, pais, valor " +
-                         "FROM Jugadores " + // Utiliza el nombre exacto de tu tabla
+                         "FROM Jugadores " + 
                          "WHERE LOWER(nombre) LIKE ?")) {
 
-            stmt.setString(1, textoBuscar.toLowerCase() + "%"); // Set the wildcard at the beginning
+            stmt.setString(1, textoBuscar.toLowerCase() + "%"); 
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
@@ -153,16 +153,16 @@ public class ManagerMercado extends JFrame {
         mostrarResultados();
     }
     
+ // Método para buscar jugadores con filtros aplicados
     private void buscarJugadorConFiltros(String nombreJugador) {
+        resultado = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT * FROM Jugadores WHERE 1=1");
-        
-        
-        
+
         // Agregar filtro por equipo si se ha seleccionado uno en el JComboBox
         if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
             query.append(" AND equipo_id = ?");
         }
-        
+
         // Agregar filtro por posición si se ha seleccionado una en el JComboBox
         if (posicionFiltro != null && !posicionFiltro.isEmpty() && !posicionFiltro.equals("Seleccione una posicion:")) {
             query.append(" AND posicion = ?");
@@ -190,21 +190,22 @@ public class ManagerMercado extends JFrame {
 
             ResultSet rs = pstmt.executeQuery();
 
-            // Procesar los resultados de la consulta
+            // Procesar los resultados de la consulta y agregar al ArrayList de resultados
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
-                String posicion = rs.getString("posicion");
                 int equipoId = rs.getInt("equipo_id");
-
-                System.out.println("Jugador: " + nombre + ", Posición: " + posicion + ", Equipo ID: " + equipoId);
+                String posicion = rs.getString("posicion");
+                String pais = rs.getString("pais");
+                double valor = rs.getDouble("valor");
+                resultado.add(new Jugador(nombre, equipoId, posicion, pais, valor));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        // Llamar al método para mostrar los resultados en el panel
+        mostrarResultados();
     }
-
-
-
 
     // Método que muestra los resultados de la búsqueda en el panel de resultados
     private void mostrarResultados() {
@@ -220,6 +221,7 @@ public class ManagerMercado extends JFrame {
         revalidate();
         repaint();
     }
+
 
     // Método para mostrar el diálogo de filtros
  // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
@@ -248,9 +250,13 @@ public class ManagerMercado extends JFrame {
         // Opciones estáticas de posición
         comboPosicion.addItem("Seleccione una posicion:");
         comboPosicion.addItem("Portero");
-        comboPosicion.addItem("Defensa");
-        comboPosicion.addItem("Medio");
-        comboPosicion.addItem("Delantero");
+        comboPosicion.addItem("Defensa central");
+        comboPosicion.addItem("Lateral derecho");
+        comboPosicion.addItem("Lateral izquierdo");
+        comboPosicion.addItem("Mediocentro ofensivo");
+        comboPosicion.addItem("Extremo izquierdo");
+        comboPosicion.addItem("Extremo derecho");
+        comboPosicion.addItem("Delantero centro");
 
         // Mostrar un cuadro de diálogo con los JComboBox de filtros
         JPanel panel = new JPanel(new GridBagLayout());
