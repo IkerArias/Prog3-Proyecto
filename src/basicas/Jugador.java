@@ -53,6 +53,7 @@ public class Jugador {
 		return "Jugador [nombre=" + nombre + ", equipo=" + equipo + ", posicion=" + posicion + ", pais=" + pais
 				+ ", valor=" + valor + "]";
 	}
+
 	
 	
 
