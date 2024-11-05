@@ -24,7 +24,7 @@ public class ManagerWelcome extends JFrame {
         setSize(1100, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         
         
        
