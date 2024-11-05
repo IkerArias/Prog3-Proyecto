@@ -3,8 +3,6 @@ package gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -22,27 +20,24 @@ public class ManagerPerfil extends JFrame {
 
         String username = UserData.getUsername();
 
-        // Panel principal para organizar los componentes
+        // Panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBackground(new Color(240, 240, 240));
 
-        // Etiqueta de título con estilo
+        // Título con estilo
         JLabel labelTitulo = new JLabel("MI PERFIL", JLabel.CENTER);
         labelTitulo.setFont(new Font("Arial", Font.BOLD, 24));
         labelTitulo.setOpaque(true);
-        labelTitulo.setBackground(new Color(60, 63, 65)); // Fondo gris oscuro
-        labelTitulo.setForeground(Color.WHITE); // Texto blanco
+        labelTitulo.setBackground(new Color(60, 63, 65));
+        labelTitulo.setForeground(Color.WHITE);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
 
-        // Panel central para los campos de información
-        JPanel panelCentro = new JPanel(new GridLayout(3, 4, 10, 10));
-        panelCentro.setBackground(new Color(255, 255, 255));
-        panelCentro.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+        // Panel para los datos del usuario
+        JPanel panelCentro = new JPanel(new GridLayout(3, 2, 10, 10));
+        panelCentro.setBackground(Color.WHITE);
+        panelCentro.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
         // Cargar datos del usuario
         String[] userData = cargarDatosUsuario(username);
@@ -51,76 +46,30 @@ public class ManagerPerfil extends JFrame {
             return;
         }
 
-        // Etiquetas y datos del usuario
-        JLabel labelNombre = createLabel("NOMBRE:");
-        JLabel fieldNombre = createDataLabel(userData[0]);
-
-        JLabel labelEmail = createLabel("EMAIL:");
-        JLabel fieldEmail = createDataLabel(userData[2]);
-
-        JLabel labelNumero = createLabel("NÚMERO:");
-        JLabel fieldNumero = createDataLabel(userData[3]);
-
-        JLabel labelAddress = createLabel("DIRECCIÓN:");
-        JLabel fieldAddress = createDataLabel(userData[4]);
-
-        JLabel labelPostal = createLabel("CÓDIGO POSTAL:");
-        JLabel fieldPostal = createDataLabel(userData[5]);
-
-        JLabel labelEquipo = createLabel("EQUIPO:");
-        JLabel fieldEquipo = createDataLabel(userData[6]);
-
-        // Agregar componentes al panel central
-        panelCentro.add(labelNombre);
-        panelCentro.add(fieldNombre);
-        panelCentro.add(labelAddress);
-        panelCentro.add(fieldAddress);
-
-        panelCentro.add(labelEmail);
-        panelCentro.add(fieldEmail);
-        panelCentro.add(labelPostal);
-        panelCentro.add(fieldPostal);
-
-        panelCentro.add(labelNumero);
-        panelCentro.add(fieldNumero);
-        panelCentro.add(labelEquipo);
-        panelCentro.add(fieldEquipo);
+        // Datos de usuario en recuadros
+        panelCentro.add(createDataPanel("NOMBRE:", userData[0]));
+        panelCentro.add(createDataPanel("DIRECCIÓN:", userData[4]));
+        panelCentro.add(createDataPanel("EMAIL:", userData[2]));
+        panelCentro.add(createDataPanel("CÓDIGO POSTAL:", userData[5]));
+        panelCentro.add(createDataPanel("NÚMERO:", userData[3]));
+        panelCentro.add(createDataPanel("EQUIPO:", userData[6]));
 
         mainPanel.add(panelCentro, BorderLayout.CENTER);
 
         // Panel inferior para los botones
-        JPanel panelInferior = new JPanel(new BorderLayout());
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         panelInferior.setBackground(new Color(240, 240, 240));
 
-        // Panel para el botón de configuración en la esquina inferior izquierda
-        JPanel panelIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        panelIzquierda.setBackground(new Color(240, 240, 240));
-        JButton btnConfiguracion = createIconButton("/imagenes/avatar-de-usuario.png");
-        btnConfiguracion.addActionListener(e -> {
-            dispose();
-            new ManagerConfig().setVisible(true);
-        });
-        panelIzquierda.add(btnConfiguracion);
-
-        // Panel para el botón de notificaciones en la esquina inferior derecha
-        JPanel panelDerecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        panelDerecha.setBackground(new Color(240, 240, 240));
-        JButton btnNotificaciones = createIconButton("/imagenes/icono_notif_transparent.png");
-        btnNotificaciones.addActionListener(e -> {
-            dispose();
-            new ManagerNotif().setVisible(true);
-        });
-        panelDerecha.add(btnNotificaciones);
-
-        // Panel central para los botones de acción
-        JPanel panelCentral = new JPanel();
-        panelCentral.setBackground(new Color(240, 240, 240));
         JButton btnAtras = new JButton("Atrás");
         styleButton(btnAtras);
         btnAtras.addActionListener(e -> {
             dispose();
             new ManagerWelcome().setVisible(true);
         });
+
+        JButton btnCambiarContraseña = new JButton("Cambiar Contraseña");
+        styleButton(btnCambiarContraseña);
+        btnCambiarContraseña.addActionListener(e -> cambiarContraseña(username));
 
         JButton btnCerrarSesion = new JButton("Cerrar Sesión");
         styleButton(btnCerrarSesion);
@@ -129,40 +78,14 @@ public class ManagerPerfil extends JFrame {
             new ManagerLogin().setVisible(true);
         });
 
-        JButton btnCambiarContraseña = new JButton("Cambiar Contraseña");
-        styleButton(btnCambiarContraseña);
-        btnCambiarContraseña.addActionListener(e -> {
-            String nuevaContraseña = JOptionPane.showInputDialog(this, "Introduce la nueva contraseña:");
-            if (nuevaContraseña == null || nuevaContraseña.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "La contraseña no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            String contraseñaActual = obtenerContraseñaActual(username);
-            if (nuevaContraseña.equals(contraseñaActual)) {
-                JOptionPane.showMessageDialog(this, "La nueva contraseña no puede ser la misma que la actual.", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                if (actualizarContraseña(username, nuevaContraseña)) {
-                    JOptionPane.showMessageDialog(this, "Contraseña cambiada exitosamente.");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        panelCentral.add(btnAtras);
-        panelCentral.add(btnCambiarContraseña);
-        panelCentral.add(btnCerrarSesion);
-
-        // Agregar los paneles izquierdo, central y derecho al panel inferior
-        panelInferior.add(panelIzquierda, BorderLayout.WEST);
-        panelInferior.add(panelCentral, BorderLayout.CENTER);
-        panelInferior.add(panelDerecha, BorderLayout.EAST);
+        panelInferior.add(btnAtras);
+        panelInferior.add(btnCambiarContraseña);
+        panelInferior.add(btnCerrarSesion);
 
         mainPanel.add(panelInferior, BorderLayout.SOUTH);
 
         add(mainPanel);
 
-        // Configuración de cierre de ventana
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -172,23 +95,26 @@ public class ManagerPerfil extends JFrame {
         });
     }
 
-    // Crear una etiqueta para campos de datos
-    private JLabel createDataLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.PLAIN, 14));
-        label.setForeground(Color.DARK_GRAY);
-        return label;
+    // Método para crear panel de datos con borde
+    private JPanel createDataPanel(String label, String data) {
+        JPanel dataPanel = new JPanel(new BorderLayout(5, 5));
+        dataPanel.setBackground(Color.WHITE);
+        dataPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true));
+
+        JLabel lblTitle = new JLabel(label);
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 14));
+        lblTitle.setForeground(new Color(60, 63, 65));
+
+        JLabel lblData = new JLabel(data);
+        lblData.setFont(new Font("Arial", Font.PLAIN, 14));
+        lblData.setForeground(Color.DARK_GRAY);
+
+        dataPanel.add(lblTitle, BorderLayout.NORTH);
+        dataPanel.add(lblData, BorderLayout.CENTER);
+        return dataPanel;
     }
 
-    // Crear una etiqueta estilizada para nombres de campos
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
-        label.setForeground(new Color(100, 100, 100));
-        return label;
-    }
-
-    // Estilizar botones
+    // Método para estilizar botones
     private void styleButton(JButton button) {
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(60, 63, 65));
@@ -196,17 +122,23 @@ public class ManagerPerfil extends JFrame {
         button.setFocusPainted(false);
     }
 
-    // Crear botón con icono
-    private JButton createIconButton(String iconPath) {
-        JButton button = new JButton();
-        ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
-        Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        button.setIcon(new ImageIcon(img));
-        button.setPreferredSize(new Dimension(50, 50));
-        button.setFocusPainted(false);
-        button.setContentAreaFilled(false);
-        button.setBorderPainted(false);
-        return button;
+    // Función para cambiar contraseña
+    private void cambiarContraseña(String username) {
+        String nuevaContraseña = JOptionPane.showInputDialog(this, "Introduce la nueva contraseña:");
+        if (nuevaContraseña == null || nuevaContraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "La contraseña no puede estar vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String contraseñaActual = obtenerContraseñaActual(username);
+        if (nuevaContraseña.equals(contraseñaActual)) {
+            JOptionPane.showMessageDialog(this, "La nueva contraseña no puede ser la misma que la actual.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            if (actualizarContraseña(username, nuevaContraseña)) {
+                JOptionPane.showMessageDialog(this, "Contraseña cambiada exitosamente.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al cambiar la contraseña.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private String[] cargarDatosUsuario(String username) {
@@ -243,7 +175,6 @@ public class ManagerPerfil extends JFrame {
         return null;
     }
 
-    // Función para actualizar la contraseña en el archivo usuarios.csv
     private boolean actualizarContraseña(String username, String nuevaContraseña) {
         String filePath = "usuarios.csv";
         File archivoOriginal = new File(filePath);
@@ -268,7 +199,6 @@ public class ManagerPerfil extends JFrame {
             return false;
         }
 
-        // Reemplazar el archivo original con el temporal si la contraseña se actualizó
         if (actualizado) {
             if (archivoOriginal.delete() && archivoTemporal.renameTo(archivoOriginal)) {
                 return true;
@@ -289,3 +219,4 @@ public class ManagerPerfil extends JFrame {
         });
     }
 }
+
