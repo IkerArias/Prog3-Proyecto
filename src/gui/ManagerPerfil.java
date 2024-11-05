@@ -1,6 +1,5 @@
 package gui;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
@@ -23,13 +22,13 @@ public class ManagerPerfil extends JFrame {
         // Panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(240, 240, 240));
+        mainPanel.setBackground(new Color(230, 240, 250)); // Fondo claro y agradable
 
         // Título con estilo
         JLabel labelTitulo = new JLabel("MI PERFIL", JLabel.CENTER);
-        labelTitulo.setFont(new Font("Arial", Font.BOLD, 24));
+        labelTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
         labelTitulo.setOpaque(true);
-        labelTitulo.setBackground(new Color(60, 63, 65));
+        labelTitulo.setBackground(new Color(33, 150, 243)); // Azul brillante
         labelTitulo.setForeground(Color.WHITE);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
@@ -46,19 +45,33 @@ public class ManagerPerfil extends JFrame {
             return;
         }
 
-        // Datos de usuario en recuadros
-        panelCentro.add(createDataPanel("NOMBRE:", userData[0]));
-        panelCentro.add(createDataPanel("DIRECCIÓN:", userData[4]));
-        panelCentro.add(createDataPanel("EMAIL:", userData[2]));
-        panelCentro.add(createDataPanel("CÓDIGO POSTAL:", userData[5]));
-        panelCentro.add(createDataPanel("NÚMERO:", userData[3]));
-        panelCentro.add(createDataPanel("EQUIPO:", userData[6]));
+        // Datos de usuario en recuadros centrados
+        panelCentro.add(createDataPanel("NOMBRE", userData[0]));
+        panelCentro.add(createDataPanel("DIRECCIÓN", userData[4]));
+        panelCentro.add(createDataPanel("EMAIL", userData[2]));
+        panelCentro.add(createDataPanel("CÓDIGO POSTAL", userData[5]));
+        panelCentro.add(createDataPanel("NÚMERO", userData[3]));
+        panelCentro.add(createDataPanel("EQUIPO", userData[6]));
 
         mainPanel.add(panelCentro, BorderLayout.CENTER);
 
         // Panel inferior para los botones
-        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        panelInferior.setBackground(new Color(240, 240, 240));
+        JPanel panelInferior = new JPanel(new BorderLayout());
+        panelInferior.setBackground(new Color(230, 240, 250));
+
+        // Panel izquierdo para botón de configuración
+        JPanel panelIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelIzquierda.setBackground(new Color(230, 240, 250));
+        JButton btnConfiguracion = createIconButton("/imagenes/avatar-de-usuario.png");
+        btnConfiguracion.addActionListener(e -> {
+            dispose();
+            new ManagerConfig().setVisible(true);
+        });
+        panelIzquierda.add(btnConfiguracion);
+
+        // Panel central para botones de acción
+        JPanel panelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        panelCentral.setBackground(new Color(230, 240, 250));
 
         JButton btnAtras = new JButton("Atrás");
         styleButton(btnAtras);
@@ -78,9 +91,24 @@ public class ManagerPerfil extends JFrame {
             new ManagerLogin().setVisible(true);
         });
 
-        panelInferior.add(btnAtras);
-        panelInferior.add(btnCambiarContraseña);
-        panelInferior.add(btnCerrarSesion);
+        panelCentral.add(btnAtras);
+        panelCentral.add(btnCambiarContraseña);
+        panelCentral.add(btnCerrarSesion);
+
+        // Panel derecho para botón de notificaciones
+        JPanel panelDerecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelDerecha.setBackground(new Color(230, 240, 250));
+        JButton btnNotificaciones = createIconButton("/imagenes/icono_notif_transparent.png");
+        btnNotificaciones.addActionListener(e -> {
+            dispose();
+            new ManagerNotif().setVisible(true);
+        });
+        panelDerecha.add(btnNotificaciones);
+
+        // Añadir paneles izquierdo, central y derecho al panel inferior
+        panelInferior.add(panelIzquierda, BorderLayout.WEST);
+        panelInferior.add(panelCentral, BorderLayout.CENTER);
+        panelInferior.add(panelDerecha, BorderLayout.EAST);
 
         mainPanel.add(panelInferior, BorderLayout.SOUTH);
 
@@ -95,19 +123,19 @@ public class ManagerPerfil extends JFrame {
         });
     }
 
-    // Método para crear panel de datos con borde
+    // Método para crear panel de datos centrado con borde
     private JPanel createDataPanel(String label, String data) {
-        JPanel dataPanel = new JPanel(new BorderLayout(5, 5));
+        JPanel dataPanel = new JPanel(new BorderLayout());
         dataPanel.setBackground(Color.WHITE);
-        dataPanel.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1, true));
+        dataPanel.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1, true));
 
-        JLabel lblTitle = new JLabel(label);
-        lblTitle.setFont(new Font("Arial", Font.BOLD, 14));
-        lblTitle.setForeground(new Color(60, 63, 65));
+        JLabel lblTitle = new JLabel(label, JLabel.CENTER);
+        lblTitle.setFont(new Font("SansSerif", Font.BOLD, 14));
+        lblTitle.setForeground(new Color(63, 81, 181)); // Azul vibrante
 
-        JLabel lblData = new JLabel(data);
-        lblData.setFont(new Font("Arial", Font.PLAIN, 14));
-        lblData.setForeground(Color.DARK_GRAY);
+        JLabel lblData = new JLabel(data, JLabel.CENTER);
+        lblData.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        lblData.setForeground(new Color(85, 85, 85));
 
         dataPanel.add(lblTitle, BorderLayout.NORTH);
         dataPanel.add(lblData, BorderLayout.CENTER);
@@ -117,9 +145,22 @@ public class ManagerPerfil extends JFrame {
     // Método para estilizar botones
     private void styleButton(JButton button) {
         button.setForeground(Color.WHITE);
-        button.setBackground(new Color(60, 63, 65));
+        button.setBackground(new Color(63, 81, 181)); // Azul vibrante para botones
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.setFocusPainted(false);
+    }
+
+    // Crear botón con icono
+    private JButton createIconButton(String iconPath) {
+        JButton button = new JButton();
+        ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+        Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        button.setIcon(new ImageIcon(img));
+        button.setPreferredSize(new Dimension(50, 50));
+        button.setFocusPainted(false);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        return button;
     }
 
     // Función para cambiar contraseña
@@ -188,7 +229,7 @@ public class ManagerPerfil extends JFrame {
             while ((line = br.readLine()) != null) {
                 String[] datos = line.split(";");
                 if (datos[0].equals(username)) {
-                    datos[1] = nuevaContraseña; // Actualizar la contraseña
+                    datos[1] = nuevaContraseña;
                     actualizado = true;
                 }
                 pw.println(String.join(";", datos));
@@ -219,4 +260,5 @@ public class ManagerPerfil extends JFrame {
         });
     }
 }
+
 
