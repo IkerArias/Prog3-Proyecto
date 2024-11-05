@@ -19,7 +19,7 @@ public class ManagerJugador extends JFrame{
         
         
         panel.add(new JLabel("Nombre: " + jugador.getNombre()));
-        panel.add(new JLabel("Equipo: " + jugador.getEquipo()));
+        panel.add(new JLabel("Equipo: " + jugador.getEquipoNombre()));
         panel.add(new JLabel("Posición: " + jugador.getPosicion()));
         panel.add(new JLabel("País: " + jugador.getPais()));
         panel.add(new JLabel("Valor: " + jugador.getValor()));

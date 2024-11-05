@@ -133,95 +133,77 @@ public class ManagerMercado extends JFrame {
     private void buscarJugador(String textoBuscar) {
         resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
-                 PreparedStatement stmt = conn.prepareStatement(
-                         "SELECT nombre, posicion, equipo_id, pais, valor " +
-                         "FROM Jugadores " + 
-                         "WHERE LOWER(nombre) LIKE ?")) {
+             PreparedStatement stmt = conn.prepareStatement(
+                     "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor " +
+                     "FROM Jugadores j " +
+                     "JOIN Equipos e ON j.equipo_id = e.id " +
+                     "WHERE LOWER(j.nombre) LIKE ?")) {
 
             stmt.setString(1, textoBuscar.toLowerCase() + "%"); 
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
-                int equipoId = rs.getInt("equipo_id");
+                String equipoNombre = rs.getString("equipo_nombre");
                 String posicion = rs.getString("posicion");
                 String pais = rs.getString("pais");
                 double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoId, posicion, pais, valor));
+                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         mostrarResultados();
     }
+
     
  // Método para buscar jugadores con filtros aplicados
     private void buscarJugadorConFiltros(String nombreJugador) {
         resultado = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT * FROM Jugadores WHERE 1=1");
+        StringBuilder query = new StringBuilder(
+            "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor " +
+            "FROM Jugadores j " +
+            "JOIN Equipos e ON j.equipo_id = e.id " +
+            "WHERE 1=1"
+        );
 
-        // Agregar filtro por equipo si se ha seleccionado uno en el JComboBox
-        if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
-            query.append(" AND equipo_id = ?");
+        if (nombreJugador != null && !nombreJugador.isEmpty()) {
+            query.append(" AND LOWER(j.nombre) LIKE ?");
         }
-
-        // Agregar filtro por posición si se ha seleccionado una en el JComboBox
+        if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
+            query.append(" AND e.id = ?");
+        }
         if (posicionFiltro != null && !posicionFiltro.isEmpty() && !posicionFiltro.equals("Seleccione una posicion:")) {
-            query.append(" AND posicion = ?");
+            query.append(" AND j.posicion = ?");
         }
 
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
              PreparedStatement pstmt = conn.prepareStatement(query.toString())) {
 
             int paramIndex = 1;
-
-            // Establecer el valor del filtro de nombre
             if (nombreJugador != null && !nombreJugador.isEmpty()) {
-                pstmt.setString(paramIndex++, "%" + nombreJugador + "%");
+                pstmt.setString(paramIndex++, "%" + nombreJugador.toLowerCase() + "%");
             }
-
-            // Establecer el valor del filtro de equipo
             if (equipoFiltro != null && !equipoFiltro.isEmpty() && !equipoFiltro.equals("-1")) {
                 pstmt.setInt(paramIndex++, Integer.parseInt(equipoFiltro));
             }
-
-            // Establecer el valor del filtro de posición
             if (posicionFiltro != null && !posicionFiltro.isEmpty() && !posicionFiltro.equals("Seleccione una posicion:")) {
                 pstmt.setString(paramIndex++, posicionFiltro);
             }
 
             ResultSet rs = pstmt.executeQuery();
-
-            // Procesar los resultados de la consulta y agregar al ArrayList de resultados
             while (rs.next()) {
                 String nombre = rs.getString("nombre");
-                int equipoId = rs.getInt("equipo_id");
+                String equipoNombre = rs.getString("equipo_nombre");
                 String posicion = rs.getString("posicion");
                 String pais = rs.getString("pais");
                 double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoId, posicion, pais, valor));
+                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
-        // Llamar al método para mostrar los resultados en el panel
         mostrarResultados();
-    }
-
-    // Método que muestra los resultados de la búsqueda en el panel de resultados
-    private void mostrarResultados() {
-        panelResultados.removeAll();
-
-        if (resultado.isEmpty()) {
-            panelResultados.add(new JLabel("No se encontraron jugadores."));
-        } else {
-            for (Jugador jugador : resultado) {
-                panelResultados.add(new JLabel(jugador.toString()));
-            }
-        }
-        revalidate();
-        repaint();
     }
 
 
@@ -290,6 +272,27 @@ public class ManagerMercado extends JFrame {
             buscarJugador(textField.getText()); // Realizar búsqueda con filtros
         }
     }
+    
+    private void mostrarResultados() {
+        panelResultados.removeAll();  
+
+        
+        if (resultado.isEmpty()) {
+            
+            panelResultados.add(new JLabel("No se encontraron jugadores."));
+        } else {
+            // Mostrar cada jugador en el panel de resultados
+            for (Jugador jugador : resultado) {
+                JLabel jugadorLabel = new JLabel(jugador.toString());
+                panelResultados.add(jugadorLabel);  
+            }
+        }
+
+       
+        revalidate();
+        repaint();
+    }
+
 
 
     // Clase interna ComboItem para almacenar nombres y IDs en el JComboBox
