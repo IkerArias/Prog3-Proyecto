@@ -134,7 +134,7 @@ public class ManagerMercado extends JFrame {
         resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
              PreparedStatement stmt = conn.prepareStatement(
-                     "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor " +
+                     "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor,j.puntos,j.goles,j.asistencias,j.regates,j.tarjetas_amarillas,j.tarjetas_rojas " +
                      "FROM Jugadores j " +
                      "JOIN Equipos e ON j.equipo_id = e.id " +
                      "WHERE LOWER(j.nombre) LIKE ?")) {
@@ -148,7 +148,14 @@ public class ManagerMercado extends JFrame {
                 String posicion = rs.getString("posicion");
                 String pais = rs.getString("pais");
                 double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor));
+                int puntos = rs.getInt("puntos");
+                int goles = rs.getInt("goles");
+                int asistencias = rs.getInt("asistencias");
+                int regates = rs.getInt("regates");
+                int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
+                int tarjetas_rojas = rs.getInt("tarjetas_rojas");
+                
+                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor,puntos,goles,asistencias,regates,tarjetas_amarillas,tarjetas_rojas));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,7 +168,7 @@ public class ManagerMercado extends JFrame {
     private void buscarJugadorConFiltros(String nombreJugador) {
         resultado = new ArrayList<>();
         StringBuilder query = new StringBuilder(
-            "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor " +
+            "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor,j.puntos,j.goles,j.asistencias,j.regates,j.tarjetas_amarillas,j.tarjetas_rojas  " +
             "FROM Jugadores j " +
             "JOIN Equipos e ON j.equipo_id = e.id " +
             "WHERE 1=1"
@@ -193,12 +200,18 @@ public class ManagerMercado extends JFrame {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                String nombre = rs.getString("nombre");
-                String equipoNombre = rs.getString("equipo_nombre");
-                String posicion = rs.getString("posicion");
-                String pais = rs.getString("pais");
-                double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor));
+            	  String nombre = rs.getString("nombre");
+                  String equipoNombre = rs.getString("equipo_nombre");
+                  String posicion = rs.getString("posicion");
+                  String pais = rs.getString("pais");
+                  double valor = rs.getDouble("valor");
+                  int puntos = rs.getInt("puntos");
+                  int goles = rs.getInt("goles");
+                  int asistencias = rs.getInt("asistencias");
+                  int regates = rs.getInt("regates");
+                  int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
+                  int tarjetas_rojas = rs.getInt("tarjetas_rojas");
+                  resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor,puntos,goles,asistencias,regates,tarjetas_amarillas,tarjetas_rojas));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -269,29 +282,53 @@ public class ManagerMercado extends JFrame {
             equipoFiltro = selectedEquipo != null && selectedEquipo.getId() != -1 ? String.valueOf(selectedEquipo.getId()) : "";
             posicionFiltro = selectedPosicion != null && !selectedPosicion.equals("Seleccione una posicion:") ? selectedPosicion : "";
 
-            buscarJugador(textField.getText()); // Realizar búsqueda con filtros
+            buscarJugador(textField.getText()); 
         }
     }
     
     private void mostrarResultados() {
-        panelResultados.removeAll();  
+        panelResultados.removeAll(); 
 
-        
         if (resultado.isEmpty()) {
-            
             panelResultados.add(new JLabel("No se encontraron jugadores."));
         } else {
-            // Mostrar cada jugador en el panel de resultados
-            for (Jugador jugador : resultado) {
-                JLabel jugadorLabel = new JLabel(jugador.toString());
-                panelResultados.add(jugadorLabel);  
+            
+            String[] columnas = {"Nombre", "Equipo", "Posición", "País", "Valor", "Puntos", "Goles", "Asistencias", "Regates", "Tarjetas Amarillas", "Tarjetas Rojas"};
+            Object[][] datos = new Object[resultado.size()][columnas.length];  
+            
+            
+            
+            for (int i = 0; i < resultado.size(); i++) {
+                Jugador jugador = resultado.get(i);
+                datos[i][0] = jugador.getNombre();
+                datos[i][1] = jugador.getEquipoNombre();
+                datos[i][2] = jugador.getPosicion();
+                datos[i][3] = jugador.getPais();
+                datos[i][4] = jugador.getValor();
+                datos[i][5] = jugador.getPuntos();
+                datos[i][6] = jugador.getGoles();
+                datos[i][7] = jugador.getAsistencias();
+                datos[i][8] = jugador.getRegates();
+                datos[i][9] = jugador.getTarjetas_amarillas();
+                datos[i][10] = jugador.getTarjetas_amarillas();
             }
+
+            
+            JTable table = new JTable(datos, columnas);
+            table.setFillsViewportHeight(true);
+
+            
+            JScrollPane scrollPane = new JScrollPane(table);
+
+            
+            panelResultados.setLayout(new BorderLayout());
+            panelResultados.add(scrollPane, BorderLayout.CENTER);
         }
 
-       
-        revalidate();
+        revalidate(); 
         repaint();
     }
+
 
 
 
