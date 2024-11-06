@@ -33,9 +33,12 @@ public class ManagerMercado extends JFrame {
     private JTextField textField;
     private JPanel panelResultados;
     private ArrayList<Jugador> resultado;
-
     private String equipoFiltro = "";
     private String posicionFiltro = "";
+    private JButton btnAñadirJugador;
+    private JButton btnBuscar;
+    private JButton btnFiltro;
+    
 
     public ManagerMercado() {
         // Configuración de la ventana principal
@@ -55,8 +58,10 @@ public class ManagerMercado extends JFrame {
         textField.setPreferredSize(new java.awt.Dimension(600, 50));
 
         // Botones
-        JButton btnBuscar = new JButton("Buscar");
-        JButton btnFiltro = new JButton("Filtros");
+        btnBuscar = new JButton("Buscar");
+        btnFiltro = new JButton("Filtrar");
+        btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
+       
 
         // Configuración del panel superior
         GridBagConstraints gbc = new GridBagConstraints();
@@ -73,6 +78,9 @@ public class ManagerMercado extends JFrame {
 
         gbc.gridx = 2;
         panelSuperior.add(btnBuscar, gbc);
+        
+        gbc.gridx = 3;
+        panelSuperior.add(btnAñadirJugador,gbc);
 
         add(panelSuperior, BorderLayout.NORTH);
 
