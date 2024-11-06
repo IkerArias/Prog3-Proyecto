@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -67,6 +69,32 @@ public class ManagerLogin extends JFrame {
         }
 
         setVisible(true);
+        
+        addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+
+        	
+        	
+        });
     
 
         // Boton inciar sesion: Valirdar que el usuario esta regustrado en fiuchero csv
@@ -91,6 +119,37 @@ public class ManagerLogin extends JFrame {
                     }
                 }
             }
+        });
+        
+        passwordText.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) { }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                	String username = userText.getText();
+                    String password = new String(passwordText.getPassword());
+                    // Comprobar inicio de sesión
+                    if (username.isEmpty() || password.isEmpty()) {
+                        JOptionPane.showMessageDialog(null, "Por favor, completa todos los campos.");
+                    } else {
+                        // Verificación de usuario
+                        if (validateLogin(username, password)) {
+                        	UserData.setUsername(username);
+                            JOptionPane.showMessageDialog(null, "Bienvenido, " + username + "!");
+                            dispose();
+                            ManagerWelcome v = new ManagerWelcome();
+                            v.setVisible(true);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Credenciales incorrectas. Inténtalo de nuevo.");
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) { }
         });
 
         registerButton.addActionListener(new ActionListener() {
