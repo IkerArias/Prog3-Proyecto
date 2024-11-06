@@ -163,7 +163,7 @@ public class ManagerPlantilla extends JFrame {
     //Metodo reciclado de ManagerMercado
     private void buscarJugador(String textoBuscar) {
         resultado = new ArrayList<>();
-        String query = "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor " +
+        String query = "SELECT j.nombre, j.posicion, e.nombre AS equipo_nombre, j.pais, j.valor,j.puntos,j.goles,j.asistencias,j.regates,j.tarjetas_amarillas,j.tarjetas_rojas " +
                        "FROM Jugadores j " +
                        "JOIN Equipos e ON j.equipo_id = e.id ";
         
@@ -180,12 +180,18 @@ public class ManagerPlantilla extends JFrame {
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                String nombre = rs.getString("nombre");
+            	String nombre = rs.getString("nombre");
                 String equipoNombre = rs.getString("equipo_nombre");
                 String posicion = rs.getString("posicion");
                 String pais = rs.getString("pais");
                 double valor = rs.getDouble("valor");
-                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor));
+                int puntos = rs.getInt("puntos");
+                int goles = rs.getInt("goles");
+                int asistencias = rs.getInt("asistencias");
+                int regates = rs.getInt("regates");
+                int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
+                int tarjetas_rojas = rs.getInt("tarjetas_rojas");
+                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor,puntos,goles,asistencias,regates,tarjetas_amarillas,tarjetas_rojas));
             }
         } catch (SQLException e) {
             e.printStackTrace();
