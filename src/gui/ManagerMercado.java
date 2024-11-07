@@ -6,6 +6,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
@@ -38,6 +39,8 @@ public class ManagerMercado extends JFrame {
     private JButton btnAñadirJugador;
     private JButton btnBuscar;
     private JButton btnFiltro;
+    private JButton btnAtras;
+    private JPanel panelInferior;
     
 
     public ManagerMercado() {
@@ -51,6 +54,7 @@ public class ManagerMercado extends JFrame {
         // Paneles
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         JPanel panelSuperior = new JPanel(new GridBagLayout());
+        
 
         // JTextField de búsqueda
         textField = new JTextField();
@@ -61,6 +65,7 @@ public class ManagerMercado extends JFrame {
         btnBuscar = new JButton("Buscar");
         btnFiltro = new JButton("Filtrar");
         btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
+        btnAtras = new JButton("Atras");
        
 
         // Configuración del panel superior
@@ -81,6 +86,9 @@ public class ManagerMercado extends JFrame {
         
         gbc.gridx = 3;
         panelSuperior.add(btnAñadirJugador,gbc);
+        
+        gbc.gridx = 4;
+        panelSuperior.add(btnAtras);
 
         add(panelSuperior, BorderLayout.NORTH);
 
@@ -88,6 +96,12 @@ public class ManagerMercado extends JFrame {
         panelResultados = new JPanel();
         panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
         add(new JScrollPane(panelResultados), BorderLayout.CENTER);
+        
+        //Panel inferior
+        panelInferior = new JPanel(new GridLayout(1,2,10,10));
+        panelInferior.add(btnAtras);
+        panelInferior.add(btnAñadirJugador);
+        add(panelInferior,BorderLayout.SOUTH);
         
         
       //Cambiar foto de la ventana
@@ -126,16 +140,27 @@ public class ManagerMercado extends JFrame {
                 mostrarFiltros();
             }
         });
-
-        addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                dispose();
-                ManagerWelcome wel = new ManagerWelcome();
-                wel.setVisible(true);
-            }
-        });
+        
+         btnAtras.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+				ManagerWelcome w = new ManagerWelcome();
+				w.setVisible(true);
+				
+				
+				
+			}});
+        
+    
+    
     }
+    
+    
+
+ 
 
     // Método para buscar jugadores con filtros aplicados
     private void buscarJugador(String textoBuscar) {
