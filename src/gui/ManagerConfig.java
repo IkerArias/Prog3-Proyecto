@@ -8,14 +8,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class ManagerConfig extends JFrame {
 
     private static final long serialVersionUID = 1L;
 
-    public ManagerConfig() {
+    public ManagerConfig(String username) {  // Pasamos el nombre de usuario como parámetro al constructor
         setTitle("Configuración del Gestor de Plantillas");
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -155,11 +159,26 @@ public class ManagerConfig extends JFrame {
         });
         buttonPanel.add(saveButton);
 
+        // Botón "Cambiar Contraseña"
+        JButton btnCambiarContraseña = new JButton("Cambiar Contraseña");
+        styleButton(btnCambiarContraseña);
+        btnCambiarContraseña.addActionListener(e -> cambiarContraseña(username));  // Usa el nombre de usuario pasado al constructor
+        buttonPanel.add(btnCambiarContraseña);
+
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.CENTER;
         panel.add(buttonPanel, gbc);
+        
+        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
+        styleButton(btnCerrarSesion);
+        btnCerrarSesion.addActionListener(e -> {
+            dispose();
+            new ManagerLogin().setVisible(true);
+        });
+        
+        buttonPanel.add(btnCambiarContraseña);
 
         try {
             Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
@@ -204,10 +223,18 @@ public class ManagerConfig extends JFrame {
         checkBox.setBackground(new Color(230, 240, 255));
     }
 
+    private void cambiarContraseña(String username) {
+        String nuevaContraseña = JOptionPane.showInputDialog(this, "Introduce la nueva contraseña:");
+        if (nuevaContraseña != null && !nuevaContraseña.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Contraseña cambiada para el usuario " + username);
+            // Aquí puedes agregar lógica adicional para cambiar la contraseña en la base de datos o archivo de configuración
+        }
+    }
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ManagerConfig configFrame = new ManagerConfig();
-            configFrame.setVisible(true);
+            ManagerConfig config = new ManagerConfig("usuarioEjemplo");
+            config.setVisible(true);
         });
     }
 }

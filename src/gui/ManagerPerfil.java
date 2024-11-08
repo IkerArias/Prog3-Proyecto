@@ -65,7 +65,7 @@ public class ManagerPerfil extends JFrame {
         JButton btnConfiguracion = createIconButton("/imagenes/avatar-de-usuario.png");
         btnConfiguracion.addActionListener(e -> {
             dispose();
-            new ManagerConfig().setVisible(true);
+            new ManagerConfig("UsurioEjemplo").setVisible(true);
         });
         panelIzquierda.add(btnConfiguracion);
 
@@ -80,20 +80,9 @@ public class ManagerPerfil extends JFrame {
             new ManagerWelcome().setVisible(true);
         });
 
-        JButton btnCambiarContraseña = new JButton("Cambiar Contraseña");
-        styleButton(btnCambiarContraseña);
-        btnCambiarContraseña.addActionListener(e -> cambiarContraseña(username));
-
-        JButton btnCerrarSesion = new JButton("Cerrar Sesión");
-        styleButton(btnCerrarSesion);
-        btnCerrarSesion.addActionListener(e -> {
-            dispose();
-            new ManagerLogin().setVisible(true);
-        });
 
         panelCentral.add(btnAtras);
-        panelCentral.add(btnCambiarContraseña);
-        panelCentral.add(btnCerrarSesion);
+
 
         // Panel derecho para botón de notificaciones
         JPanel panelDerecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));

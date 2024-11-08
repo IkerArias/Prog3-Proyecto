@@ -3,6 +3,8 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,6 +29,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
+
 import basicas.Jugador;
 
 public class ManagerMercado extends JFrame {
@@ -347,8 +351,24 @@ public class ManagerMercado extends JFrame {
             }
 
             
-            JTable table = new JTable(datos, columnas);
+            JTable table = new JTable(datos, columnas) {
+                @Override
+                public boolean isCellEditable(int row, int column) {
+                    return false;
+                }
+            };
             table.setFillsViewportHeight(true);
+            
+            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                    c.setBackground(row % 2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
+                    c.setForeground(Color.BLACK);
+                    return c;
+                }
+            });
+            
 
             
             JScrollPane scrollPane = new JScrollPane(table);
