@@ -24,14 +24,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 import basicas.Jugador;
+
 
 public class ManagerMercado extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -45,6 +49,7 @@ public class ManagerMercado extends JFrame {
     private JButton btnFiltro;
     private JButton btnAtras;
     private JPanel panelInferior;
+    private ArrayList<String> listaEquipos;
     
 
     public ManagerMercado() {
@@ -106,6 +111,27 @@ public class ManagerMercado extends JFrame {
         panelInferior.add(btnAtras);
         panelInferior.add(btnAñadirJugador);
         add(panelInferior,BorderLayout.SOUTH);
+        
+        listaEquipos = new ArrayList<String>();
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("FC Barcelona");
+		listaEquipos.add("Real Madrid");
+		listaEquipos.add("Atlético de Madrid");
+		listaEquipos.add("Real Sociedad");
+		listaEquipos.add("Real Betis");
+		listaEquipos.add("Sevilla FC");
+		listaEquipos.add("Valencia CF");
+		listaEquipos.add("Villarreal CF");
+		listaEquipos.add("Celta de Vigo");
+		listaEquipos.add("Getafe CF");
+		listaEquipos.add("Rayo Vallecano");
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("Athletic Club De Bilbao");
+		listaEquipos.add("Athletic Club De Bilbao");
+		
         
         
       //Cambiar foto de la ventana
@@ -257,7 +283,7 @@ public class ManagerMercado extends JFrame {
     }
 
 
-    // Método para mostrar el diálogo de filtros
+    
  // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
     private void mostrarFiltros() {
         JComboBox<ComboItem> comboEquipo = new JComboBox<>();
@@ -351,27 +377,107 @@ public class ManagerMercado extends JFrame {
             }
 
             
-            JTable table = new JTable(datos, columnas) {
+            JTable tabla = new JTable(datos, columnas) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
             };
-            table.setFillsViewportHeight(true);
             
-            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-                @Override
-                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                    c.setBackground(row % 2 == 0 ? Color.WHITE : Color.LIGHT_GRAY);
-                    c.setForeground(Color.BLACK);
-                    return c;
+            tabla.getTableHeader().setDefaultRenderer((table, value, isSelected, hasFocus, row, column) -> {
+                JLabel label = new JLabel();
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setIconTextGap(5);
+                label.setText(value.toString());
+
+                
+                ImageIcon icon = null;
+                switch (column) {
+                    case 4: 
+                        icon = cambiarTamañoImagen("src/imagenes/euro.jpg", 20, 20);
+                        break;
+                    case 6: 
+                        icon = cambiarTamañoImagen("src/imagenes/gol.jfif", 20, 20);
+                        break;
+                    case 7: 
+                        icon = cambiarTamañoImagen("src/imagenes/asis.png", 20, 20);
+                        break;
+                    case 9: 
+                        icon = cambiarTamañoImagen("src/imagenes/amarilla.jfif", 20, 20);
+                        break;
+                    case 10: 
+                        icon = cambiarTamañoImagen("src/imagenes/roja.jfif", 20, 20);
+                        break;
                 }
+
+                if (icon != null) {
+                    label.setIcon(icon);
+                }
+
+                label.setHorizontalTextPosition(SwingConstants.RIGHT);
+                label.setVerticalTextPosition(SwingConstants.CENTER);
+
+                label.setOpaque(true);
+                label.setBackground(Color.LIGHT_GRAY);
+                label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+                return label;
             });
+
+             
+                
+             
+                
+        		// Mapa para almacenar las imágenes de los equipos
+        		Map<String, ImageIcon> mapaEquipos = new HashMap<>();
+
+        		// Inicializar las imágenes una vez
+        		for (String equipo : listaEquipos) {
+        		    try {
+        		        ImageIcon icon = new ImageIcon("src/imagenesEscudos.laliga/" + equipo + ".png");
+        		        mapaEquipos.put(equipo, icon);
+        		    } catch (Exception e) {
+        		        System.err.println("No se encontró imagen para el equipo: " + equipo);
+        		    }
+        		}
+
+        		// Renderizado personalizado para las celdas de la tabla
+        		TableCellRenderer cellRenderer = (table, value, isSelected, hasFocus, row, column) -> {
+        		    JLabel label = new JLabel();
+        		    label.setHorizontalAlignment(SwingConstants.CENTER);
+
+        		    // Renderizado para la columna del equipo
+        		    if (column == 1) { // Suponiendo que la columna de equipo es la 1
+        		        String equipo = (String) value;
+        		        label.setText(equipo);
+        		        ImageIcon icono = mapaEquipos.get(equipo);
+        		        if (icono != null) {
+        		            label.setIcon(icono);
+        		        }
+        		    } else {
+        		        // Renderizado estándar para las demás celdas
+        		        label.setText(value != null ? value.toString() : "");
+        		    }
+
+        		    // Opcional: agregar estilo a las celdas
+        		    label.setOpaque(true);
+        		    
+        		    label.setForeground(Color.BLACK);
+
+        		    return label;
+        		};
+
+        		// Asignar el renderizado personalizado a todas las celdas de la tabla
+        		tabla.setDefaultRenderer(Object.class, cellRenderer);
+
+                
+
+                
+                JScrollPane scrollPane = new JScrollPane(tabla);
             
 
             
-            JScrollPane scrollPane = new JScrollPane(table);
+         
 
             
             panelResultados.setLayout(new BorderLayout());
@@ -381,6 +487,18 @@ public class ManagerMercado extends JFrame {
         revalidate(); 
         repaint();
     }
+    
+    private ImageIcon cambiarTamañoImagen(String ruta, int ancho, int alto) {
+        try {
+            Image imagenOriginal = ImageIO.read(new File(ruta));
+            Image imagenEscalada = imagenOriginal.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
+            return new ImageIcon(imagenEscalada);
+        } catch (IOException e) {
+            System.err.println("Error al cargar la imagen: " + ruta);
+            return null;
+        }
+    }
+
 
 
 
