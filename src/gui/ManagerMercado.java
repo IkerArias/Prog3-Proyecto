@@ -5,6 +5,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,8 +14,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -28,11 +29,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowSorter;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import basicas.Jugador;
 
@@ -62,24 +78,56 @@ public class ManagerMercado extends JFrame {
         
 
         // Paneles
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
         JPanel panelSuperior = new JPanel(new GridBagLayout());
-        
-        
-        
-        
+        panelSuperior.setBackground(new Color(235, 235, 235)); 
+        panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
 
         // JTextField de búsqueda
         textField = new JTextField();
         textField.setFont(new Font("Courier", Font.BOLD, 24));
-        textField.setPreferredSize(new java.awt.Dimension(600, 50));
+        textField.setPreferredSize(new Dimension(600, 50));
+        textField.setBackground(new Color(245, 245, 245)); 
+        textField.setForeground(new Color(50, 50, 50)); 
+        textField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2)); 
+        textField.setCaretColor(Color.BLUE);
 
         // Botones
         btnBuscar = new JButton("Buscar");
+        btnBuscar.setFont(new Font("Arial", Font.BOLD, 16));
+        btnBuscar.setForeground(Color.WHITE);
+        btnBuscar.setBackground(new Color(0, 123, 255)); // Fondo azul brillante
+        btnBuscar.setFocusPainted(false);
+        btnBuscar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnBuscar.setPreferredSize(new Dimension(120, 50));
+        btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
         btnFiltro = new JButton("Filtrar");
+        btnFiltro.setFont(new Font("Arial", Font.BOLD, 16));
+        btnFiltro.setForeground(Color.WHITE);
+        btnFiltro.setBackground(new Color(255, 193, 7)); 
+        btnFiltro.setFocusPainted(false);
+        btnFiltro.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnFiltro.setPreferredSize(new Dimension(120, 50));
+        btnFiltro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
         btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
+        btnAñadirJugador.setFont(new Font("Arial", Font.BOLD, 16));
+        btnAñadirJugador.setForeground(Color.WHITE);
+        btnAñadirJugador.setBackground(new Color(40, 167, 69)); 
+        btnAñadirJugador.setFocusPainted(false);
+        btnAñadirJugador.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnAñadirJugador.setPreferredSize(new Dimension(220, 50)); 
+        btnAñadirJugador.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
         btnAtras = new JButton("Atras");
+        btnAtras.setFont(new Font("Arial", Font.BOLD, 16));
+        btnAtras.setForeground(Color.WHITE);
+        btnAtras.setBackground(new Color(108, 117, 125)); 
+        btnAtras.setFocusPainted(false);
+        btnAtras.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnAtras.setPreferredSize(new Dimension(120, 50));
+        btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         
         configurarBotones(btnBuscar);
         configurarBotones(btnFiltro);
@@ -119,33 +167,13 @@ public class ManagerMercado extends JFrame {
         
         //Panel inferior
         panelInferior = new JPanel(new GridLayout(1,2,10,10));
+        panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelInferior.add(btnAtras);
         panelInferior.add(btnAñadirJugador);
         add(panelInferior,BorderLayout.SOUTH);
-        panelInferior.setBackground(new Color(196, 238, 255));
-        
-        listaEquipos = new ArrayList<String>();
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("FC Barcelona");
-		listaEquipos.add("Real Madrid");
-		listaEquipos.add("Atlético de Madrid");
-		listaEquipos.add("Real Sociedad");
-		listaEquipos.add("Real Betis");
-		listaEquipos.add("Sevilla FC");
-		listaEquipos.add("Valencia CF");
-		listaEquipos.add("Villarreal CF");
-		listaEquipos.add("Celta de Vigo");
-		listaEquipos.add("Getafe CF");
-		listaEquipos.add("Rayo Vallecano");
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("Athletic Club De Bilbao");
-		listaEquipos.add("Athletic Club De Bilbao");
-		
         
         
+
       //Cambiar foto de la ventana
         try {
             Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
@@ -200,9 +228,6 @@ public class ManagerMercado extends JFrame {
     
     }
     
-    
-
- 
 
     // Método para buscar jugadores con filtros aplicados
     private void buscarJugador(String textoBuscar) {
@@ -300,6 +325,13 @@ public class ManagerMercado extends JFrame {
     private void mostrarFiltros() {
         JComboBox<ComboItem> comboEquipo = new JComboBox<>();
         JComboBox<String> comboPosicion = new JComboBox<>();
+        
+        comboEquipo.setFont(new Font("Arial", Font.PLAIN, 14));
+        comboPosicion.setFont(new Font("Arial", Font.PLAIN, 14));
+        comboEquipo.setBackground(new Color(255, 255, 255)); 
+        comboPosicion.setBackground(new Color(255, 255, 255)); 
+        comboEquipo.setForeground(Color.DARK_GRAY); 
+        comboPosicion.setForeground(Color.DARK_GRAY);
 
         // Cargar equipos desde la base de datos y añadirlos al comboBox
         comboEquipo.addItem(new ComboItem("Seleccione un equipo:", -1));
@@ -406,112 +438,53 @@ public class ManagerMercado extends JFrame {
                     return false;
                 }
             };
-            
-            tabla.getTableHeader().setDefaultRenderer((table, value, isSelected, hasFocus, row, column) -> {
-                JLabel label = new JLabel();
-                label.setHorizontalAlignment(SwingConstants.CENTER);
-                label.setIconTextGap(5);
-                label.setText(value.toString());
-              
-                
-                if (value != null) {
-                    label.setToolTipText(value.toString());
-                } else {
-                    label.setToolTipText(null);
-                }
-
-                
-                ImageIcon icon = null;
-                switch (column) {
-                    case 4: 
-                        icon = cambiarTamañoImagen("src/imagenes/euro.jpg", 20, 20);
-                        break;
-                    case 6: 
-                        icon = cambiarTamañoImagen("src/imagenes/gol.jfif", 20, 20);
-                        break;
-                    case 7: 
-                        icon = cambiarTamañoImagen("src/imagenes/asis.png", 20, 20);
-                        break;
-                    case 9: 
-                        icon = cambiarTamañoImagen("src/imagenes/amarilla.jfif", 20, 20);
-                        break;
-                    case 10: 
-                        icon = cambiarTamañoImagen("src/imagenes/roja.jfif", 20, 20);
-                        break;
-                }
-
-                if (icon != null) {
-                    label.setIcon(icon);
-                }
-
-                label.setHorizontalTextPosition(SwingConstants.RIGHT);
-                label.setVerticalTextPosition(SwingConstants.CENTER);
-
-                label.setOpaque(true);
-                label.setBackground(Color.LIGHT_GRAY);
-                label.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-                return label;
-            });
-
-             
-                
-             
-                
-        		
-        		Map<String, ImageIcon> mapaEquipos = new HashMap<>();
-
-        		
-        		for (String equipo : listaEquipos) {
-        		    try {
-        		        ImageIcon icon = new ImageIcon("src/imagenesEscudos.laliga/" + equipo + ".png");
-        		        mapaEquipos.put(equipo, icon);
-        		    } catch (Exception e) {
-        		        System.err.println("No se encontró imagen para el equipo: " + equipo);
-        		    }
-        		}
-
-        		// Renderizado personalizado para las celdas de la tabla
-        		TableCellRenderer cellRenderer = (table, value, isSelected, hasFocus, row, column) -> {
-        		    JLabel label = new JLabel();
-        		    label.setHorizontalAlignment(SwingConstants.CENTER);
-        		    if (value != null) {
-                        label.setToolTipText(value.toString());
-                    }
-        		    		   
-        		            		   
-        		    if (column == 1) { 
-        		        String equipo = (String) value;
-        		        label.setText(equipo);
-        		        ImageIcon icono = mapaEquipos.get(equipo);
-        		        if (icono != null) {
-        		            label.setIcon(icono);
-        		        }
-        		    } else {
-        		       
-        		        label.setText(value != null ? value.toString() : "");
-        		    }
-
-        		    
-        		    label.setOpaque(true);
-        		    
-        		    label.setForeground(Color.BLACK);
-
-        		    return label;
-        		};
-
-        		// Asignar el renderizado personalizado a todas las celdas de la tabla
-        		tabla.setDefaultRenderer(Object.class, cellRenderer);
-
-                
-
-                
-                JScrollPane scrollPane = new JScrollPane(tabla);
-            
 
             
-         
-
+               
+            JScrollPane scrollPane = new JScrollPane(tabla);
+            tabla.getTableHeader().setDefaultRenderer(headerRenderer);
+        	tabla.setDefaultRenderer(Object.class, cellRenderer);
+            tabla.getTableHeader().setPreferredSize(new Dimension(tabla.getPreferredSize().width, 50));
+            
+            //Se define la altura de las filas de la tabla de comics
+            tabla.setRowHeight(30);
+            
+    		//Se deshabilita la reordenación de columnas
+            tabla.getTableHeader().setReorderingAllowed(false);
+    		//Se deshabilita el redimensionado de las columna
+            tabla.getTableHeader().setResizingAllowed(false);
+    		//Se definen criterios de ordenación por defecto para cada columna
+            
+            
+            
+            tabla.setAutoCreateRowSorter(true);
+            
+            RowSorter<? extends TableModel> sorter = tabla.getRowSorter();
+            if (sorter instanceof TableRowSorter) {
+                TableRowSorter<?> tableRowSorter = (TableRowSorter<?>) sorter;
+                tableRowSorter.setComparator(4, (o1, o2) -> {
+                    // Compara los valores numéricamente
+                    Double valor1 = (Double) o1;
+                    Double valor2 = (Double) o2;
+                    return valor1.compareTo(valor2);
+                });
+            }
+            
+            tabla.getColumnModel().getColumn(0).setPreferredWidth(200);  // Columna del nombre más ancha
+        	tabla.getColumnModel().getColumn(1).setPreferredWidth(100);  // Columna del equipo
+        	tabla.getColumnModel().getColumn(2).setPreferredWidth(170);  // Columna de la posición
+        	tabla.getColumnModel().getColumn(4).setPreferredWidth(100);  // Columna del valor
+        	tabla.getColumnModel().getColumn(5).setPreferredWidth(80);   // Columna de los puntos
+        	tabla.getColumnModel().getColumn(6).setPreferredWidth(80);   // Columna de los goles
+        	tabla.getColumnModel().getColumn(7).setPreferredWidth(100);  // Columna de las asistencias
+        	tabla.getColumnModel().getColumn(8).setPreferredWidth(100);  // Columna de los regates
+        	tabla.getColumnModel().getColumn(9).setPreferredWidth(120);  // Columna de las tarjetas amarillas
+        	tabla.getColumnModel().getColumn(10).setPreferredWidth(120); // Columna de las tarjetas rojas
+        	
+        	
+        	
+        	
+            
             
             panelResultados.setLayout(new BorderLayout());
             panelResultados.add(scrollPane, BorderLayout.CENTER);
@@ -521,19 +494,91 @@ public class ManagerMercado extends JFrame {
         repaint();
     }
     
-    private ImageIcon cambiarTamañoImagen(String ruta, int ancho, int alto) {
-        try {
-            Image imagenOriginal = ImageIO.read(new File(ruta));
-            Image imagenEscalada = imagenOriginal.getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-            return new ImageIcon(imagenEscalada);
-        } catch (IOException e) {
-            System.err.println("Error al cargar la imagen: " + ruta);
-            return null;
+    
+    
+    TableCellRenderer headerRenderer = (table, value, isSelected, hasFocus, row, column) -> {
+        JLabel result = new JLabel(value != null ? value.toString() : "");
+
+        // Renderizar el encabezado de la columna
+        result.setFont(new Font("Arial", Font.BOLD, 14));  // Establecer la fuente en negrita para los títulos de las columnas
+        result.setHorizontalAlignment(SwingConstants.CENTER); // Alinear el texto al centro
+
+        if (column == 9) {  // Columna de tarjetas amarillas
+            result.setText(""); // No texto, solo la imagen
+            result.setHorizontalAlignment(JLabel.CENTER);
+            ImageIcon yellowIcon = new ImageIcon("src/imagenes/amarilla.png");
+            Image yellowImage = yellowIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            result.setIcon(new ImageIcon(yellowImage));
+        } else if (column == 10) {  // Columna de tarjetas rojas
+            result.setText(""); // No texto, solo la imagen
+            result.setHorizontalAlignment(JLabel.CENTER);
+            ImageIcon redIcon = new ImageIcon("src/imagenes/roja.png");
+            Image redImage = redIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+            result.setIcon(new ImageIcon(redImage));
         }
-    }
+        
+        result.setBackground(new Color(0, 51, 102));
+        result.setForeground(Color.WHITE);
+        result.setOpaque(true);
+        return result;
+    };
+
+    TableCellRenderer cellRenderer = (table, value, isSelected, hasFocus, row, column) -> {
+        JLabel result = new JLabel(value != null ? value.toString() : "");
+        
+        // Verificar si es la columna de equipo
+        if (column == 1) {
+            String equipoNombre = (String) value;
+            String imagePath = "src/imagenesEscudos/laliga/" + equipoNombre + ".png";
+            ImageIcon icon = new ImageIcon(imagePath);
+            Image image = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+            result.setIcon(new ImageIcon(image));
+            result.setHorizontalAlignment(SwingConstants.CENTER);
+            result.setText(""); 
+            result.setToolTipText(equipoNombre);
+        }
+
+        // Establecer el estilo para las celdas
+        if (column == 0) {
+            result.setFont(new Font("Arial", Font.BOLD, 16));  // Nombre en negrita
+            result.setHorizontalAlignment(SwingConstants.LEFT);  // Alinear el texto a la izquierda
+        } else if (column == 4) {
+            result.setFont(new Font("Arial", Font.BOLD, 16));  // Valor en negrita
+            result.setHorizontalAlignment(SwingConstants.RIGHT);  // Alinear el valor a la derecha
+        } else {
+            result.setFont(new Font("Arial", Font.PLAIN, 14));  // Otras celdas con fuente normal
+            result.setHorizontalAlignment(SwingConstants.CENTER);  // Alinear al centro
+        }
+
+        // Definir color de fondo alternado
+        if (row % 2 == 0) {  // Fila par
+            result.setBackground(new Color(240, 248, 255));  // Color claro
+        } else {  // Fila impar
+            result.setBackground(new Color(255, 255, 255));  // Color blanco
+        }
+
+        // Color de fondo para la selección
+        if (isSelected) {
+            result.setBackground(new Color(173, 216, 230));  // Color de fondo al seleccionar
+        }
+        
+        if (column == 4) { // Si es la columna de valor
+            double valor = (double) value;
+            if (valor > 80) {  // Si el valor es mayor a 100 millones
+                result.setFont(new Font("Arial", Font.BOLD, 16));  // Poner en negrita
+                result.setForeground(Color.RED);  // Y cambiar el color a rojo
+            }
+            result.setHorizontalAlignment(SwingConstants.CENTER);
+        }
+
+        result.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        result.setOpaque(true);  // Necesario para que el color de fondo se vea
+        return result;
+    };
 
 
-
+	
+    
 
 
     // Clase interna ComboItem para almacenar nombres y IDs en el JComboBox
