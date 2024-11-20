@@ -72,7 +72,7 @@ public class ManagerMercado extends JFrame {
         setLayout(new BorderLayout(10, 10));
         
 
-        // Paneles
+     // Paneles
         JPanel panelSuperior = new JPanel(new GridBagLayout());
         panelSuperior.setBackground(new Color(235, 235, 235)); 
         panelSuperior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -85,35 +85,35 @@ public class ManagerMercado extends JFrame {
         textField.setBackground(new Color(245, 245, 245)); 
         textField.setForeground(new Color(50, 50, 50)); 
         textField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2)); 
-        textField.setCaretColor(Color.BLUE);
+        textField.setCaretColor(Color.GRAY);
 
         // Botones
         btnBuscar = new JButton("Buscar");
         btnBuscar.setFont(new Font("Arial", Font.BOLD, 16));
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setBackground(new Color(0, 123, 255)); // Fondo azul brillante
+        btnBuscar.setForeground(Color.BLACK);
+        btnBuscar.setBackground(new Color(255, 239, 108));
         btnBuscar.setFocusPainted(false);
         btnBuscar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnBuscar.setPreferredSize(new Dimension(120, 50));
         btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBuscar.setOpaque(true);
-       
+        
+        Color softColor = new Color(0, 51, 102); 
         
         btnFiltro = new JButton("Filtrar");
         btnFiltro.setFont(new Font("Arial", Font.BOLD, 16));
         btnFiltro.setForeground(Color.WHITE);
-        btnFiltro.setBackground(new Color(255, 193, 7)); 
+        btnFiltro.setBackground(softColor); 
         btnFiltro.setFocusPainted(false);
         btnFiltro.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnFiltro.setPreferredSize(new Dimension(120, 50));
         btnFiltro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFiltro.setOpaque(true);
-       
         
         btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
         btnAñadirJugador.setFont(new Font("Arial", Font.BOLD, 16));
         btnAñadirJugador.setForeground(Color.WHITE);
-        btnAñadirJugador.setBackground(new Color(40, 167, 69)); 
+        btnAñadirJugador.setBackground(softColor); 
         btnAñadirJugador.setFocusPainted(false);
         btnAñadirJugador.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnAñadirJugador.setPreferredSize(new Dimension(220, 50)); 
@@ -123,17 +123,17 @@ public class ManagerMercado extends JFrame {
         btnAtras = new JButton("Atras");
         btnAtras.setFont(new Font("Arial", Font.BOLD, 16));
         btnAtras.setForeground(Color.WHITE);
-        btnAtras.setBackground(new Color(108, 117, 125)); 
+        btnAtras.setBackground(softColor); 
         btnAtras.setFocusPainted(false);
         btnAtras.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnAtras.setPreferredSize(new Dimension(120, 50));
         btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAtras.setOpaque(true);
         
-        configurarBotones(btnBuscar);
-        configurarBotones(btnFiltro);
-        configurarBotones(btnAñadirJugador);
-        configurarBotones(btnAtras);  
+        add(btnBuscar);
+        add(btnFiltro);
+        add(btnAñadirJugador);
+        add(btnAtras);  
        
 
         // Configuración del panel superior
@@ -394,16 +394,7 @@ public class ManagerMercado extends JFrame {
         }
     }
     
-    private void configurarBotones(JButton boton) {
-        boton.setFont(new Font("Arial", Font.BOLD, 16));
-        
-        boton.setForeground(Color.black);
-        boton.setFocusPainted(false);
-        
-        boton.setBackground(Color.LIGHT_GRAY);
-        boton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        
-    }
+  
     
     private void mostrarResultados() {
         panelResultados.removeAll(); 
