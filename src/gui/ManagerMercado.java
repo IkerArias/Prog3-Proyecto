@@ -59,10 +59,15 @@ public class ManagerMercado extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout(10, 10));
+        
 
         // Paneles
         JPanel panelPrincipal = new JPanel(new BorderLayout());
         JPanel panelSuperior = new JPanel(new GridBagLayout());
+        
+        
+        
+        
         
 
         // JTextField de búsqueda
@@ -75,6 +80,11 @@ public class ManagerMercado extends JFrame {
         btnFiltro = new JButton("Filtrar");
         btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
         btnAtras = new JButton("Atras");
+        
+        configurarBotones(btnBuscar);
+        configurarBotones(btnFiltro);
+        configurarBotones(btnAñadirJugador);
+        configurarBotones(btnAtras);  
        
 
         // Configuración del panel superior
@@ -106,11 +116,13 @@ public class ManagerMercado extends JFrame {
         panelResultados.setLayout(new BoxLayout(panelResultados, BoxLayout.Y_AXIS));
         add(new JScrollPane(panelResultados), BorderLayout.CENTER);
         
+        
         //Panel inferior
         panelInferior = new JPanel(new GridLayout(1,2,10,10));
         panelInferior.add(btnAtras);
         panelInferior.add(btnAñadirJugador);
         add(panelInferior,BorderLayout.SOUTH);
+        panelInferior.setBackground(new Color(196, 238, 255));
         
         listaEquipos = new ArrayList<String>();
 		listaEquipos.add("Athletic Club De Bilbao");
@@ -347,6 +359,17 @@ public class ManagerMercado extends JFrame {
 
             buscarJugador(textField.getText()); 
         }
+    }
+    
+    private void configurarBotones(JButton boton) {
+        boton.setFont(new Font("Arial", Font.BOLD, 16));
+        
+        boton.setForeground(Color.black);
+        boton.setFocusPainted(false);
+        
+        boton.setBackground(Color.LIGHT_GRAY);
+        boton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        
     }
     
     private void mostrarResultados() {
