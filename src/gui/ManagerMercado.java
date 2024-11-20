@@ -389,6 +389,13 @@ public class ManagerMercado extends JFrame {
                 label.setHorizontalAlignment(SwingConstants.CENTER);
                 label.setIconTextGap(5);
                 label.setText(value.toString());
+              
+                
+                if (value != null) {
+                    label.setToolTipText(value.toString());
+                } else {
+                    label.setToolTipText(null);
+                }
 
                 
                 ImageIcon icon = null;
@@ -428,10 +435,10 @@ public class ManagerMercado extends JFrame {
                 
              
                 
-        		// Mapa para almacenar las imágenes de los equipos
+        		
         		Map<String, ImageIcon> mapaEquipos = new HashMap<>();
 
-        		// Inicializar las imágenes una vez
+        		
         		for (String equipo : listaEquipos) {
         		    try {
         		        ImageIcon icon = new ImageIcon("src/imagenesEscudos.laliga/" + equipo + ".png");
@@ -445,9 +452,12 @@ public class ManagerMercado extends JFrame {
         		TableCellRenderer cellRenderer = (table, value, isSelected, hasFocus, row, column) -> {
         		    JLabel label = new JLabel();
         		    label.setHorizontalAlignment(SwingConstants.CENTER);
-
-        		    // Renderizado para la columna del equipo
-        		    if (column == 1) { // Suponiendo que la columna de equipo es la 1
+        		    if (value != null) {
+                        label.setToolTipText(value.toString());
+                    }
+        		    		   
+        		            		   
+        		    if (column == 1) { 
         		        String equipo = (String) value;
         		        label.setText(equipo);
         		        ImageIcon icono = mapaEquipos.get(equipo);
@@ -455,11 +465,11 @@ public class ManagerMercado extends JFrame {
         		            label.setIcon(icono);
         		        }
         		    } else {
-        		        // Renderizado estándar para las demás celdas
+        		       
         		        label.setText(value != null ? value.toString() : "");
         		    }
 
-        		    // Opcional: agregar estilo a las celdas
+        		    
         		    label.setOpaque(true);
         		    
         		    label.setForeground(Color.BLACK);
