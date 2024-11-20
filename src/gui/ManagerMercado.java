@@ -96,6 +96,8 @@ public class ManagerMercado extends JFrame {
         btnBuscar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnBuscar.setPreferredSize(new Dimension(120, 50));
         btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBuscar.setOpaque(true);
+       
         
         btnFiltro = new JButton("Filtrar");
         btnFiltro.setFont(new Font("Arial", Font.BOLD, 16));
@@ -105,6 +107,8 @@ public class ManagerMercado extends JFrame {
         btnFiltro.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnFiltro.setPreferredSize(new Dimension(120, 50));
         btnFiltro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFiltro.setOpaque(true);
+       
         
         btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
         btnAñadirJugador.setFont(new Font("Arial", Font.BOLD, 16));
@@ -114,6 +118,7 @@ public class ManagerMercado extends JFrame {
         btnAñadirJugador.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnAñadirJugador.setPreferredSize(new Dimension(220, 50)); 
         btnAñadirJugador.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAñadirJugador.setOpaque(true);
         
         btnAtras = new JButton("Atras");
         btnAtras.setFont(new Font("Arial", Font.BOLD, 16));
@@ -123,6 +128,7 @@ public class ManagerMercado extends JFrame {
         btnAtras.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnAtras.setPreferredSize(new Dimension(120, 50));
         btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAtras.setOpaque(true);
         
         configurarBotones(btnBuscar);
         configurarBotones(btnFiltro);
