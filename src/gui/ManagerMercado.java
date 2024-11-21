@@ -494,6 +494,11 @@ public class ManagerMercado extends JFrame {
         // Renderizar el encabezado de la columna
         result.setFont(new Font("Arial", Font.BOLD, 14));  // Establecer la fuente en negrita para los títulos de las columnas
         result.setHorizontalAlignment(SwingConstants.CENTER); // Alinear el texto al centro
+        
+        //Establecer el toolTipText
+        if(value!= null) {
+        	 result.setToolTipText(value.toString());
+        }
 
         if (column == 9) {  // Columna de tarjetas amarillas
             result.setText(""); // No texto, solo la imagen
@@ -529,6 +534,12 @@ public class ManagerMercado extends JFrame {
             result.setText(""); 
             result.setToolTipText(equipoNombre);
         }
+        
+        
+        //Establecer el toolTipText
+        if(value!= null) {
+       	 result.setToolTipText(value.toString());
+       }
 
         // Establecer el estilo para las celdas
         if (column == 0) {
