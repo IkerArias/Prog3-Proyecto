@@ -303,7 +303,7 @@ public class ManagerWelcome extends JFrame {
         btnClasificacion.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a la clasificación...");
+                
                 dispose();
                 ManagerClasificacion clasificacion = new ManagerClasificacion();
                 clasificacion.setVisible(true);
@@ -314,7 +314,7 @@ public class ManagerWelcome extends JFrame {
         btnPlantilla.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo a mi plantilla...");
+               
                 dispose();
                 ManagerPlantilla plantilla = new ManagerPlantilla();
                 plantilla.setVisible(true);
@@ -325,7 +325,7 @@ public class ManagerWelcome extends JFrame {
         btnMercado.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo al mercado...");
+               
                 dispose();
                 ManagerMercado mercado = new ManagerMercado();
                 mercado.setVisible(true);
@@ -338,7 +338,7 @@ public class ManagerWelcome extends JFrame {
         btnPerfil.addActionListener(new ActionListener() {
         	@Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Accediendo al perfil...");
+                
                 dispose();
                 ManagerPerfil perfil = new ManagerPerfil();
                 perfil.setVisible(true);
