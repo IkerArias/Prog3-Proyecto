@@ -11,19 +11,22 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+
 
 import basicas.Jugador;
 
 public class ManagerPlantilla extends JFrame {
 
-    private ArrayList<Jugador> resultado;
+    private static final long serialVersionUID = 1L;
+    
+	private ArrayList<Jugador> resultado;
     private double presupuesto = 200.0; // Presupuesto inicial
     private JLabel lblPresupuesto;
     private JLabel lblFormacion;
     private JPanel pnlPlantilla; // Panel central para la formación
     private JComboBox<String> formationSelector; // Selector de formación
     private JButton[] playerButtons; // Botones reutilizables para los jugadores
+    private JProgressBar progressBar; // Barra de progreso
 
     public ManagerPlantilla() {
         // Configuración básica
@@ -97,19 +100,18 @@ public class ManagerPlantilla extends JFrame {
             playerButtons[i] = crearBotonJugador(null);
         }
 
-        // Configurar formación inicial
+     // Configurar formación inicial
         configurarFormacion("4-3-3");
 
-        // Panel inferior (Banquillo)
-        JPanel benchPanel = new JPanel(new GridLayout(1, 4, 10, 10));
-        benchPanel.setOpaque(false);
-        benchPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-        JButton[] benchButtons = new JButton[4];
-        for (int i = 0; i < 4; i++) {
-            benchButtons[i] = crearBotonJugador("Banquillo " + (i + 1));
-            benchPanel.add(benchButtons[i]);
-        }
-        add(benchPanel, BorderLayout.SOUTH);
+        // Barra de progreso
+        progressBar = new JProgressBar(0, 100);
+        progressBar.setStringPainted(true);
+        progressBar.setPreferredSize(new Dimension(300, 25));
+        progressBar.setVisible(false); // Se muestra solo cuando está trabajando
+        JPanel progressPanel = new JPanel();
+        progressPanel.setOpaque(false);
+        progressPanel.add(progressBar);
+        add(progressPanel, BorderLayout.SOUTH);
     }
 
     private JButton crearBotonJugador(String texto) {
@@ -329,10 +331,42 @@ public class ManagerPlantilla extends JFrame {
     }
 
     private void cambiarFormacion(ActionEvent e) {
-    	reiniciarBotonesFormacion();
-        String seleccion = (String) formationSelector.getSelectedItem();
-        configurarFormacion(seleccion);
+        reiniciarBotonesFormacion();
+
+        // Mostrar barra de progreso
+        progressBar.setVisible(true);
+
+        // Crear un SwingWorker para cambiar la formación
+        SwingWorker<Void, Integer> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws InterruptedException {
+                String seleccion = (String) formationSelector.getSelectedItem();
+                Thread.sleep(100); // Simula un breve retraso para mostrar la barra de progreso
+
+                for (int i = 0; i <= 100; i++) {
+                    Thread.sleep(30); // Simula un pequeño retraso
+                    publish(i); // Actualiza el progreso
+                }
+
+                Thread.sleep(1500); // Espera de 1,5 segundos (simulación)
+                configurarFormacion(seleccion);
+                return null;
+            }
+
+            @Override
+            protected void process(java.util.List<Integer> chunks) {
+                // Actualiza el progreso de la barra
+                progressBar.setValue(chunks.get(chunks.size() - 1));
+            }
+
+            @Override
+            protected void done() {
+                progressBar.setVisible(false); // Ocultar la barra después de completar
+            }
+        };
+        worker.execute();
     }
+    
     private void reiniciarBotonesFormacion() {
         for (JButton boton : playerButtons) {
         	boton.setText(""); 
