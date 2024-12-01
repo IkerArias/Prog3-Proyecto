@@ -33,8 +33,8 @@ public class ManagerConfig extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-                Color color1 = new Color(230, 240, 255);
-                Color color2 = new Color(180, 200, 240);
+                Color color1 = new Color(196, 238, 255);
+                Color color2 = Color.WHITE;
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, getHeight(), color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
@@ -200,7 +200,7 @@ public class ManagerConfig extends JFrame {
 
     private void styleButton(JButton button) {
         button.setBackground(new Color(60, 63, 65));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -215,7 +215,7 @@ public class ManagerConfig extends JFrame {
 
     private void styleComboBox(JComboBox<String> comboBox) {
         comboBox.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        comboBox.setBorder(new LineBorder(new Color(0, 102, 204), 1));
+        
     }
 
     private void styleCheckBox(JCheckBox checkBox) {

@@ -13,32 +13,28 @@ public class ManagerClasificacion extends JFrame {
     private static final long serialVersionUID = 1L;
     
     public ManagerClasificacion() {
-        setSize(400, 400);  // Ajusta el tamaño de la ventana
+        setSize(400, 400);
         setTitle("Clasificación");
         setResizable(false);
         setLocationRelativeTo(null);
         
-        String username = UserData.getUsername();  // Obtén el nombre de usuario que ha iniciado sesión
-        List<Usuario> usuarios = obtenerUsuarios();  // Obtén la lista de usuarios
+        String username = UserData.getUsername();
+        List<Usuario> usuarios = obtenerUsuarios();
         
-        // Ordenar los usuarios por los puntos de forma descendente
         Collections.sort(usuarios, (u1, u2) -> Integer.compare(u2.getPuntos(), u1.getPuntos()));
         
-        // Panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(230, 240, 250)); // Fondo claro y agradable
+        mainPanel.setBackground(new Color(196, 238, 255));
         
-        // Título de la ventana
         JLabel labelTitulo = new JLabel("Clasificación", JLabel.CENTER);
         labelTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
         labelTitulo.setOpaque(true);
-        labelTitulo.setBackground(new Color(33, 150, 243)); // Azul brillante
-        labelTitulo.setForeground(Color.WHITE);
+        labelTitulo.setBackground(new Color(196, 238, 255));
+        labelTitulo.setForeground(Color.BLACK);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
         
-        // Crear la tabla para mostrar usuarios y puntos
         String[] columnNames = {"Usuario", "Puntos"};
         Object[][] data = new Object[usuarios.size()][2];
         
@@ -48,46 +44,43 @@ public class ManagerClasificacion extends JFrame {
             data[i][1] = usuario.getPuntos();
         }
         
-        // Crear la tabla con los datos de usuarios y puntos
         JTable tablaClasificacion = new JTable(data, columnNames);
         tablaClasificacion.setFont(new Font("SansSerif", Font.PLAIN, 16));
         tablaClasificacion.setRowHeight(30);
         
-        // Subrayar al usuario actual
         tablaClasificacion.setDefaultRenderer(Object.class, (table, value, isSelected, hasFocus, row, column) -> {
             JLabel label = new JLabel(value.toString(), JLabel.CENTER);
             if (column == 0 && value.equals(username)) {
-                // Subrayar al usuario actual
                 label.setFont(new Font("SansSerif", Font.BOLD, 16));
-                label.setForeground(new Color(33, 150, 243));  // Color del usuario actual
-                label.setText("<html><u>" + value + "</u></html>");  // Subrayado
+                label.setForeground(new Color(33, 150, 243));
+                label.setText("<html><u>" + value + "</u></html>");
             } else {
                 label.setFont(new Font("SansSerif", Font.PLAIN, 16));
                 label.setForeground(Color.BLACK);
             }
             return label;
         });
+
+        tablaClasificacion.setBorder(BorderFactory.createEmptyBorder());  // Quitar el borde de la tabla
         
-        // Añadir la tabla al panel
         JScrollPane scrollPane = new JScrollPane(tablaClasificacion);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
         
-        // Panel para el botón de volver atrás
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        panelInferior.setBackground(new Color(196, 238, 255));
         JButton btnAtras = new JButton("Atrás");
         btnAtras.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        btnAtras.setToolTipText("Volver a la ventana principal");
         btnAtras.addActionListener(e -> {
             dispose();
-            new ManagerWelcome().setVisible(true);  // Regresar a la ventana de bienvenida
+            new ManagerWelcome().setVisible(true);
         });
         panelInferior.add(btnAtras);
         mainPanel.add(panelInferior, BorderLayout.SOUTH);
         
-        // Agregar el panel principal a la ventana
         add(mainPanel);
         
-        // Manejar el cierre de la ventana
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -97,22 +90,25 @@ public class ManagerClasificacion extends JFrame {
         });
     }
     
-    // Método para obtener todos los usuarios desde el archivo usuarios.csv
     private List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String filePath = "usuarios.csv";
+        
+        Random random = new Random();
         
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] datos = line.split(";");
                 if (datos.length >= 2) {
-                    String username = datos[0];  // El primer campo es el nombre de usuario
-                    int puntos = 0;  // Inicialmente todos los puntos son 0
+                    String username = datos[0];
+                    int puntos = random.nextInt(50) + 1; // Genera puntos aleatorios entre 1 y 50
+                    
+                    // Intentar parsear el valor de puntos del archivo CSV
                     try {
-                        puntos = Integer.parseInt(datos[1]);  // Si hay puntos, usarlos
+                        puntos = Integer.parseInt(datos[1]);
                     } catch (NumberFormatException e) {
-                        // Si no hay puntos válidos, usar 0
+                        // Si ocurre una excepción, se mantiene el valor aleatorio
                     }
                     usuarios.add(new Usuario(username, puntos));
                 }
@@ -132,7 +128,6 @@ public class ManagerClasificacion extends JFrame {
         });
     }
     
-    // Clase interna para representar un usuario y sus puntos
     static class Usuario {
         private String username;
         private int puntos;

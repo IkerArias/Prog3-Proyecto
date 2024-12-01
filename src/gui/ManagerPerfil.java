@@ -133,7 +133,7 @@ public class ManagerPerfil extends JFrame {
 
     // Método para estilizar botones
     private void styleButton(JButton button) {
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setBackground(new Color(63, 81, 181)); // Azul vibrante para botones
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.setFocusPainted(false);
