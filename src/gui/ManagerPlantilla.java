@@ -1,21 +1,17 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import basicas.Jugador;
 
@@ -24,16 +20,20 @@ public class ManagerPlantilla extends JFrame {
     private ArrayList<Jugador> resultado;
     private double presupuesto = 200.0; // Presupuesto inicial
     private JLabel lblPresupuesto;
+    private JLabel lblFormacion;
     private JPanel pnlPlantilla; // Panel central para la formación
     private JComboBox<String> formationSelector; // Selector de formación
     private JButton[] playerButtons; // Botones reutilizables para los jugadores
 
     public ManagerPlantilla() {
+        // Configuración básica
         setSize(700, 700);
-        setTitle("Plantilla");
+        setTitle("Gestión de Plantilla");
         setResizable(false);
         setLocationRelativeTo(null);
-
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        getContentPane().setBackground(new Color(196, 238, 255)); 
+        
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -51,12 +51,20 @@ public class ManagerPlantilla extends JFrame {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
         }
 
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(10, 10)); 
 
-        // Panel superior con presupuesto y selector de formación
-        JPanel topPanel = new JPanel();
-        lblPresupuesto = new JLabel("Presupuesto: " + presupuesto + "M");
-        topPanel.add(lblPresupuesto);
+        // Panel superior (Presupuesto y Selector de formación)
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
+        JPanel panelFormacion = new JPanel();
+        topPanel.setOpaque(false);
+
+        lblPresupuesto = new JLabel("Presupuesto: " + presupuesto + " M");
+        lblPresupuesto.setFont(new Font("Arial", Font.BOLD, 16));
+        lblPresupuesto.setForeground(new Color(70, 130, 180)); 
+        
+        lblFormacion = new JLabel("Formacion: ");
+        lblFormacion.setFont(new Font("Arial", Font.BOLD, 16));
+        lblFormacion.setForeground(new Color(70, 130, 180)); 
 
         formationSelector = new JComboBox<>(new String[] { 
             "4-3-3", 
@@ -66,34 +74,51 @@ public class ManagerPlantilla extends JFrame {
             "3-4-3"
         });
         formationSelector.addActionListener(this::cambiarFormacion);
-        topPanel.add(new JLabel("Formación:"));
-        topPanel.add(formationSelector);
+        formationSelector.setFont(new Font("Arial", Font.PLAIN, 14));
+        
+
+        topPanel.add(lblPresupuesto);
+        panelFormacion.add(lblFormacion);
+        panelFormacion.add(formationSelector);
+        panelFormacion.setBackground(new Color(196, 238, 255));
+        topPanel.add(panelFormacion);
 
         add(topPanel, BorderLayout.NORTH);
 
-        // Panel central para la formación
+        // Panel central (Formación del equipo)
         pnlPlantilla = new JPanel();
+        pnlPlantilla.setOpaque(false);
+        pnlPlantilla.setBorder(new EmptyBorder(15, 15, 15, 15)); 
         add(pnlPlantilla, BorderLayout.CENTER);
 
-        // Botones para jugadores
+        // Crear botones de jugadores
         playerButtons = new JButton[11];
         for (int i = 0; i < 11; i++) {
-            playerButtons[i] = new JButton();
-            SeleccionarJugadorPorPosicion(playerButtons[i], null);
+            playerButtons[i] = crearBotonJugador(null);
         }
 
         // Configurar formación inicial
         configurarFormacion("4-3-3");
 
-        // Panel para el banquillo
-        JPanel benchPanel = new JPanel(new GridLayout(1, 4));
+        // Panel inferior (Banquillo)
+        JPanel benchPanel = new JPanel(new GridLayout(1, 4, 10, 10));
+        benchPanel.setOpaque(false);
+        benchPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         JButton[] benchButtons = new JButton[4];
         for (int i = 0; i < 4; i++) {
-            benchButtons[i] = new JButton("Banquillo " + (i + 1));
-            SeleccionarJugadorPorPosicion(benchButtons[i], null);
+            benchButtons[i] = crearBotonJugador("Banquillo " + (i + 1));
             benchPanel.add(benchButtons[i]);
         }
         add(benchPanel, BorderLayout.SOUTH);
+    }
+
+    private JButton crearBotonJugador(String texto) {
+        JButton button = new JButton(texto != null ? texto : "");
+        button.setFont(new Font("Arial", Font.PLAIN, 12));
+        button.setBackground(new Color(224, 255, 255)); 
+        button.setForeground(new Color(0, 102, 102)); 
+        
+        return button;
     }
 
     private void configurarFormacion(String formacion) {
@@ -291,6 +316,12 @@ public class ManagerPlantilla extends JFrame {
             pnlPlantilla.add(new JLabel(""));
             SeleccionarJugadorPorPosicion(playerButtons[10], "Extremo derecho");
             pnlPlantilla.add(playerButtons[10]); // Extremo derecho
+            
+         
+            for (int i = 11; i < playerButtons.length; i++) {
+                SeleccionarJugadorPorPosicion(playerButtons[i], "Banquillo");
+                pnlPlantilla.add(playerButtons[i]);
+            }
         }
  
         pnlPlantilla.revalidate();
@@ -311,6 +342,7 @@ public class ManagerPlantilla extends JFrame {
 
 
     private void SeleccionarJugadorPorPosicion(JButton button, String posicion) {
+        button.setText(posicion); // Establece el texto predeterminado como el nombre de la posición
         button.addActionListener(e -> {
             buscarJugador(posicion); // Filtrar jugadores por rol específico
             if (!resultado.isEmpty()) {
@@ -349,6 +381,7 @@ public class ManagerPlantilla extends JFrame {
             }
         });
     }
+
 
 
 

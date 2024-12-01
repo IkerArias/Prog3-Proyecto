@@ -107,7 +107,7 @@ public class ManagerNotif extends JFrame {
     // Método para estilizar botones
     private void styleButton(JButton button) {
         button.setBackground(new Color(60, 63, 65));
-        button.setForeground(Color.WHITE);
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
     }
