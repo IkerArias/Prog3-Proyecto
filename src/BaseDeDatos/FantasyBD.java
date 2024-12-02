@@ -11,7 +11,8 @@ public class FantasyBD {
     private static final String URL = "jdbc:sqlite:futbol_fantasy.db"; 
 
     public static void main(String[] args) {
-
+    	
+    	vaciarBaseDeDatos();
     	crearBaseDeDatos();
     	crearTablas();
         insertarDatos();
@@ -42,14 +43,14 @@ public class FantasyBD {
     // Crear las tablas de la base de datos
     private static void crearTablas() {
         // SQL para crear las tablas
-    	// Tabla equipo (id, nombre, ciudad y fundacion)
+        // Tabla equipo (id, nombre, ciudad y fundacion)
         String sqlEquipos = "CREATE TABLE IF NOT EXISTS Equipos (" +
                 "id INTEGER PRIMARY KEY," +
                 "nombre TEXT NOT NULL," +
                 "ciudad TEXT" +
                 ");";
 
-    	//Tabla jugador con varias estadisticas
+        // Tabla jugador con estadísticas totales
         String sqlJugadores = "CREATE TABLE IF NOT EXISTS Jugadores (" +
                 "id INTEGER PRIMARY KEY," +
                 "nombre TEXT NOT NULL," +
@@ -66,22 +67,31 @@ public class FantasyBD {
                 "FOREIGN KEY (equipo_id) REFERENCES Equipos(id)" +
                 ");";
 
-    	//tabla para partidos
-    	// Corrección en el SQL de creación de la tabla Partidos
-    	String sqlPartidos = "CREATE TABLE IF NOT EXISTS Partidos (" +
-    	        "id INTEGER PRIMARY KEY," +
-    	        "equipo_local_id INTEGER," +
-    	        "equipo_visitante_id INTEGER," +
-    	        "jornada INTEGER," +  
-    	        "goles_local INTEGER," +
-    	        "goles_visitante INTEGER," +
-    	        "FOREIGN KEY (equipo_local_id) REFERENCES Equipos(id)," +
-    	        "FOREIGN KEY (equipo_visitante_id) REFERENCES Equipos(id)" +
-    	        ");";
+        // Tabla partidos
+        String sqlPartidos = "CREATE TABLE IF NOT EXISTS Partidos (" +
+                "id INTEGER PRIMARY KEY," +
+                "equipo_local_id INTEGER," +
+                "equipo_visitante_id INTEGER," +
+                "jornada INTEGER," +
+                "goles_local INTEGER," +
+                "goles_visitante INTEGER," +
+                "FOREIGN KEY (equipo_local_id) REFERENCES Equipos(id)," +
+                "FOREIGN KEY (equipo_visitante_id) REFERENCES Equipos(id)" +
+                ");";
 
-
-
-        
+        // Tabla jugadores_partidos (relación entre jugadores y partidos con estadísticas específicas)
+        String sqlJugadoresPartidos = "CREATE TABLE IF NOT EXISTS Jugadores_Partidos (" +
+                "id INTEGER PRIMARY KEY," +
+                "jugador_id INTEGER," +
+                "partido_id INTEGER," +
+                "goles INTEGER DEFAULT 0," +
+                "asistencias INTEGER DEFAULT 0," +
+                "regates INTEGER DEFAULT 0," +
+                "tarjetas_amarillas INTEGER DEFAULT 0," +
+                "tarjetas_rojas INTEGER DEFAULT 0," +
+                "FOREIGN KEY (jugador_id) REFERENCES Jugadores(id)," +
+                "FOREIGN KEY (partido_id) REFERENCES Partidos(id)" +
+                ");";
 
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
@@ -89,12 +99,14 @@ public class FantasyBD {
             stmt.execute(sqlEquipos);
             stmt.execute(sqlJugadores);
             stmt.execute(sqlPartidos);
-      
+            stmt.execute(sqlJugadoresPartidos);
+
             System.out.println("Tablas creadas exitosamente.");
         } catch (SQLException e) {
             System.out.println("Error al crear las tablas: " + e.getMessage());
         }
     }
+
     
     // Método para insertar un equipo
     private static void insertarEquipo(String nombre, String ciudad) {
@@ -127,22 +139,76 @@ public class FantasyBD {
         }
     }
 
-    // Método para insertar un partido
+ // Método para insertar un partido
     private static void insertarPartido(int equipoLocal, int equipoVisitante, int golesLocal, int golesVisitante, int jornada) {
         String sql = "INSERT INTO Partidos (equipo_local_id, equipo_visitante_id, goles_local, goles_visitante, jornada) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, equipoLocal);
             pstmt.setInt(2, equipoVisitante);
             pstmt.setInt(3, golesLocal);
             pstmt.setInt(4, golesVisitante);
             pstmt.setInt(5, jornada);
             pstmt.executeUpdate();
-            System.out.println("Partido insertado entre equipo " + equipoLocal + " y equipo " + equipoVisitante);
+            
+            // Obtener el ID del partido recién insertado
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                int partidoId = rs.getInt(1);
+                System.out.println("Partido insertado con ID: " + partidoId);
+                
+                // Aquí podrías insertar estadísticas de jugadores en ese partido (esto puede hacerse luego en otro método)
+            }
         } catch (SQLException e) {
             System.out.println("Error al insertar partido: " + e.getMessage());
         }
     }
+
+    
+ // Método para insertar estadísticas de un jugador en un partido
+    private static void insertarEstadisticasPartido(int jugadorId, int partidoId, int goles, int asistencias, int regates, int tarjetasAmarillas, int tarjetasRojas) {
+        // Insertar estadísticas del jugador en el partido
+        String sql = "INSERT INTO Jugadores_Partidos (jugador_id, partido_id, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas) " +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, jugadorId);
+            pstmt.setInt(2, partidoId);
+            pstmt.setInt(3, goles);
+            pstmt.setInt(4, asistencias);
+            pstmt.setInt(5, regates);
+            pstmt.setInt(6, tarjetasAmarillas);
+            pstmt.setInt(7, tarjetasRojas);
+            pstmt.executeUpdate();
+            System.out.println("Estadísticas del jugador insertadas para el partido " + partidoId);
+            
+            // Ahora, actualizar las estadísticas totales del jugador
+            actualizarEstadisticasJugador(jugadorId, goles, asistencias, regates, tarjetasAmarillas, tarjetasRojas);
+        } catch (SQLException e) {
+            System.out.println("Error al insertar estadísticas del jugador: " + e.getMessage());
+        }
+    }
+
+    // Método para actualizar las estadísticas totales del jugador
+    private static void actualizarEstadisticasJugador(int jugadorId, int goles, int asistencias, int regates, int tarjetasAmarillas, int tarjetasRojas) {
+        // Actualizar las estadísticas totales del jugador
+        String sql = "UPDATE Jugadores SET goles = goles + ?, asistencias = asistencias + ?, regates = regates + ?, " +
+                     "tarjetas_amarillas = tarjetas_amarillas + ?, tarjetas_rojas = tarjetas_rojas + ? WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, goles);
+            pstmt.setInt(2, asistencias);
+            pstmt.setInt(3, regates);
+            pstmt.setInt(4, tarjetasAmarillas);
+            pstmt.setInt(5, tarjetasRojas);
+            pstmt.setInt(6, jugadorId);
+            pstmt.executeUpdate();
+            System.out.println("Estadísticas del jugador actualizadas");
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar estadísticas del jugador: " + e.getMessage());
+        }
+    }
+
 
     
     //Metodo para mostrar los equipos
@@ -817,20 +883,263 @@ public class FantasyBD {
     	insertarJugador("Miguel de la Fuente", 20, "Delantero centro", "España", 2.50);
     	insertarJugador("Diego García", 20, "Delantero centro", "España", 2.00);
 
+
+    	// Partido 1
+    	insertarPartido(1, 2, 2, 1, 11); // Athletic Club vs FC Barcelona
+    	insertarEstadisticasPartido(21, 1, 1, 1, 2, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(10, 1, 1, 0, 1, 0, 0); // Robert Lewandowski (Barcelona) - 1 gol, 1 regate
+
+    	// Partido 2
+    	insertarPartido(3, 4, 1, 1, 12); // Real Madrid vs Atlético de Madrid
+    	insertarEstadisticasPartido(14, 2, 0, 1, 0, 1, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(27, 2, 1, 0, 2, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 2 regates
+
+    	// Partido 3
+    	insertarPartido(5, 6, 2, 0, 13); // Real Sociedad vs Real Betis
+    	insertarEstadisticasPartido(22, 3, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(6, 3, 0, 0, 2, 1, 0); // Isco (Real Betis) - 2 regates, 1 tarjeta amarilla
+
+    	// Partido 4
+    	insertarPartido(7, 8, 1, 2, 14); // Sevilla FC vs Valencia CF
+    	insertarEstadisticasPartido(25, 4, 0, 1, 1, 0, 0); // Suso (Sevilla) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(9, 4, 1, 0, 0, 0, 0); // Hugo Duro (Valencia) - 1 gol
+
+    	// Partido 5
+    	insertarPartido(9, 10, 3, 0, 15); // Villarreal CF vs Celta de Vigo
+    	insertarEstadisticasPartido(30, 5, 1, 0, 4, 0, 0); // Gerard Moreno (Villarreal) - 1 gol, 4 regates
+    	insertarEstadisticasPartido(19, 5, 0, 0, 2, 1, 0); // Iago Aspas (Celta) - 2 regates, 1 tarjeta amarilla
+
+    	// Partido 6
+    	insertarPartido(11, 12, 2, 2, 16); // Getafe CF vs Rayo Vallecano
+    	insertarEstadisticasPartido(33, 6, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(44, 6, 1, 0, 3, 0, 0); // Isi Palazón (Rayo) - 1 gol, 3 regates
+
+    	// Partido 7
+    	insertarPartido(13, 14, 4, 1, 17); // UD Las Palmas vs Alavés
+    	insertarEstadisticasPartido(40, 7, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
+    	insertarEstadisticasPartido(52, 7, 0, 0, 3, 1, 0); // Asier Villalibre (Alavés) - 3 regates, 1 tarjeta amarilla
+
+    	// Partido 8
+    	insertarPartido(15, 16, 2, 3, 18); // Mallorca vs Girona
+    	insertarEstadisticasPartido(53, 8, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(56, 8, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
+
+    	// Partido 9
+    	insertarPartido(17, 18, 1, 1, 19); // Osasuna vs Espanyol
+    	insertarEstadisticasPartido(60, 9, 0, 0, 2, 0, 1); // Ante Budimir (Osasuna) - 2 regates, 1 tarjeta roja
+    	insertarEstadisticasPartido(68, 9, 1, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 gol, 1 regate
+
+    	// Partido 10
+    	insertarPartido(19, 20, 2, 0, 20); // Real Valladolid vs Leganés
+    	insertarEstadisticasPartido(70, 10, 1, 0, 1, 0, 0); // Marcos André (Valladolid) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(80, 10, 0, 0, 2, 0, 0); // Javi Hernández (Leganés) - 2 regates
+
+    	// Partido 11
+    	insertarPartido(2, 17, 3, 1, 21); // FC Barcelona vs Osasuna
+    	insertarEstadisticasPartido(15, 11, 1, 1, 2, 0, 0); // Pedri (Barcelona) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(60, 11, 0, 0, 3, 1, 0); // Ante Budimir (Osasuna) - 3 regates, 1 tarjeta amarilla
+
+    	// Partido 12
+    	insertarPartido(3, 5, 2, 0, 22); // Real Madrid vs Real Sociedad
+    	insertarEstadisticasPartido(14, 12, 0, 1, 1, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(22, 12, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
+
+    	// Partido 13
+    	insertarPartido(4, 6, 2, 2, 23); // Atlético de Madrid vs Real Betis
+    	insertarEstadisticasPartido(27, 13, 1, 1, 4, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 1 asistencia, 4 regates
+    	insertarEstadisticasPartido(36, 13, 0, 0, 2, 1, 0); // Joaquín (Real Betis) - 2 regates, 1 tarjeta amarilla
+
+    	// Partido 14
+    	insertarPartido(7, 9, 3, 0, 24); // Sevilla FC vs Villarreal CF
+    	insertarEstadisticasPartido(25, 14, 2, 0, 3, 0, 0); // Suso (Sevilla) - 2 goles, 3 regates
+    	insertarEstadisticasPartido(30, 14, 0, 0, 1, 0, 0); // Gerard Moreno (Villarreal) - 1 regate
+
+    	// Partido 15
+    	insertarPartido(11, 17, 1, 0, 25); // Getafe CF vs Osasuna
+    	insertarEstadisticasPartido(33, 15, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(60, 15, 0, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 2 regates
+
+    	// Partido 16
+    	insertarPartido(15, 20, 3, 2, 26); // Mallorca vs Leganés
+    	insertarEstadisticasPartido(53, 16, 1, 0, 3, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(80, 16, 0, 0, 1, 0, 0); // Javi Hernández (Leganés) - 1 regate
+
+    	// Partido 17
+    	insertarPartido(18, 19, 2, 1, 27); // Espanyol vs Real Valladolid
+    	insertarEstadisticasPartido(68, 17, 1, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(70, 17, 0, 1, 2, 0, 0); // Marcos André (Valladolid) - 2 regates
+
+    	// Partido 18
+    	insertarPartido(4, 3, 2, 3, 28); // Atlético de Madrid vs Real Madrid
+    	insertarEstadisticasPartido(27, 18, 1, 0, 2, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(14, 18, 0, 1, 3, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 3 regates
+
+    	// Partido 19
+    	insertarPartido(2, 6, 1, 1, 29); // FC Barcelona vs Real Betis
+    	insertarEstadisticasPartido(15, 19, 0, 1, 0, 0, 0); // Pedri (Barcelona) - 1 asistencia
+    	insertarEstadisticasPartido(36, 19, 1, 0, 1, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 regate
+
+    	// Partido 20
+    	insertarPartido(7, 8, 1, 0, 30); // Sevilla FC vs Valencia CF
+    	insertarEstadisticasPartido(25, 20, 1, 0, 1, 0, 0); // Suso (Sevilla) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(9, 20, 0, 0, 0, 1, 0); // Hugo Duro (Valencia) - 1 regate, 1 tarjeta amarilla
+
+    	// Partido 21
+    	insertarPartido(1, 3, 2, 1, 31); // Athletic Club vs Real Madrid
+    	insertarEstadisticasPartido(21, 21, 1, 0, 2, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(14, 21, 1, 0, 3, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 3 regates
+
+    	// Partido 22
+    	insertarPartido(2, 4, 3, 0, 32); // FC Barcelona vs Atlético de Madrid
+    	insertarEstadisticasPartido(15, 22, 1, 1, 2, 0, 0); // Pedri (Barcelona) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(27, 22, 0, 0, 4, 0, 0); // Antoine Griezmann (Atlético) - 4 regates
+
+    	// Partido 23
+    	insertarPartido(5, 7, 2, 1, 33); // Real Sociedad vs Sevilla FC
+    	insertarEstadisticasPartido(22, 23, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(25, 23, 0, 1, 4, 0, 0); // Suso (Sevilla) - 1 asistencia, 4 regates
+
+    	// Partido 24
+    	insertarPartido(6, 8, 1, 2, 34); // Real Betis vs Valencia CF
+    	insertarEstadisticasPartido(36, 24, 1, 0, 1, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(9, 24, 0, 1, 3, 0, 0); // Hugo Duro (Valencia) - 1 asistencia, 3 regates
+
+    	// Partido 25
+    	insertarPartido(9, 10, 3, 1, 35); // Villarreal CF vs Celta de Vigo
+    	insertarEstadisticasPartido(30, 25, 2, 0, 4, 0, 0); // Gerard Moreno (Villarreal) - 2 goles, 4 regates
+    	insertarEstadisticasPartido(19, 25, 1, 0, 2, 0, 0); // Iago Aspas (Celta) - 1 gol, 2 regates
+
+    	// Partido 26
+    	insertarPartido(11, 12, 2, 1, 36); // Getafe CF vs Rayo Vallecano
+    	insertarEstadisticasPartido(33, 26, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(44, 26, 1, 0, 2, 0, 0); // Isi Palazón (Rayo) - 1 gol, 2 regates
+
+    	// Partido 27
+    	insertarPartido(13, 14, 4, 0, 37); // UD Las Palmas vs Alavés
+    	insertarEstadisticasPartido(40, 27, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
+    	insertarEstadisticasPartido(52, 27, 0, 0, 4, 1, 0); // Asier Villalibre (Alavés) - 4 regates, 1 tarjeta amarilla
+
+    	// Partido 28
+    	insertarPartido(15, 16, 3, 1, 38); // Mallorca vs Girona
+    	insertarEstadisticasPartido(53, 28, 1, 0, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(56, 28, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
+
+    	// Partido 29
+    	insertarPartido(17, 18, 2, 0, 39); // Osasuna vs Espanyol
+    	insertarEstadisticasPartido(60, 29, 1, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(68, 29, 0, 1, 1, 0, 0); // Javi Puado (Espanyol) - 1 asistencia, 1 regate
+
+    	// Partido 30
+    	insertarPartido(19, 20, 2, 1, 40); // Real Valladolid vs Leganés
+    	insertarEstadisticasPartido(70, 30, 1, 0, 1, 0, 0); // Marcos André (Valladolid) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(80, 30, 0, 0, 2, 0, 0); // Javi Hernández (Leganés) - 2 regates
+
+    	// Partido 31
+    	insertarPartido(2, 5, 4, 2, 41); // FC Barcelona vs Real Sociedad
+    	insertarEstadisticasPartido(15, 31, 2, 1, 3, 0, 0); // Pedri (Barcelona) - 2 goles, 1 asistencia, 3 regates
+    	insertarEstadisticasPartido(22, 31, 1, 0, 2, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 2 regates
+
+    	// Partido 32
+    	insertarPartido(3, 9, 3, 0, 42); // Real Madrid vs Villarreal CF
+    	insertarEstadisticasPartido(14, 32, 1, 1, 4, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 1 asistencia, 4 regates
+    	insertarEstadisticasPartido(30, 32, 0, 0, 2, 0, 0); // Gerard Moreno (Villarreal) - 2 regates
+
+    	// Partido 33
+    	insertarPartido(4, 6, 2, 1, 43); // Atlético de Madrid vs Real Betis
+    	insertarEstadisticasPartido(27, 33, 1, 0, 3, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(36, 33, 0, 1, 1, 0, 0); // Joaquín (Real Betis) - 1 asistencia, 1 regate
+
+    	// Partido 34
+    	insertarPartido(7, 8, 2, 2, 44); // Sevilla FC vs Valencia CF
+    	insertarEstadisticasPartido(25, 34, 1, 0, 4, 0, 0); // Suso (Sevilla) - 1 gol, 4 regates
+    	insertarEstadisticasPartido(9, 34, 1, 0, 2, 0, 0); // Hugo Duro (Valencia) - 1 gol, 2 regates
+
+    	// Partido 35
+    	insertarPartido(11, 17, 2, 0, 45); // Getafe CF vs Osasuna
+    	insertarEstadisticasPartido(33, 35, 1, 0, 2, 0, 0); // Borja Mayoral (Getafe) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(60, 35, 0, 0, 3, 0, 0); // Ante Budimir (Osasuna) - 3 regates
+
+    	// Partido 36
+    	insertarPartido(13, 16, 3, 0, 46); // UD Las Palmas vs Girona
+    	insertarEstadisticasPartido(40, 36, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
+    	insertarEstadisticasPartido(56, 36, 0, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 asistencia, 3 regates
+
+    	// Partido 37
+    	insertarPartido(15, 20, 3, 2, 47); // Mallorca vs Leganés
+    	insertarEstadisticasPartido(53, 37, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(80, 37, 0, 0, 1, 0, 0); // Javi Hernández (Leganés) - 1 regate
+
+    	// Partido 38
+    	insertarPartido(18, 19, 2, 1, 48); // Espanyol vs Real Valladolid
+    	insertarEstadisticasPartido(68, 38, 1, 0, 2, 0, 0); // Javi Puado (Espanyol) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(70, 38, 0, 1, 3, 0, 0); // Marcos André (Valladolid) - 3 regates
+
+    	// Partido 39
+    	insertarPartido(3, 5, 2, 1, 49); // Real Madrid vs Real Sociedad
+    	insertarEstadisticasPartido(14, 39, 1, 0, 2, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(22, 39, 0, 1, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 asistencia, 3 regates
+
+    	// Partido 40
+    	insertarPartido(4, 6, 2, 0, 50); // Atlético de Madrid vs Real Betis
+    	insertarEstadisticasPartido(27, 40, 1, 0, 3, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(36, 40, 0, 1, 1, 0, 0); // Joaquín (Real Betis) - 1 asistencia, 1 regate
+
+    	// Partido 41
+    	insertarPartido(7, 9, 3, 1, 51); // Sevilla FC vs Villarreal CF
+    	insertarEstadisticasPartido(25, 41, 1, 1, 2, 0, 0); // Suso (Sevilla) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(30, 41, 0, 0, 3, 0, 0); // Gerard Moreno (Villarreal) - 3 regates
+
+    	// Partido 42
+    	insertarPartido(11, 12, 2, 1, 52); // Getafe CF vs Rayo Vallecano
+    	insertarEstadisticasPartido(33, 42, 0, 1, 2, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(44, 42, 1, 0, 3, 0, 0); // Isi Palazón (Rayo) - 1 gol, 3 regates
+
+    	// Partido 43
+    	insertarPartido(13, 17, 4, 2, 53); // UD Las Palmas vs Osasuna
+    	insertarEstadisticasPartido(40, 43, 1, 1, 4, 0, 0); // Vitor Roque (Las Palmas) - 1 gol, 1 asistencia, 4 regates
+    	insertarEstadisticasPartido(60, 43, 1, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 2 regates
+
+    	// Partido 44
+    	insertarPartido(15, 18, 3, 0, 54); // Mallorca vs Espanyol
+    	insertarEstadisticasPartido(53, 44, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(68, 44, 0, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 regate
+
+    	// Partido 45
+    	insertarPartido(20, 6, 1, 2, 55); // Leganés vs Real Betis
+    	insertarEstadisticasPartido(80, 45, 0, 0, 3, 0, 0); // Javi Hernández (Leganés) - 3 regates
+    	insertarEstadisticasPartido(36, 45, 1, 0, 2, 0, 0); // Joaquín (Real Betis) - 1 gol, 2 regates
+
+    	// Partido 46
+    	insertarPartido(12, 19, 2, 2, 56); // Rayo Vallecano vs Real Valladolid
+    	insertarEstadisticasPartido(44, 46, 1, 0, 2, 0, 0); // Isi Palazón (Rayo) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(70, 46, 0, 1, 3, 0, 0); // Marcos André (Valladolid) - 3 regates
+
+    	// Partido 47
+    	insertarPartido(2, 3, 2, 1, 57); // FC Barcelona vs Real Madrid
+    	insertarEstadisticasPartido(15, 47, 1, 0, 4, 0, 0); // Pedri (Barcelona) - 1 gol, 4 regates
+    	insertarEstadisticasPartido(14, 47, 0, 1, 3, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 3 regates
+
+    	// Partido 48
+    	insertarPartido(4, 8, 1, 0, 58); // Atlético de Madrid vs Valencia CF
+    	insertarEstadisticasPartido(27, 48, 1, 0, 5, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 5 regates
+    	insertarEstadisticasPartido(9, 48, 0, 0, 4, 0, 0); // Hugo Duro (Valencia) - 4 regates
+
+    	// Partido 49
+    	insertarPartido(5, 7, 1, 1, 59); // Real Sociedad vs Sevilla FC
+    	insertarEstadisticasPartido(22, 49, 0, 1, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 asistencia, 3 regates
+    	insertarEstadisticasPartido(25, 49, 1, 0, 2, 0, 0); // Suso (Sevilla) - 1 gol, 2 regates
+
+    	// Partido 50
+    	insertarPartido(6, 10, 3, 2, 60); // Real Betis vs Celta de Vigo
+    	insertarEstadisticasPartido(36, 50, 1, 1, 4, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 asistencia, 4 regates
+    	insertarEstadisticasPartido(19, 50, 1, 0, 2, 0, 0); // Iago Aspas (Celta) - 1 gol, 2 regates
+
+
+
+
+
     	
-    	//Insertar partidos Jornada 1
-    	insertarPartido(1, 2, 1, 1, 1); //1
-    	insertarPartido(3, 4, 1, 3, 1); //2
-    	insertarPartido(5, 6, 1, 0, 1); //3
-    	insertarPartido(7, 8, 1, 2, 2); 
-    	insertarPartido(9, 10, 1, 2, 1); 
-    	insertarPartido(11, 12, 1, 0, 0);
-    	insertarPartido(13, 14, 1, 1, 1); 
-    	insertarPartido(15, 16, 1, 4, 2); 
-    	insertarPartido(17, 18, 1, 0, 2);
-    	insertarPartido(19, 20, 1, 3, 1);
-    	
-    	//INSERTAR MAS PARTIDOS DE TODOS LOS EQUIPOS EN EL FUTURO
+
     	
 
     	

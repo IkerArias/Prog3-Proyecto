@@ -241,7 +241,6 @@ public class ManagerMercado extends JFrame {
     }
     
 
-    // Método para buscar jugadores con filtros aplicados
     private void buscarJugador(String textoBuscar) {
         resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
@@ -275,8 +274,10 @@ public class ManagerMercado extends JFrame {
         mostrarResultados();
     }
 
+
+
     
- // Método para buscar jugadores con filtros aplicados
+    // Método para buscar jugadores con filtros aplicados
     private void buscarJugadorConFiltros(String nombreJugador) {
         resultado = new ArrayList<>();
         StringBuilder query = new StringBuilder(
@@ -330,7 +331,6 @@ public class ManagerMercado extends JFrame {
         }
         mostrarResultados();
     }
-
 
     
  // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
@@ -462,16 +462,24 @@ public class ManagerMercado extends JFrame {
             
             tabla.setAutoCreateRowSorter(true);
             
+            // En el código que configura el TableRowSorter
             RowSorter<? extends TableModel> sorter = tabla.getRowSorter();
             if (sorter instanceof TableRowSorter) {
                 TableRowSorter<?> tableRowSorter = (TableRowSorter<?>) sorter;
                 tableRowSorter.setComparator(4, (o1, o2) -> {
-                    // Compara los valores numéricamente
                     Double valor1 = (Double) o1;
                     Double valor2 = (Double) o2;
                     return valor1.compareTo(valor2);
                 });
+                tableRowSorter.setComparator(8, (o1, o2) -> {
+                    Integer regates1 = (Integer) o1;
+                    Integer regates2 = (Integer) o2;
+                    return regates1.compareTo(regates2);  // Ordenar por regates
+                });
             }
+
+            
+            
             
             tabla.getColumnModel().getColumn(0).setPreferredWidth(200);  // Columna del nombre más ancha
         	tabla.getColumnModel().getColumn(1).setPreferredWidth(100);  // Columna del equipo
@@ -591,7 +599,45 @@ public class ManagerMercado extends JFrame {
     };
 
 
-	
+
+    private int calcularPuntos(Jugador jugador) {
+        int puntos = 0;
+
+        // Goles
+        puntos += jugador.getGoles() * 8; // +8 puntos por cada gol
+
+        // Asistencias
+        puntos += jugador.getAsistencias() * 5; // +5 puntos por cada asistencia
+
+        // Regates
+        puntos += jugador.getRegates() * 2; // +2 puntos por cada regate
+
+        // Tarjetas amarillas
+        puntos -= jugador.getTarjetas_amarillas() * 2; // -2 puntos por cada tarjeta amarilla
+
+        // Tarjetas rojas
+        puntos -= jugador.getTarjetas_rojas() * 5; // -5 puntos por cada tarjeta roja
+
+        return puntos;
+    }
+
+
+    
+    private void actualizarPuntosEnBD(Jugador jugador) {
+        int puntosCalculados = calcularPuntos(jugador);
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
+             PreparedStatement stmt = conn.prepareStatement("UPDATE Jugadores SET puntos = ? WHERE nombre = ?")) {
+
+            stmt.setInt(1, puntosCalculados);
+            stmt.setString(2, jugador.getNombre());
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     
 
 

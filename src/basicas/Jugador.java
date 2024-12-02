@@ -79,6 +79,7 @@ public class Jugador {
 	public void setAsistencias(int asistencias) {
 		this.asistencias = asistencias;
 	}
+	
 	public int getRegates() {
 		return regates;
 	}
