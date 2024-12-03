@@ -277,7 +277,7 @@ public class ManagerMercado extends JFrame {
 
 
     
-    // Método para buscar jugadores con filtros aplicados
+ // Método para buscar jugadores con filtros aplicados
     private void buscarJugadorConFiltros(String nombreJugador) {
         resultado = new ArrayList<>();
         StringBuilder query = new StringBuilder(
@@ -313,24 +313,29 @@ public class ManagerMercado extends JFrame {
 
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-            	  String nombre = rs.getString("nombre");
-                  String equipoNombre = rs.getString("equipo_nombre");
-                  String posicion = rs.getString("posicion");
-                  String pais = rs.getString("pais");
-                  double valor = rs.getDouble("valor");
-                  int puntos = rs.getInt("puntos");
-                  int goles = rs.getInt("goles");
-                  int asistencias = rs.getInt("asistencias");
-                  int regates = rs.getInt("regates");
-                  int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
-                  int tarjetas_rojas = rs.getInt("tarjetas_rojas");
-                  resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor,puntos,goles,asistencias,regates,tarjetas_amarillas,tarjetas_rojas));
+                String nombre = rs.getString("nombre");
+                String equipoNombre = rs.getString("equipo_nombre");
+                String posicion = rs.getString("posicion");
+                String pais = rs.getString("pais");
+                double valor = rs.getDouble("valor");
+                int goles = rs.getInt("goles");
+                int asistencias = rs.getInt("asistencias");
+                int regates = rs.getInt("regates");
+                int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
+                int tarjetas_rojas = rs.getInt("tarjetas_rojas");
+
+                // Calcular los puntos basados en las estadísticas
+                int puntos = calcularPuntos(new Jugador(nombre, equipoNombre, posicion, pais, valor, 0, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas));
+
+                // Agregar el jugador a la lista con los puntos calculados
+                resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor, puntos, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         mostrarResultados();
     }
+
 
     
  // Método para mostrar el diálogo de filtros, cargando dinámicamente los equipos desde la BD
