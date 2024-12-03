@@ -47,7 +47,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import basicas.Jugador;
+import domain.Jugador;
 
 
 public class ManagerMercado extends JFrame {
@@ -188,7 +188,7 @@ public class ManagerMercado extends JFrame {
 
       //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
@@ -527,13 +527,13 @@ public class ManagerMercado extends JFrame {
         if (column == 9) {  // Columna de tarjetas amarillas
             result.setText(""); // No texto, solo la imagen
             result.setHorizontalAlignment(JLabel.CENTER);
-            ImageIcon yellowIcon = new ImageIcon("src/imagenes/amarilla.png");
+            ImageIcon yellowIcon = new ImageIcon("resources/imagenes/amarilla.png");
             Image yellowImage = yellowIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             result.setIcon(new ImageIcon(yellowImage));
         } else if (column == 10) {  // Columna de tarjetas rojas
             result.setText(""); // No texto, solo la imagen
             result.setHorizontalAlignment(JLabel.CENTER);
-            ImageIcon redIcon = new ImageIcon("src/imagenes/roja.png");
+            ImageIcon redIcon = new ImageIcon("resources/imagenes/roja.png");
             Image redImage = redIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
             result.setIcon(new ImageIcon(redImage));
         }
@@ -550,7 +550,7 @@ public class ManagerMercado extends JFrame {
         // Verificar si es la columna de equipo
         if (column == 1) {
             String equipoNombre = (String) value;
-            String imagePath = "src/imagenesEscudos/laliga/" + equipoNombre + ".png";
+            String imagePath = "resources/laliga/" + equipoNombre + ".png";
             ImageIcon icon = new ImageIcon(imagePath);
             Image image = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
             result.setIcon(new ImageIcon(image));

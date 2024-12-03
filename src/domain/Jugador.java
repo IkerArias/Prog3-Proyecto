@@ -1,4 +1,4 @@
-package basicas;
+package domain;
 
 public class Jugador {
     private String nombre; 

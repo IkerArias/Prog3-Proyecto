@@ -53,7 +53,7 @@ public class ManagerNotif extends JFrame {
         
        //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());

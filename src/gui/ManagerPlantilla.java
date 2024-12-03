@@ -12,8 +12,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-
-import basicas.Jugador;
+import domain.Jugador;
 
 public class ManagerPlantilla extends JFrame {
 
@@ -48,7 +47,7 @@ public class ManagerPlantilla extends JFrame {
 
         // Cambiar icono de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());

@@ -16,7 +16,7 @@ public class ManagerForo extends JFrame {
     private static final long serialVersionUID = 1L;
     private JTextArea messageArea;
     private JTextField messageInput;
-    private static final String FILE_NAME = "foro_mensajes.txt"; // Nombre del archivo para almacenar mensajes
+    private static final String FILE_NAME = "resources/data/foro_mensajes.txt"; // Nombre del archivo para almacenar mensajes
 
     public ManagerForo() {
         setTitle("Foro/Chat");
@@ -43,7 +43,7 @@ public class ManagerForo extends JFrame {
         
       //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());

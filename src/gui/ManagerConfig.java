@@ -181,7 +181,7 @@ public class ManagerConfig extends JFrame {
         buttonPanel.add(btnCambiarContraseña);
 
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
@@ -233,7 +233,7 @@ public class ManagerConfig extends JFrame {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            ManagerConfig config = new ManagerConfig("usuarioEjemplo");
+            ManagerConfig config = new ManagerConfig("usuario");
             config.setVisible(true);
         });
     }

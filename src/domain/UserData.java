@@ -1,4 +1,4 @@
-package gui;
+package domain;
 
 public class UserData {
     private static String username;

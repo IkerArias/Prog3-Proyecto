@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import basicas.Jugador;
+import domain.Jugador;
 
 public class ManagerJugador extends JFrame{
 	

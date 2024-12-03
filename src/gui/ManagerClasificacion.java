@@ -2,6 +2,9 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import domain.UserData;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -41,7 +44,7 @@ public class ManagerClasificacion extends JFrame {
 
         for (int i = 0; i < usuarios.size(); i++) {
             Usuario usuario = usuarios.get(i);
-            data[i][0] = escalarImagen("src/imagenes/usuario.png", 30, 30); 
+            data[i][0] = escalarImagen("resources/imagenes/usuario.png", 30, 30); 
             data[i][1] = usuario.getUsername();
             data[i][2] = usuario.getPuntos();
         }
@@ -118,7 +121,7 @@ public class ManagerClasificacion extends JFrame {
 
     private List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
-        String filePath = "usuarios.csv";
+        String filePath = "resources/data/usuarios.csv";
 
         Random random = new Random();
 

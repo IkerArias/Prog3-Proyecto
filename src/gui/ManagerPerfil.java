@@ -1,6 +1,9 @@
 package gui;
 
 import javax.swing.*;
+
+import domain.UserData;
+
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -22,7 +25,7 @@ public class ManagerPerfil extends JFrame {
         // Panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(230, 240, 250)); // Fondo claro y agradable
+        mainPanel.setBackground(new Color(230, 240, 250)); 
 
         // Título con estilo
         JLabel labelTitulo = new JLabel("MI PERFIL", JLabel.CENTER);
@@ -62,7 +65,7 @@ public class ManagerPerfil extends JFrame {
         // Panel izquierdo para botón de configuración
         JPanel panelIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelIzquierda.setBackground(new Color(230, 240, 250));
-        JButton btnConfiguracion = createIconButton("/imagenes/avatar-de-usuario.png");
+        JButton btnConfiguracion = createIconButton("resources/imagenes/avatar-de-usuario.png");
         btnConfiguracion.addActionListener(e -> {
             dispose();
             new ManagerConfig("UsurioEjemplo").setVisible(true);
@@ -87,7 +90,7 @@ public class ManagerPerfil extends JFrame {
         // Panel derecho para botón de notificaciones
         JPanel panelDerecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelDerecha.setBackground(new Color(230, 240, 250));
-        JButton btnNotificaciones = createIconButton("/imagenes/icono_notif_transparent.png");
+        JButton btnNotificaciones = createIconButton("resources/imagenes/icono_notif_transparent.png");
         btnNotificaciones.addActionListener(e -> {
             dispose();
             new ManagerNotif().setVisible(true);
@@ -142,15 +145,26 @@ public class ManagerPerfil extends JFrame {
     // Crear botón con icono
     private JButton createIconButton(String iconPath) {
         JButton button = new JButton();
-        ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+        File imageFile = new File(iconPath);
+        if (!imageFile.exists()) {
+            System.err.println("Image not found: " + iconPath);
+            return button; 
+        }
+        ImageIcon icon = new ImageIcon(imageFile.getAbsolutePath());
         Image img = icon.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        
+       
         button.setIcon(new ImageIcon(img));
+        
+      
         button.setPreferredSize(new Dimension(50, 50));
         button.setFocusPainted(false);
         button.setContentAreaFilled(false);
         button.setBorderPainted(false);
+        
         return button;
     }
+
 
     // Función para cambiar contraseña
     private void cambiarContraseña(String username) {
@@ -172,7 +186,7 @@ public class ManagerPerfil extends JFrame {
     }
 
     private String[] cargarDatosUsuario(String username) {
-        String filePath = "usuarios.csv";
+        String filePath = "resources/data/usuarios.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -206,7 +220,7 @@ public class ManagerPerfil extends JFrame {
     }
 
     private boolean actualizarContraseña(String username, String nuevaContraseña) {
-        String filePath = "usuarios.csv";
+        String filePath = "resources/data/usuarios.csv";
         File archivoOriginal = new File(filePath);
         File archivoTemporal = new File("usuarios_temp.csv");
         boolean actualizado = false;

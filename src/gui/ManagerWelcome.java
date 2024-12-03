@@ -41,35 +41,42 @@ public class ManagerWelcome extends JFrame {
         panelSuperior.setBackground(new Color(196, 238, 255));
         
         
+        
+
+     
+        String imagePath = "resources/imagenes/logo.png";
+        String image2Path = "resources/imagenes/logo2.png";
+
         // Añadir logotipo en el lado izquierdo
-        URL imageUrl = getClass().getResource("/imagenes/logo.png");
-        if (imageUrl == null) {
-            System.err.println("Image not found: /imagenes/logo.png");
+        File imageFile = new File(imagePath);
+        if (!imageFile.exists()) {
+            System.err.println("Image not found: " + imagePath);
         } else {
-            ImageIcon icono = new ImageIcon(imageUrl);
-            Image image = icono.getImage(); 
-            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH); 
-            ImageIcon resizedIcon = new ImageIcon(resizedImage); 
-            
-            JLabel labelLogo = new JLabel(resizedIcon); 
+            ImageIcon icono = new ImageIcon(imageFile.getAbsolutePath());
+            Image image = icono.getImage();
+            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+            JLabel labelLogo = new JLabel(resizedIcon);
             panelSuperior.add(labelLogo, BorderLayout.WEST);
         }
-        
+
         // Añadir logotipo en el lado derecho
-        URL image2Url = getClass().getResource("/imagenes/logo2.png");
-        if (image2Url == null) {
-            System.err.println("Image not found: /imagenes/logo2.png");
+        File image2File = new File(image2Path);
+        if (!image2File.exists()) {
+            System.err.println("Image not found: " + image2Path);
         } else {
-            ImageIcon icono = new ImageIcon(image2Url);
-            Image image = icono.getImage(); 
-            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH); 
-            ImageIcon resizedIcon = new ImageIcon(resizedImage); 
-            
-            JLabel labelLogo = new JLabel(resizedIcon); 
+            ImageIcon icono = new ImageIcon(image2File.getAbsolutePath());
+            Image image = icono.getImage();
+            Image resizedImage = image.getScaledInstance(70, 70, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+            JLabel labelLogo = new JLabel(resizedIcon);
             panelSuperior.add(labelLogo, BorderLayout.EAST);
         }
-
- 
+    
+        
+        
         
         // Título
         JLabel labelBienvenida = new JLabel("Liga hypertension", SwingConstants.CENTER);
@@ -134,7 +141,7 @@ public class ManagerWelcome extends JFrame {
         
       //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());

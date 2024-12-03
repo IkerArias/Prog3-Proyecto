@@ -3,6 +3,9 @@ package gui;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import domain.UserData;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,7 +65,7 @@ public class ManagerLogin extends JFrame {
         
         //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
@@ -168,7 +171,7 @@ public class ManagerLogin extends JFrame {
     
     // Metodo para validar el login: comprueba que el ususario y la contraseña son correctos
     private boolean validateLogin(String username, String password) {
-        try (BufferedReader br = new BufferedReader(new FileReader("usuarios.csv"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("resources/data/usuarios.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(";");

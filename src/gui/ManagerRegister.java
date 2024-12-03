@@ -163,7 +163,7 @@ public class ManagerRegister extends JFrame {
         
       //Cambiar foto de la ventana
         try {
-            Image icono = ImageIO.read(new File("src/imagenes/logo.png"));
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
@@ -312,7 +312,7 @@ public class ManagerRegister extends JFrame {
     
  // Método para registrar al usuario en el archivo
     private void registerUser(String username, String password, String email, String phone, String address, String postalCode, String selectedTeam, Date birthDate) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter("usuarios.csv", true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter("resources/data/usuarios.csv", true))) {
             // Guardar datos en el fichero csv
             bw.write(username + ";" + password + ";" + email + ";" + phone + ";" + address + ";" + postalCode + ";" + selectedTeam + ";" + birthDate);
             bw.newLine(); 
