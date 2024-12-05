@@ -1,5 +1,6 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import domain.UserData;
@@ -47,6 +48,15 @@ public class ManagerPerfil extends JFrame {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        //Cambiar foto de la ventana
+        try {
+            Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
+            setIconImage(icono);
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar el icono: " + e.getMessage());
+        }
+        
 
         // Datos de usuario en recuadros centrados
         panelCentro.add(createDataPanel("NOMBRE", userData[0]));
