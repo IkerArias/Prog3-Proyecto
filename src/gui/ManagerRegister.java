@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -15,6 +17,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ManagerRegister extends JFrame {
+	private BufferedImage imagenCargada;
+	
+	 
 
     private static final long serialVersionUID = 1L;
 
@@ -111,34 +116,55 @@ public class ManagerRegister extends JFrame {
         gbc.gridx = 1;
         gbc.gridy = 6;
         panel.add(postalCodeField, gbc);
+        
+     // Etiqueta y campo para la foto de usuario (sin mostrar la imagen)
+        JLabel imagenLabel1 = new JLabel("Foto de usuario:");
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        panel.add(imagenLabel1, gbc);
+
+        // Botón para cargar la foto
+        JButton cargarFotoButton = new JButton("Cargar Foto");
+        cargarFotoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarFoto();
+            }
+        });
+        gbc.gridx = 1;
+        gbc.gridy = 7; // Pon el botón en una fila diferente
+        panel.add(cargarFotoButton, gbc);
+       
 
         // Etiqueta y campo para la contraseña
         JLabel passLabel = new JLabel("Contraseña:");
         gbc.gridx = 0;
-        gbc.gridy = 7; // Cambiar a nueva fila
+        gbc.gridy = 8; // Cambiar a nueva fila
         panel.add(passLabel, gbc);
 
         JPasswordField passField = new JPasswordField(20);
         gbc.gridx = 1;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         panel.add(passField, gbc);
 
         // Etiqueta y campo para confirmar la contraseña
         JLabel confirmPassLabel = new JLabel("Confirmar Contraseña:");
         gbc.gridx = 0;
-        gbc.gridy = 8; // Cambiar a nueva fila
+        gbc.gridy = 9; // Cambiar a nueva fila
         panel.add(confirmPassLabel, gbc);
 
         JPasswordField confirmPassField = new JPasswordField(20);
         gbc.gridx = 1;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         panel.add(confirmPassField, gbc);
 
         // Etiqueta y JComboBox para el equipo favorito
         JLabel teamLabel = new JLabel("Equipo Favorito:");
         gbc.gridx = 0;
-        gbc.gridy = 9; // Cambiar a nueva fila
+        gbc.gridy = 10; // Cambiar a nueva fila
         panel.add(teamLabel, gbc);
+        
+       
 
         // Lista de equipos únicos
         String[] equipos = {
@@ -149,13 +175,13 @@ public class ManagerRegister extends JFrame {
         };
         JComboBox<String> teamComboBox = new JComboBox<>(equipos);
         gbc.gridx = 1;
-        gbc.gridy = 9;
+        gbc.gridy = 10;
         panel.add(teamComboBox, gbc);
 
         // Botón de Crear Cuenta
         JButton createAccountButton = new JButton("Crear Cuenta");
         gbc.gridx = 0;
-        gbc.gridy = 10;
+        gbc.gridy = 11;
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.CENTER;
         panel.add(createAccountButton, gbc);
@@ -193,6 +219,10 @@ public class ManagerRegister extends JFrame {
                 String password = new String(passField.getPassword());
                 String confirmPassword = new String(confirmPassField.getPassword());
                 String selectedTeam = (String) teamComboBox.getSelectedItem();
+                String fotoUsuario = null;
+                if (imagenCargada != null) {
+                    fotoUsuario = convertImageToBase64(imagenCargada);
+                }
 
                 // Obtener la fecha de nacimiento desde el JSpinner
                 Date selectedDate = (Date) dateSpinner.getValue();
@@ -202,6 +232,8 @@ public class ManagerRegister extends JFrame {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int age = Calendar.getInstance().get(Calendar.YEAR) - year;
+                
+
 
                 // Validación de campos
                 if (username.isEmpty() || email.isEmpty() || phone.isEmpty() ||
@@ -210,9 +242,12 @@ public class ManagerRegister extends JFrame {
                     JOptionPane.showMessageDialog(panel, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
                 } else if (!password.equals(confirmPassword)) {
                     JOptionPane.showMessageDialog(panel, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else if (!isValidEmail(email)) {
-                    JOptionPane.showMessageDialog(panel, "Por favor, ingrese un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                }else if  (imagenCargada != null) {
+                    fotoUsuario = convertImageToBase64(imagenCargada);
                 } else {
+                    fotoUsuario = "No Foto"; // Indicar que no hay foto cargada
+                }
+{
                     if (age < 18) {
                         showConsentDialog();
                     } else {
@@ -229,7 +264,7 @@ public class ManagerRegister extends JFrame {
         
         // Botón de Volver
         JButton backButton = new JButton("Atrás");
-        gbc.gridy = 11; // Nueva fila para el botón Atrás
+        gbc.gridy = 12; // Nueva fila para el botón Atrás
         panel.add(backButton, gbc);
         
         // Acción para el botón Atrás
@@ -250,6 +285,8 @@ public class ManagerRegister extends JFrame {
     private boolean isValidEmail(String email) {
         return email.contains("@") && (email.endsWith(".com") || email.endsWith(".es"));
     }
+    
+    
 
     // Método para mostrar la ventana de consentimiento
     private void showConsentDialog() {
@@ -309,6 +346,20 @@ public class ManagerRegister extends JFrame {
         
         
     }
+ // Método para convertir la imagen a Base64
+    private String convertImageToBase64(BufferedImage image) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", baos);
+            baos.flush();
+            byte[] imageBytes = baos.toByteArray();
+            baos.close();
+            return java.util.Base64.getEncoder().encodeToString(imageBytes); // Devuelve la imagen en Base64
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
     
  // Método para registrar al usuario en el archivo
     private void registerUser(String username, String password, String email, String phone, String address, String postalCode, String selectedTeam, Date birthDate) {
@@ -320,6 +371,24 @@ public class ManagerRegister extends JFrame {
             System.out.println("Usuario guardado"); //Linea para comprobar por la consola
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+    private void cargarFoto() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Selecciona una foto de perfil");
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes", "jpg", "png", "gif"));
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                // Cargar la imagen en la variable imagenCargada
+                imagenCargada = ImageIO.read(selectedFile);
+                // La imagen está cargada, pero no se muestra en la interfaz
+                System.out.println("Imagen cargada correctamente.");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Error al cargar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
     
