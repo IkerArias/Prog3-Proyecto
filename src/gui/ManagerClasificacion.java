@@ -38,6 +38,8 @@ public class ManagerClasificacion extends JFrame {
         labelTitulo.setForeground(Color.BLACK);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
+        
+        
 
         String[] columnNames = {"Foto", "Usuario", "Puntos"};
         Object[][] data = new Object[usuarios.size()][3];

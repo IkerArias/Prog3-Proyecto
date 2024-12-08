@@ -117,13 +117,13 @@ public class ManagerRegister extends JFrame {
         gbc.gridy = 6;
         panel.add(postalCodeField, gbc);
         
-     // Etiqueta y campo para la foto de usuario (sin mostrar la imagen)
+     // Etiqueta y campo para la foto de usuario 
         JLabel imagenLabel1 = new JLabel("Foto de usuario:");
         gbc.gridx = 0;
         gbc.gridy = 7;
         panel.add(imagenLabel1, gbc);
 
-        // Botón para cargar la foto
+   
         JButton cargarFotoButton = new JButton("Cargar Foto");
         cargarFotoButton.addActionListener(new ActionListener() {
             @Override
@@ -132,7 +132,7 @@ public class ManagerRegister extends JFrame {
             }
         });
         gbc.gridx = 1;
-        gbc.gridy = 7; // Pon el botón en una fila diferente
+        gbc.gridy = 7; 
         panel.add(cargarFotoButton, gbc);
        
 
@@ -211,56 +211,68 @@ public class ManagerRegister extends JFrame {
         createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = userField.getText();
-                String email = emailField.getText();
-                String phone = phoneField.getText();
-                String address = addressField.getText();
-                String postalCode = postalCodeField.getText();
+                String username = userField.getText().trim();
+                String email = emailField.getText().trim();
+                String phone = phoneField.getText().trim();
+                String address = addressField.getText().trim();
+                String postalCode = postalCodeField.getText().trim();
                 String password = new String(passField.getPassword());
                 String confirmPassword = new String(confirmPassField.getPassword());
                 String selectedTeam = (String) teamComboBox.getSelectedItem();
-                String fotoUsuario = null;
-                if (imagenCargada != null) {
-                    fotoUsuario = convertImageToBase64(imagenCargada);
-                }
 
-                // Obtener la fecha de nacimiento desde el JSpinner
-                Date selectedDate = (Date) dateSpinner.getValue();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(selectedDate);
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int age = Calendar.getInstance().get(Calendar.YEAR) - year;
-                
-
-
-                // Validación de campos
                 if (username.isEmpty() || email.isEmpty() || phone.isEmpty() ||
                     address.isEmpty() || postalCode.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() ||
                     selectedTeam.equals("Seleccione un equipo")) {
                     JOptionPane.showMessageDialog(panel, "Por favor, complete todos los campos.", "Error", JOptionPane.ERROR_MESSAGE);
-                } else if (!password.equals(confirmPassword)) {
-                    JOptionPane.showMessageDialog(panel, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
-                }else if  (imagenCargada != null) {
-                    fotoUsuario = convertImageToBase64(imagenCargada);
-                } else {
-                    fotoUsuario = "No Foto"; // Indicar que no hay foto cargada
+                    return;
                 }
-{
-                    if (age < 18) {
-                        showConsentDialog();
-                    } else {
-                    	//SE REGISTRA EL USUARIO EN EL FICHERO
-                    	registerUser(username, password, email, phone, address, postalCode, selectedTeam, selectedDate);
-                        JOptionPane.showMessageDialog(panel, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                        dispose();
-                        ManagerLogin v = new ManagerLogin();
-                        v.setVisible(true); // Cierra la ventana principal y vuelve a la ventana de login
-                    }
+
+                if (!isValidEmail(email)) {
+                    JOptionPane.showMessageDialog(panel, "Ingrese un correo electrónico válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (!password.equals(confirmPassword)) {
+                    JOptionPane.showMessageDialog(panel, "Las contraseñas no coinciden.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (!phone.matches("\\d{10,}")) {
+                    JOptionPane.showMessageDialog(panel, "El número de teléfono debe contener al menos 10 dígitos.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    Integer.parseInt(postalCode);
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(panel, "El código postal debe ser un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (imagenCargada == null) {
+                    int confirm = JOptionPane.showConfirmDialog(panel, "No se ha cargado una foto. ¿Desea continuar?", "Advertencia", JOptionPane.YES_NO_OPTION);
+                    if (confirm != JOptionPane.YES_OPTION) return;
+                }
+
+                // Lógica para guardar datos y redirigir al usuario
+                Date selectedDate = (Date) dateSpinner.getValue();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(selectedDate);
+                int year = calendar.get(Calendar.YEAR);
+                int age = Calendar.getInstance().get(Calendar.YEAR) - year;
+
+                if (age < 18) {
+                    showConsentDialog();
+                } else {
+                    String fotoUsuario = (imagenCargada != null) ? convertImageToBase64(imagenCargada) : "No Foto";
+                    registerUser(username, password, email, phone, address, postalCode, selectedTeam, selectedDate, fotoUsuario);
+                    JOptionPane.showMessageDialog(panel, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                    dispose();
+                    new ManagerLogin().setVisible(true);
                 }
             }
         });
+
         
         // Botón de Volver
         JButton backButton = new JButton("Atrás");
@@ -362,10 +374,10 @@ public class ManagerRegister extends JFrame {
     }
     
  // Método para registrar al usuario en el archivo
-    private void registerUser(String username, String password, String email, String phone, String address, String postalCode, String selectedTeam, Date birthDate) {
+    private void registerUser(String username, String password, String email, String phone, String address, String postalCode, String selectedTeam, Date birthDate,String fotoUsuario) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter("resources/data/usuarios.csv", true))) {
             // Guardar datos en el fichero csv
-            bw.write(username + ";" + password + ";" + email + ";" + phone + ";" + address + ";" + postalCode + ";" + selectedTeam + ";" + birthDate);
+            bw.write(username + ";" + password + ";" + email + ";" + phone + ";" + address + ";" + postalCode + ";" + selectedTeam + ";" + birthDate + (fotoUsuario != null ? fotoUsuario : "No Foto"));
             bw.newLine(); 
             bw.flush();
             System.out.println("Usuario guardado"); //Linea para comprobar por la consola
