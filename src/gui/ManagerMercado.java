@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -39,6 +40,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.DocumentEvent;
@@ -436,7 +438,7 @@ public class ManagerMercado extends JFrame {
                 datos[i][7] = jugador.getAsistencias();
                 datos[i][8] = jugador.getRegates();
                 datos[i][9] = jugador.getTarjetas_amarillas();
-                datos[i][10] = jugador.getTarjetas_amarillas();
+                datos[i][10] = jugador.getTarjetas_rojas();
             }
 
             
@@ -467,21 +469,36 @@ public class ManagerMercado extends JFrame {
             
             tabla.setAutoCreateRowSorter(true);
             
-            // En el código que configura el TableRowSorter
-            RowSorter<? extends TableModel> sorter = tabla.getRowSorter();
-            if (sorter instanceof TableRowSorter) {
-                TableRowSorter<?> tableRowSorter = (TableRowSorter<?>) sorter;
-                tableRowSorter.setComparator(4, (o1, o2) -> {
-                    Double valor1 = (Double) o1;
-                    Double valor2 = (Double) o2;
-                    return valor1.compareTo(valor2);
-                });
-                tableRowSorter.setComparator(8, (o1, o2) -> {
-                    Integer regates1 = (Integer) o1;
-                    Integer regates2 = (Integer) o2;
-                    return regates1.compareTo(regates2);  // Ordenar por regates
-                });
-            }
+            tabla.setAutoCreateRowSorter(true);
+
+         // Configuración del TableRowSorter
+         RowSorter<? extends TableModel> sorter = tabla.getRowSorter();
+         if (sorter instanceof TableRowSorter) {
+             TableRowSorter<?> tableRowSorter = (TableRowSorter<?>) sorter;
+             
+             // Configurar comparadores personalizados
+             tableRowSorter.setComparator(4, (o1, o2) -> { // Comparador para valor
+                 Double valor1 = (Double) o1;
+                 Double valor2 = (Double) o2;
+                 return valor1.compareTo(valor2);
+             });
+             tableRowSorter.setComparator(5, (o1, o2) -> { // Comparador para puntos
+                 Integer puntos1 = (Integer) o1;
+                 Integer puntos2 = (Integer) o2;
+                 return puntos1.compareTo(puntos2);
+             });
+             tableRowSorter.setComparator(8, (o1, o2) -> { // Comparador para regates
+                 Integer regates1 = (Integer) o1;
+                 Integer regates2 = (Integer) o2;
+                 return regates1.compareTo(regates2);
+             });
+
+             // Ordenar inicialmente por la columna de puntos en orden descendente
+             List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+             sortKeys.add(new RowSorter.SortKey(5, SortOrder.DESCENDING)); // Columna 5 (Puntos)
+             tableRowSorter.setSortKeys(sortKeys);
+         }
+
 
             
             

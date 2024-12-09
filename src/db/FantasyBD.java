@@ -886,255 +886,103 @@ public class FantasyBD {
 
     	// Partido 1
     	insertarPartido(1, 2, 2, 1, 11); // Athletic Club vs FC Barcelona
-    	insertarEstadisticasPartido(21, 1, 1, 1, 2, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(10, 1, 1, 0, 1, 0, 0); // Robert Lewandowski (Barcelona) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(24, 1, 1, 1, 2, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(51, 1, 1, 0, 1, 0, 0); // Robert Lewandowski (Barcelona) - 1 gol, 1 regate
 
     	// Partido 2
     	insertarPartido(3, 4, 1, 1, 12); // Real Madrid vs Atlético de Madrid
-    	insertarEstadisticasPartido(14, 2, 0, 1, 0, 1, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(27, 2, 1, 0, 2, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(66, 2, 0, 1, 0, 1, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(95, 2, 1, 0, 2, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 2 regates
 
     	// Partido 3
     	insertarPartido(5, 6, 2, 0, 13); // Real Sociedad vs Real Betis
-    	insertarEstadisticasPartido(22, 3, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
-    	insertarEstadisticasPartido(6, 3, 0, 0, 2, 1, 0); // Isco (Real Betis) - 2 regates, 1 tarjeta amarilla
+    	insertarEstadisticasPartido(124, 3, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(143, 3, 0, 0, 2, 1, 0); // Isco (Real Betis) - 2 regates, 1 tarjeta amarilla
 
     	// Partido 4
     	insertarPartido(7, 8, 1, 2, 14); // Sevilla FC vs Valencia CF
-    	insertarEstadisticasPartido(25, 4, 0, 1, 1, 0, 0); // Suso (Sevilla) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(9, 4, 1, 0, 0, 0, 0); // Hugo Duro (Valencia) - 1 gol
+    	insertarEstadisticasPartido(173, 4, 0, 1, 1, 0, 0); // Suso (Sevilla) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(199, 4, 1, 0, 0, 0, 0); // Hugo Duro (Valencia) - 1 gol
 
     	// Partido 5
     	insertarPartido(9, 10, 3, 0, 15); // Villarreal CF vs Celta de Vigo
-    	insertarEstadisticasPartido(30, 5, 1, 0, 4, 0, 0); // Gerard Moreno (Villarreal) - 1 gol, 4 regates
-    	insertarEstadisticasPartido(19, 5, 0, 0, 2, 1, 0); // Iago Aspas (Celta) - 2 regates, 1 tarjeta amarilla
+    	insertarEstadisticasPartido(225, 5, 1, 0, 4, 0, 0); // Gerard Moreno (Villarreal) - 1 gol, 4 regates
+    	insertarEstadisticasPartido(251, 5, 0, 0, 2, 1, 0); // Iago Aspas (Celta) - 2 regates, 1 tarjeta amarilla
 
     	// Partido 6
     	insertarPartido(11, 12, 2, 2, 16); // Getafe CF vs Rayo Vallecano
-    	insertarEstadisticasPartido(33, 6, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(44, 6, 1, 0, 3, 0, 0); // Isi Palazón (Rayo) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(273, 6, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(296, 6, 1, 0, 3, 0, 0); // Isi Palazón (Rayo) - 1 gol, 3 regates
 
     	// Partido 7
     	insertarPartido(13, 14, 4, 1, 17); // UD Las Palmas vs Alavés
-    	insertarEstadisticasPartido(40, 7, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
-    	insertarEstadisticasPartido(52, 7, 0, 0, 3, 1, 0); // Asier Villalibre (Alavés) - 3 regates, 1 tarjeta amarilla
+    	insertarEstadisticasPartido(149, 7, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
+    	insertarEstadisticasPartido(351, 7, 0, 0, 3, 1, 0); // Asier Villalibre (Alavés) - 3 regates, 1 tarjeta amarilla
 
     	// Partido 8
     	insertarPartido(15, 16, 2, 3, 18); // Mallorca vs Girona
-    	insertarEstadisticasPartido(53, 8, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(56, 8, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
+    	insertarEstadisticasPartido(375, 8, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(402, 8, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
 
     	// Partido 9
     	insertarPartido(17, 18, 1, 1, 19); // Osasuna vs Espanyol
-    	insertarEstadisticasPartido(60, 9, 0, 0, 2, 0, 1); // Ante Budimir (Osasuna) - 2 regates, 1 tarjeta roja
-    	insertarEstadisticasPartido(68, 9, 1, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(426, 9, 0, 0, 2, 0, 1); // Ante Budimir (Osasuna) - 2 regates, 1 tarjeta roja
+    	insertarEstadisticasPartido(444, 9, 1, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 gol, 1 regate
 
     	// Partido 10
     	insertarPartido(19, 20, 2, 0, 20); // Real Valladolid vs Leganés
-    	insertarEstadisticasPartido(70, 10, 1, 0, 1, 0, 0); // Marcos André (Valladolid) - 1 gol, 1 regate
-    	insertarEstadisticasPartido(80, 10, 0, 0, 2, 0, 0); // Javi Hernández (Leganés) - 2 regates
+    	insertarEstadisticasPartido(477, 10, 1, 0, 1, 0, 0); // Marcos André (Valladolid) - 1 gol, 1 regate
+    	insertarEstadisticasPartido(485, 10, 0, 0, 2, 0, 0); // Javi Hernández (Leganés) - 2 regates
 
     	// Partido 11
     	insertarPartido(2, 17, 3, 1, 21); // FC Barcelona vs Osasuna
-    	insertarEstadisticasPartido(15, 11, 1, 1, 2, 0, 0); // Pedri (Barcelona) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(60, 11, 0, 0, 3, 1, 0); // Ante Budimir (Osasuna) - 3 regates, 1 tarjeta amarilla
+    	insertarEstadisticasPartido(42, 11, 1, 1, 2, 0, 0); // Pedri (Barcelona) - 1 gol, 1 asistencia, 2 regates
+    	insertarEstadisticasPartido(426, 11, 0, 0, 3, 1, 0); // Ante Budimir (Osasuna) - 3 regates, 1 tarjeta amarilla
 
     	// Partido 12
     	insertarPartido(3, 5, 2, 0, 22); // Real Madrid vs Real Sociedad
-    	insertarEstadisticasPartido(14, 12, 0, 1, 1, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(22, 12, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(66, 12, 0, 1, 1, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 1 regate
+    	insertarEstadisticasPartido(124, 12, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
 
     	// Partido 13
     	insertarPartido(4, 6, 2, 2, 23); // Atlético de Madrid vs Real Betis
-    	insertarEstadisticasPartido(27, 13, 1, 1, 4, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 1 asistencia, 4 regates
-    	insertarEstadisticasPartido(36, 13, 0, 0, 2, 1, 0); // Joaquín (Real Betis) - 2 regates, 1 tarjeta amarilla
+    	insertarEstadisticasPartido(95, 13, 1, 1, 4, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 1 asistencia, 4 regates
+    	insertarEstadisticasPartido(144, 13, 0, 0, 2, 1, 0); // Abde (Real Betis) - 2 regates, 1 tarjeta amarilla
 
     	// Partido 14
-    	insertarPartido(7, 9, 3, 0, 24); // Sevilla FC vs Villarreal CF
-    	insertarEstadisticasPartido(25, 14, 2, 0, 3, 0, 0); // Suso (Sevilla) - 2 goles, 3 regates
-    	insertarEstadisticasPartido(30, 14, 0, 0, 1, 0, 0); // Gerard Moreno (Villarreal) - 1 regate
+    	insertarPartido(6, 8, 1, 3, 24); // Real Betis vs Valencia
+    	insertarEstadisticasPartido(144, 14, 0, 1, 2, 1, 0); // Abde (Real Betis) - 1 asistencia, 2 regates, 1 amarilla
+    	insertarEstadisticasPartido(199, 14, 2, 0, 4, 0, 0); // Hugo Duro (Valencia) - 2 goles, 4 regates
 
     	// Partido 15
-    	insertarPartido(11, 17, 1, 0, 25); // Getafe CF vs Osasuna
-    	insertarEstadisticasPartido(33, 15, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(60, 15, 0, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 2 regates
+    	insertarPartido(2, 4, 2, 2, 25); // FC Barcelona vs Atlético de Madrid
+    	insertarEstadisticasPartido(51, 15, 1, 0, 3, 0, 0); // Robert Lewandowski (Barcelona) - 1 gol, 3 regates
+    	insertarEstadisticasPartido(95, 15, 1, 1, 3, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 1 asistencia, 3 regates
 
     	// Partido 16
-    	insertarPartido(15, 20, 3, 2, 26); // Mallorca vs Leganés
-    	insertarEstadisticasPartido(53, 16, 1, 0, 3, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 3 regates
-    	insertarEstadisticasPartido(80, 16, 0, 0, 1, 0, 0); // Javi Hernández (Leganés) - 1 regate
+    	insertarPartido(9, 5, 0, 1, 26); // Villarreal vs Real Sociedad
+    	insertarEstadisticasPartido(225, 16, 0, 0, 2, 1, 0); // Gerard Moreno (Villarreal) - 2 regates, 1 amarilla
+    	insertarEstadisticasPartido(124, 16, 1, 0, 4, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 4 regates
 
     	// Partido 17
-    	insertarPartido(18, 19, 2, 1, 27); // Espanyol vs Real Valladolid
-    	insertarEstadisticasPartido(68, 17, 1, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 gol, 1 regate
-    	insertarEstadisticasPartido(70, 17, 0, 1, 2, 0, 0); // Marcos André (Valladolid) - 2 regates
+    	insertarPartido(13, 15, 1, 2, 27); // Las Palmas vs Girona
+    	insertarEstadisticasPartido(149, 17, 1, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 1 gol, 5 regates
+    	insertarEstadisticasPartido(402, 17, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
 
     	// Partido 18
-    	insertarPartido(4, 3, 2, 3, 28); // Atlético de Madrid vs Real Madrid
-    	insertarEstadisticasPartido(27, 18, 1, 0, 2, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(14, 18, 0, 1, 3, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 3 regates
+    	insertarPartido(10, 20, 0, 0, 28); // Celta de Vigo vs Leganés
+    	insertarEstadisticasPartido(251, 18, 0, 0, 2, 1, 0); // Iago Aspas (Celta) - 2 regates, 1 amarilla
+    	insertarEstadisticasPartido(485, 18, 0, 0, 1, 0, 0); // Javi Hernández (Leganés) - 1 regate
 
     	// Partido 19
-    	insertarPartido(2, 6, 1, 1, 29); // FC Barcelona vs Real Betis
-    	insertarEstadisticasPartido(15, 19, 0, 1, 0, 0, 0); // Pedri (Barcelona) - 1 asistencia
-    	insertarEstadisticasPartido(36, 19, 1, 0, 1, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 regate
+    	insertarPartido(7, 1, 2, 1, 29); // Sevilla vs Athletic Club
+    	insertarEstadisticasPartido(173, 19, 0, 2, 3, 0, 0); // Suso (Sevilla) - 2 asistencias, 3 regates
+    	insertarEstadisticasPartido(24, 19, 1, 0, 3, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 3 regates
 
     	// Partido 20
-    	insertarPartido(7, 8, 1, 0, 30); // Sevilla FC vs Valencia CF
-    	insertarEstadisticasPartido(25, 20, 1, 0, 1, 0, 0); // Suso (Sevilla) - 1 gol, 1 regate
-    	insertarEstadisticasPartido(9, 20, 0, 0, 0, 1, 0); // Hugo Duro (Valencia) - 1 regate, 1 tarjeta amarilla
-
-    	// Partido 21
-    	insertarPartido(1, 3, 2, 1, 31); // Athletic Club vs Real Madrid
-    	insertarEstadisticasPartido(21, 21, 1, 0, 2, 0, 0); // Iñaki Williams (Athletic) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(14, 21, 1, 0, 3, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 3 regates
-
-    	// Partido 22
-    	insertarPartido(2, 4, 3, 0, 32); // FC Barcelona vs Atlético de Madrid
-    	insertarEstadisticasPartido(15, 22, 1, 1, 2, 0, 0); // Pedri (Barcelona) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(27, 22, 0, 0, 4, 0, 0); // Antoine Griezmann (Atlético) - 4 regates
-
-    	// Partido 23
-    	insertarPartido(5, 7, 2, 1, 33); // Real Sociedad vs Sevilla FC
-    	insertarEstadisticasPartido(22, 23, 1, 0, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 3 regates
-    	insertarEstadisticasPartido(25, 23, 0, 1, 4, 0, 0); // Suso (Sevilla) - 1 asistencia, 4 regates
-
-    	// Partido 24
-    	insertarPartido(6, 8, 1, 2, 34); // Real Betis vs Valencia CF
-    	insertarEstadisticasPartido(36, 24, 1, 0, 1, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 regate
-    	insertarEstadisticasPartido(9, 24, 0, 1, 3, 0, 0); // Hugo Duro (Valencia) - 1 asistencia, 3 regates
-
-    	// Partido 25
-    	insertarPartido(9, 10, 3, 1, 35); // Villarreal CF vs Celta de Vigo
-    	insertarEstadisticasPartido(30, 25, 2, 0, 4, 0, 0); // Gerard Moreno (Villarreal) - 2 goles, 4 regates
-    	insertarEstadisticasPartido(19, 25, 1, 0, 2, 0, 0); // Iago Aspas (Celta) - 1 gol, 2 regates
-
-    	// Partido 26
-    	insertarPartido(11, 12, 2, 1, 36); // Getafe CF vs Rayo Vallecano
-    	insertarEstadisticasPartido(33, 26, 0, 1, 1, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 1 regate
-    	insertarEstadisticasPartido(44, 26, 1, 0, 2, 0, 0); // Isi Palazón (Rayo) - 1 gol, 2 regates
-
-    	// Partido 27
-    	insertarPartido(13, 14, 4, 0, 37); // UD Las Palmas vs Alavés
-    	insertarEstadisticasPartido(40, 27, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
-    	insertarEstadisticasPartido(52, 27, 0, 0, 4, 1, 0); // Asier Villalibre (Alavés) - 4 regates, 1 tarjeta amarilla
-
-    	// Partido 28
-    	insertarPartido(15, 16, 3, 1, 38); // Mallorca vs Girona
-    	insertarEstadisticasPartido(53, 28, 1, 0, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(56, 28, 1, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 gol, 1 asistencia, 3 regates
-
-    	// Partido 29
-    	insertarPartido(17, 18, 2, 0, 39); // Osasuna vs Espanyol
-    	insertarEstadisticasPartido(60, 29, 1, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(68, 29, 0, 1, 1, 0, 0); // Javi Puado (Espanyol) - 1 asistencia, 1 regate
-
-    	// Partido 30
-    	insertarPartido(19, 20, 2, 1, 40); // Real Valladolid vs Leganés
-    	insertarEstadisticasPartido(70, 30, 1, 0, 1, 0, 0); // Marcos André (Valladolid) - 1 gol, 1 regate
-    	insertarEstadisticasPartido(80, 30, 0, 0, 2, 0, 0); // Javi Hernández (Leganés) - 2 regates
-
-    	// Partido 31
-    	insertarPartido(2, 5, 4, 2, 41); // FC Barcelona vs Real Sociedad
-    	insertarEstadisticasPartido(15, 31, 2, 1, 3, 0, 0); // Pedri (Barcelona) - 2 goles, 1 asistencia, 3 regates
-    	insertarEstadisticasPartido(22, 31, 1, 0, 2, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 gol, 2 regates
-
-    	// Partido 32
-    	insertarPartido(3, 9, 3, 0, 42); // Real Madrid vs Villarreal CF
-    	insertarEstadisticasPartido(14, 32, 1, 1, 4, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 1 asistencia, 4 regates
-    	insertarEstadisticasPartido(30, 32, 0, 0, 2, 0, 0); // Gerard Moreno (Villarreal) - 2 regates
-
-    	// Partido 33
-    	insertarPartido(4, 6, 2, 1, 43); // Atlético de Madrid vs Real Betis
-    	insertarEstadisticasPartido(27, 33, 1, 0, 3, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 3 regates
-    	insertarEstadisticasPartido(36, 33, 0, 1, 1, 0, 0); // Joaquín (Real Betis) - 1 asistencia, 1 regate
-
-    	// Partido 34
-    	insertarPartido(7, 8, 2, 2, 44); // Sevilla FC vs Valencia CF
-    	insertarEstadisticasPartido(25, 34, 1, 0, 4, 0, 0); // Suso (Sevilla) - 1 gol, 4 regates
-    	insertarEstadisticasPartido(9, 34, 1, 0, 2, 0, 0); // Hugo Duro (Valencia) - 1 gol, 2 regates
-
-    	// Partido 35
-    	insertarPartido(11, 17, 2, 0, 45); // Getafe CF vs Osasuna
-    	insertarEstadisticasPartido(33, 35, 1, 0, 2, 0, 0); // Borja Mayoral (Getafe) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(60, 35, 0, 0, 3, 0, 0); // Ante Budimir (Osasuna) - 3 regates
-
-    	// Partido 36
-    	insertarPartido(13, 16, 3, 0, 46); // UD Las Palmas vs Girona
-    	insertarEstadisticasPartido(40, 36, 2, 0, 5, 0, 0); // Vitor Roque (Las Palmas) - 2 goles, 5 regates
-    	insertarEstadisticasPartido(56, 36, 0, 1, 3, 0, 0); // Cristhian Stuani (Girona) - 1 asistencia, 3 regates
-
-    	// Partido 37
-    	insertarPartido(15, 20, 3, 2, 47); // Mallorca vs Leganés
-    	insertarEstadisticasPartido(53, 37, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(80, 37, 0, 0, 1, 0, 0); // Javi Hernández (Leganés) - 1 regate
-
-    	// Partido 38
-    	insertarPartido(18, 19, 2, 1, 48); // Espanyol vs Real Valladolid
-    	insertarEstadisticasPartido(68, 38, 1, 0, 2, 0, 0); // Javi Puado (Espanyol) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(70, 38, 0, 1, 3, 0, 0); // Marcos André (Valladolid) - 3 regates
-
-    	// Partido 39
-    	insertarPartido(3, 5, 2, 1, 49); // Real Madrid vs Real Sociedad
-    	insertarEstadisticasPartido(14, 39, 1, 0, 2, 0, 0); // Luka Modric (Real Madrid) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(22, 39, 0, 1, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 asistencia, 3 regates
-
-    	// Partido 40
-    	insertarPartido(4, 6, 2, 0, 50); // Atlético de Madrid vs Real Betis
-    	insertarEstadisticasPartido(27, 40, 1, 0, 3, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 3 regates
-    	insertarEstadisticasPartido(36, 40, 0, 1, 1, 0, 0); // Joaquín (Real Betis) - 1 asistencia, 1 regate
-
-    	// Partido 41
-    	insertarPartido(7, 9, 3, 1, 51); // Sevilla FC vs Villarreal CF
-    	insertarEstadisticasPartido(25, 41, 1, 1, 2, 0, 0); // Suso (Sevilla) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(30, 41, 0, 0, 3, 0, 0); // Gerard Moreno (Villarreal) - 3 regates
-
-    	// Partido 42
-    	insertarPartido(11, 12, 2, 1, 52); // Getafe CF vs Rayo Vallecano
-    	insertarEstadisticasPartido(33, 42, 0, 1, 2, 0, 0); // Borja Mayoral (Getafe) - 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(44, 42, 1, 0, 3, 0, 0); // Isi Palazón (Rayo) - 1 gol, 3 regates
-
-    	// Partido 43
-    	insertarPartido(13, 17, 4, 2, 53); // UD Las Palmas vs Osasuna
-    	insertarEstadisticasPartido(40, 43, 1, 1, 4, 0, 0); // Vitor Roque (Las Palmas) - 1 gol, 1 asistencia, 4 regates
-    	insertarEstadisticasPartido(60, 43, 1, 0, 2, 0, 0); // Ante Budimir (Osasuna) - 2 regates
-
-    	// Partido 44
-    	insertarPartido(15, 18, 3, 0, 54); // Mallorca vs Espanyol
-    	insertarEstadisticasPartido(53, 44, 1, 1, 2, 0, 0); // Vedat Muriqi (Mallorca) - 1 gol, 1 asistencia, 2 regates
-    	insertarEstadisticasPartido(68, 44, 0, 0, 1, 0, 0); // Javi Puado (Espanyol) - 1 regate
-
-    	// Partido 45
-    	insertarPartido(20, 6, 1, 2, 55); // Leganés vs Real Betis
-    	insertarEstadisticasPartido(80, 45, 0, 0, 3, 0, 0); // Javi Hernández (Leganés) - 3 regates
-    	insertarEstadisticasPartido(36, 45, 1, 0, 2, 0, 0); // Joaquín (Real Betis) - 1 gol, 2 regates
-
-    	// Partido 46
-    	insertarPartido(12, 19, 2, 2, 56); // Rayo Vallecano vs Real Valladolid
-    	insertarEstadisticasPartido(44, 46, 1, 0, 2, 0, 0); // Isi Palazón (Rayo) - 1 gol, 2 regates
-    	insertarEstadisticasPartido(70, 46, 0, 1, 3, 0, 0); // Marcos André (Valladolid) - 3 regates
-
-    	// Partido 47
-    	insertarPartido(2, 3, 2, 1, 57); // FC Barcelona vs Real Madrid
-    	insertarEstadisticasPartido(15, 47, 1, 0, 4, 0, 0); // Pedri (Barcelona) - 1 gol, 4 regates
-    	insertarEstadisticasPartido(14, 47, 0, 1, 3, 0, 0); // Luka Modric (Real Madrid) - 1 asistencia, 3 regates
-
-    	// Partido 48
-    	insertarPartido(4, 8, 1, 0, 58); // Atlético de Madrid vs Valencia CF
-    	insertarEstadisticasPartido(27, 48, 1, 0, 5, 0, 0); // Antoine Griezmann (Atlético) - 1 gol, 5 regates
-    	insertarEstadisticasPartido(9, 48, 0, 0, 4, 0, 0); // Hugo Duro (Valencia) - 4 regates
-
-    	// Partido 49
-    	insertarPartido(5, 7, 1, 1, 59); // Real Sociedad vs Sevilla FC
-    	insertarEstadisticasPartido(22, 49, 0, 1, 3, 0, 0); // Mikel Oyarzabal (Real Sociedad) - 1 asistencia, 3 regates
-    	insertarEstadisticasPartido(25, 49, 1, 0, 2, 0, 0); // Suso (Sevilla) - 1 gol, 2 regates
-
-    	// Partido 50
-    	insertarPartido(6, 10, 3, 2, 60); // Real Betis vs Celta de Vigo
-    	insertarEstadisticasPartido(36, 50, 1, 1, 4, 0, 0); // Joaquín (Real Betis) - 1 gol, 1 asistencia, 4 regates
-    	insertarEstadisticasPartido(19, 50, 1, 0, 2, 0, 0); // Iago Aspas (Celta) - 1 gol, 2 regates
-
-
+    	insertarPartido(18, 12, 1, 3, 30); // Espanyol vs Rayo Vallecano
+    	insertarEstadisticasPartido(444, 20, 1, 0, 2, 0, 0); // Javi Puado (Espanyol) - 1 gol, 2 regates
+    	insertarEstadisticasPartido(296, 20, 2, 1, 4, 0, 0); // Isi Palazón (Rayo) - 2 goles, 1 asistencia, 4 regates
 
 
 
