@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import domain.Jugador;
+import domain.UserData;
 
 public class ManagerPlantilla extends JFrame {
 
@@ -35,6 +36,8 @@ public class ManagerPlantilla extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(new Color(196, 238, 255)); 
+        
+        
         
         addWindowListener(new WindowAdapter() {
             @Override
@@ -78,12 +81,19 @@ public class ManagerPlantilla extends JFrame {
         formationSelector.addActionListener(this::cambiarFormacion);
         formationSelector.setFont(new Font("Arial", Font.PLAIN, 14));
         
+        JButton btnGuardarPlantilla = new JButton("Guardar Plantilla");
+        // btnGuardarPlantilla.addActionListener(this::guardarPlantilla);
+        
 
         topPanel.add(lblPresupuesto);
         panelFormacion.add(lblFormacion);
         panelFormacion.add(formationSelector);
         panelFormacion.setBackground(new Color(196, 238, 255));
         topPanel.add(panelFormacion);
+        topPanel.add(btnGuardarPlantilla);
+ 
+        
+        
 
         add(topPanel, BorderLayout.NORTH);
 
@@ -458,6 +468,9 @@ public class ManagerPlantilla extends JFrame {
             e.printStackTrace();
         }
     }
+    
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

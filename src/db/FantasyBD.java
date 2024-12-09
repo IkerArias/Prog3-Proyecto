@@ -1,6 +1,10 @@
 package db;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 public class FantasyBD {
 
@@ -11,11 +15,13 @@ public class FantasyBD {
         crearBaseDeDatos();
         crearTablas();
         insertarDatos();
+        cargarUsuariosDesdeCSV("resources/data/usuarios.csv");
         
         // Mostrar los datos
         mostrarEquipos();
         mostrarJugadores();
         mostrarPartidos();
+        
         
         //CUIDADO!!!!!
         //vaciarBaseDeDatos();
@@ -80,6 +86,20 @@ public class FantasyBD {
                 "FOREIGN KEY (jugador_id) REFERENCES Jugadores(id)," +
                 "FOREIGN KEY (partido_id) REFERENCES Partidos(id)" +
                 ");";
+        
+        String sqlUsuarios = "CREATE TABLE IF NOT EXISTS Usuarios (" +
+                "id INTEGER PRIMARY KEY," +
+                "nombre TEXT NOT NULL," +
+                "apellido TEXT NOT NULL," +
+                "email TEXT NOT NULL," +
+                "telefono TEXT NOT NULL," +
+                "ciudad TEXT NOT NULL," +
+                "saldo DOUBLE NOT NULL," +
+                "equipo_favorito TEXT NOT NULL," +
+                "fecha_nacimiento TEXT NOT NULL" +
+                ");";
+        
+       
 
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
@@ -87,6 +107,8 @@ public class FantasyBD {
             stmt.execute(sqlJugadores);
             stmt.execute(sqlPartidos);
             stmt.execute(sqlJugadoresPartidos);
+            stmt.execute(sqlUsuarios);
+           
 
             System.out.println("Tablas creadas exitosamente.");
         } catch (SQLException e) {
@@ -94,6 +116,60 @@ public class FantasyBD {
         }
     }
 
+    
+    private static void cargarUsuariosDesdeCSV(String archivo) {
+        String sqlInsertarUsuario = "INSERT INTO Usuarios (nombre, apellido, email, telefono, ciudad, saldo, equipo_favorito, fecha_nacimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo));
+             Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sqlInsertarUsuario)) {
+
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(";");
+                
+                if (datos.length == 8) {
+                    pstmt.setString(1, datos[0]);  // nombre
+                    pstmt.setString(2, datos[1]);  // apellido
+                    pstmt.setString(3, datos[2]);  // email
+                    pstmt.setString(4, datos[3]);  // telefono
+                    pstmt.setString(5, datos[4]);  // ciudad
+                    pstmt.setDouble(6, Double.parseDouble(datos[5]));  // saldo
+                    pstmt.setString(7, datos[6]);  // equipo_favorito
+                    pstmt.setString(8, datos[7]);  // fecha_nacimiento
+                    pstmt.addBatch();
+                }
+            }
+            pstmt.executeBatch();  // Ejecutar el lote de inserciones
+            System.out.println("Usuarios cargados desde el archivo CSV.");
+        } catch (IOException | SQLException e) {
+            System.out.println("Error al cargar los usuarios desde el archivo CSV: " + e.getMessage());
+        }
+    }
+
+    // Mostrar los usuarios
+    private static void mostrarUsuarios() {
+        String sql = "SELECT * FROM Usuarios";
+        try (Connection conn = DriverManager.getConnection(URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            System.out.println("Usuarios:");
+            while (rs.next()) {
+                System.out.println("ID: " + rs.getInt("id") + ", Nombre: " + rs.getString("nombre") +
+                                   ", Apellido: " + rs.getString("apellido") + 
+                                   ", Email: " + rs.getString("email") +
+                                   ", Teléfono: " + rs.getString("telefono") + 
+                                   ", Ciudad: " + rs.getString("ciudad") +
+                                   ", Saldo: " + rs.getDouble("saldo") +
+                                   ", Equipo Favorito: " + rs.getString("equipo_favorito") +
+                                   ", Fecha de Nacimiento: " + rs.getString("fecha_nacimiento"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al mostrar usuarios: " + e.getMessage());
+        }
+    }
+    
+    
     // Insertar un equipo
     private static void insertarEquipo(String nombre, String ciudad) {
         String sql = "INSERT INTO Equipos (nombre, ciudad) VALUES (?, ?)";

@@ -162,6 +162,7 @@ public class ManagerClasificacion extends JFrame {
 
         return usuarios;
     }
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
