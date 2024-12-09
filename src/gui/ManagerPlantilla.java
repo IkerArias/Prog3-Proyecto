@@ -2,15 +2,21 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import java.nio.channels.FileChannel;
 
 import domain.Jugador;
 import domain.UserData;
@@ -20,13 +26,17 @@ public class ManagerPlantilla extends JFrame {
     private static final long serialVersionUID = 1L;
     
 	private ArrayList<Jugador> resultado;
-    private double presupuesto = 200.0; // Presupuesto inicial
+	private double presupuestoInicial = 1000.0; // Presupuesto inicial
+    private double presupuesto = presupuestoInicial;
     private JLabel lblPresupuesto;
     private JLabel lblFormacion;
     private JPanel pnlPlantilla; // Panel central para la formación
     private JComboBox<String> formationSelector; // Selector de formación
     private JButton[] playerButtons; // Botones reutilizables para los jugadores
     private JProgressBar progressBar; // Barra de progreso
+    private JLabel lblJornada;
+    private JComboBox<String> comboJornada;
+    
 
     public ManagerPlantilla() {
         // Configuración básica
@@ -59,7 +69,7 @@ public class ManagerPlantilla extends JFrame {
         setLayout(new BorderLayout(10, 10)); 
 
         // Panel superior (Presupuesto y Selector de formación)
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 12));
         JPanel panelFormacion = new JPanel();
         topPanel.setOpaque(false);
 
@@ -81,8 +91,34 @@ public class ManagerPlantilla extends JFrame {
         formationSelector.addActionListener(this::cambiarFormacion);
         formationSelector.setFont(new Font("Arial", Font.PLAIN, 14));
         
+        
+        lblJornada = new JLabel("Jornada");
+        lblJornada.setFont(new Font("Arial", Font.BOLD, 16));
+        lblJornada.setForeground(new Color(70, 130, 180));
+
+        comboJornada = new JComboBox<>(new String[] { 
+            "1", "2", "3", "4", "5"
+        });
+        comboJornada.setFont(new Font("Arial", Font.PLAIN, 14));
+        comboJornada.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+		        reiniciarPresupuesto();
+				
+			}
+		});
+
+        
+        
+        
+        
+        
         JButton btnGuardarPlantilla = new JButton("Guardar Plantilla");
-        // btnGuardarPlantilla.addActionListener(this::guardarPlantilla);
+        //btnGuardarPlantilla.addActionListener(this::guardarPlantilla);
+        btnGuardarPlantilla.addActionListener(e -> guardarPlantilla());
         
 
         topPanel.add(lblPresupuesto);
@@ -90,12 +126,15 @@ public class ManagerPlantilla extends JFrame {
         panelFormacion.add(formationSelector);
         panelFormacion.setBackground(new Color(196, 238, 255));
         topPanel.add(panelFormacion);
+        topPanel.add(lblJornada);
+        topPanel.add(comboJornada);
         topPanel.add(btnGuardarPlantilla);
  
         
         
 
         add(topPanel, BorderLayout.NORTH);
+        
 
         // Panel central (Formación del equipo)
         pnlPlantilla = new JPanel();
@@ -338,10 +377,11 @@ public class ManagerPlantilla extends JFrame {
         pnlPlantilla.revalidate();
         pnlPlantilla.repaint();
     }
+   
 
     private void cambiarFormacion(ActionEvent e) {
-        reiniciarBotonesFormacion();
-
+    	reiniciarBotonesFormacion();
+        reiniciarPresupuesto();
         // Mostrar barra de progreso
         progressBar.setVisible(true);
 
@@ -374,6 +414,10 @@ public class ManagerPlantilla extends JFrame {
             }
         };
         worker.execute();
+    }
+    private void reiniciarPresupuesto() {
+        presupuesto = presupuestoInicial;
+        actualizarPresupuesto();
     }
     
     private void reiniciarBotonesFormacion() {
@@ -424,12 +468,89 @@ public class ManagerPlantilla extends JFrame {
             }
         });
     }
+    
+    private void guardarPlantilla() {
+        String jornadaSeleccionada = (String) comboJornada.getSelectedItem();
+        if (jornadaSeleccionada == null) {
+            JOptionPane.showMessageDialog(this, "Por favor selecciona una jornada para guardar.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String nombreUsuario = UserData.getUsername(); 
+
+        // Obtener la lista de jugadores seleccionados
+        ArrayList<String> jugadoresSeleccionados = new ArrayList<>();
+        for (JButton boton : playerButtons) {
+            if (boton.getText() != null && !boton.getText().isEmpty()) {
+                jugadoresSeleccionados.add(boton.getText());
+            }
+        }
+
+        // Guardar la plantilla en el archivo CSV
+        guardarPlantillaEnCSV(nombreUsuario, jornadaSeleccionada, jugadoresSeleccionados);
+
+        JOptionPane.showMessageDialog(this, "Plantilla guardada para la jornada: " + jornadaSeleccionada, "Guardado", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void guardarPlantillaEnCSV(String nombreUsuario, String jornada, ArrayList<String> jugadores) {
+        String filePath = "resources/data/guardarPlantillas.csv"; 
+
+        try (FileWriter fw = new FileWriter(filePath, true);
+                 BufferedWriter bw = new BufferedWriter(fw)) {
+
+            // Comprobar si el archivo está vacío para añadir el encabezado
+            if (new File(filePath).length() == 0) {
+                bw.write("usuario,jornada,jugador1,jugador2,jugador3,jugador4,jugador5,jugador6,jugador7,jugador8,jugador9,jugador10,jugador11");
+                bw.newLine();
+            }
+
+            // Crear una copia de la lista de jugadores y unirlos en una cadena
+            StringBuilder jugadoresString = new StringBuilder();
+            for (String jugador : new ArrayList<>(jugadores)) {
+                jugadoresString.append(jugador).append(",");
+            }
+            // Eliminar la última coma si es necesario
+            if (jugadoresString.length() > 0) {
+                jugadoresString.deleteCharAt(jugadoresString.length() - 1);
+            }
+
+            // Construir la línea completa
+            String linea = nombreUsuario + "," + jornada + "," + jugadoresString;
+            bw.write(linea);
+            bw.newLine();
+
+        } catch (IOException e) {
+            System.err.println("Error al guardar la plantilla: " + e.getMessage());
+        }
+    }
+    
+
+    // Método auxiliar para buscar la línea del usuario en el archivo CSV
+    private String buscarLineaUsuario(String filePath, String nombreUsuario) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos[0].equals(nombreUsuario)) {
+                    return linea;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Error al leer el archivo CSV: " + e.getMessage());
+        }
+        return null;
+    }
+
+    
+    
+
+
 
 
 
 
     private void actualizarPresupuesto() {
-        lblPresupuesto.setText("Presupuesto: $" + presupuesto);
+        lblPresupuesto.setText("Presupuesto: $" + String.format("%.2f", presupuesto));
     }
 
     private void buscarJugador(String textoBuscar) {

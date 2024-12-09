@@ -285,6 +285,21 @@ public class ManagerPerfil extends JFrame {
         }
         return null;
     }
+    private void guardarNombreEnGuardarPlantillas(String username) {
+        String filePath = "resources/data/guardarPlantillas.csv";
+
+        try (FileWriter fw = new FileWriter(filePath, true);
+             BufferedWriter bw = new BufferedWriter(fw);
+             PrintWriter pw = new PrintWriter(bw)) {
+
+            // Escribir el nombre del usuario en el archivo
+            pw.println(username);
+            JOptionPane.showMessageDialog(this, "Nombre guardado en CSV correctamente.");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar el nombre en el CSV: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 
     private boolean actualizarContraseña(String username, String nuevaContraseña) {
         String filePath = "resources/data/usuarios.csv";
