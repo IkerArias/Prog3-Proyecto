@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class ManagerPerfil extends JFrame {
 
@@ -71,6 +73,61 @@ public class ManagerPerfil extends JFrame {
         // Panel inferior para los botones
         JPanel panelInferior = new JPanel(new BorderLayout());
         panelInferior.setBackground(new Color(230, 240, 250));
+        
+     // Panel para la foto de perfil y botón de cambio
+        JPanel panelFoto = new JPanel(new BorderLayout());
+        panelFoto.setBackground(Color.WHITE);
+        panelFoto.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150), 1, true));
+
+        // Etiqueta para mostrar la imagen del perfil
+        JLabel lblFoto = new JLabel();
+        lblFoto.setHorizontalAlignment(JLabel.CENTER);
+        lblFoto.setPreferredSize(new Dimension(100, 100));
+        lblFoto.setBorder(BorderFactory.createLineBorder(new Color(100, 100, 100), 1, true));
+
+        // Cargar la imagen del perfil si existe
+        String userImagePath = "resources/imagenes/" + username + "_perfil.png"; // Ruta de la imagen de perfil
+        File userImageFile = new File(userImagePath);
+        if (userImageFile.exists()) {
+            lblFoto.setIcon(new ImageIcon(new ImageIcon(userImagePath).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+        } else {
+            lblFoto.setText("Sin Foto");
+        }
+
+        // Botón para cambiar la foto
+        JButton btnCambiarFoto = new JButton("Cambiar Foto");
+        styleButton(btnCambiarFoto);
+        btnCambiarFoto.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Seleccionar una nueva foto de perfil");
+            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
+
+            int returnValue = fileChooser.showOpenDialog(this);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                try {
+                    // Copiar la imagen seleccionada a la carpeta de recursos
+                    File destFile = new File("resources/imagenes/" + username + "_perfil.png");
+                    Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                    // Actualizar la imagen en la interfaz
+                    lblFoto.setIcon(new ImageIcon(new ImageIcon(destFile.getAbsolutePath()).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH)));
+                    lblFoto.setText("");
+                    JOptionPane.showMessageDialog(this, "Foto de perfil actualizada correctamente.");
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(this, "Error al actualizar la foto de perfil: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
+        // Añadir componentes al panel de foto
+        panelFoto.add(lblFoto, BorderLayout.CENTER);
+        panelFoto.add(btnCambiarFoto, BorderLayout.SOUTH);
+        panelCentro.add(panelFoto);
+
+        
+   
+
 
         // Panel izquierdo para botón de configuración
         JPanel panelIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -265,6 +322,8 @@ public class ManagerPerfil extends JFrame {
             return false;
         }
     }
+    
+    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

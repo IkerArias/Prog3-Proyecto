@@ -25,7 +25,7 @@ public class ManagerRegister extends JFrame {
 
     public ManagerRegister() {
         setTitle("Fantasy Manager - Crear Cuenta");
-        setSize(600, 600);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);

@@ -17,7 +17,7 @@ public class ManagerClasificacion extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public ManagerClasificacion() {
-        setSize(400, 400);
+        setSize(600, 600);
         setTitle("Clasificación");
         setResizable(false);
         setLocationRelativeTo(null);
@@ -38,15 +38,16 @@ public class ManagerClasificacion extends JFrame {
         labelTitulo.setForeground(Color.BLACK);
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
-        
-        
 
         String[] columnNames = {"Foto", "Usuario", "Puntos"};
         Object[][] data = new Object[usuarios.size()][3];
 
         for (int i = 0; i < usuarios.size(); i++) {
             Usuario usuario = usuarios.get(i);
-            data[i][0] = escalarImagen("resources/imagenes/usuario.png", 30, 30); 
+            // Cargar la imagen del perfil del usuario
+            String imagenPath = "resources/imagenes/" + usuario.getUsername() + "_perfil.png"; // Ruta de la imagen del perfil
+            ImageIcon fotoPerfil = cargarFotoPerfil(imagenPath);
+            data[i][0] = fotoPerfil; 
             data[i][1] = usuario.getUsername();
             data[i][2] = usuario.getPuntos();
         }
@@ -59,7 +60,7 @@ public class ManagerClasificacion extends JFrame {
         };
 
         tablaClasificacion.setFont(new Font("SansSerif", Font.PLAIN, 16));
-        tablaClasificacion.setRowHeight(50);
+        tablaClasificacion.setRowHeight(70);
 
         tablaClasificacion.setDefaultRenderer(Object.class, (table, value, isSelected, hasFocus, row, column) -> {
             JLabel label = new JLabel(value.toString(), JLabel.CENTER);
@@ -119,6 +120,17 @@ public class ManagerClasificacion extends JFrame {
         ImageIcon icono = new ImageIcon(ruta);
         Image imagen = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
         return new ImageIcon(imagen);
+    }
+
+    // Método para cargar la foto de perfil del usuario, si no existe se carga una por defecto
+    private ImageIcon cargarFotoPerfil(String ruta) {
+        File archivoImagen = new File(ruta);
+        if (archivoImagen.exists()) {
+            return escalarImagen(ruta, 50, 50);
+        } else {
+            // Foto por defecto si no existe la imagen del usuario
+            return escalarImagen("resources/imagenes/usuario.png", 30, 30);
+        }
     }
 
     private List<Usuario> obtenerUsuarios() {
