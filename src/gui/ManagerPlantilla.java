@@ -2,22 +2,17 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.nio.channels.FileChannel;
 
+import db.FantasyBD;
 import domain.Jugador;
 import domain.UserData;
 
@@ -26,17 +21,13 @@ public class ManagerPlantilla extends JFrame {
     private static final long serialVersionUID = 1L;
     
 	private ArrayList<Jugador> resultado;
-	private double presupuestoInicial = 1000.0; // Presupuesto inicial
-    private double presupuesto = presupuestoInicial;
+    private double presupuesto = 200.0; // Presupuesto inicial
     private JLabel lblPresupuesto;
     private JLabel lblFormacion;
     private JPanel pnlPlantilla; // Panel central para la formación
     private JComboBox<String> formationSelector; // Selector de formación
     private JButton[] playerButtons; // Botones reutilizables para los jugadores
     private JProgressBar progressBar; // Barra de progreso
-    private JLabel lblJornada;
-    private JComboBox<String> comboJornada;
-    
 
     public ManagerPlantilla() {
         // Configuración básica
@@ -46,8 +37,6 @@ public class ManagerPlantilla extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(new Color(196, 238, 255)); 
-        
-        
         
         addWindowListener(new WindowAdapter() {
             @Override
@@ -67,9 +56,12 @@ public class ManagerPlantilla extends JFrame {
         }
 
         setLayout(new BorderLayout(10, 10)); 
+        
+        
+
 
         // Panel superior (Presupuesto y Selector de formación)
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 12));
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
         JPanel panelFormacion = new JPanel();
         topPanel.setOpaque(false);
 
@@ -91,50 +83,22 @@ public class ManagerPlantilla extends JFrame {
         formationSelector.addActionListener(this::cambiarFormacion);
         formationSelector.setFont(new Font("Arial", Font.PLAIN, 14));
         
-        
-        lblJornada = new JLabel("Jornada");
-        lblJornada.setFont(new Font("Arial", Font.BOLD, 16));
-        lblJornada.setForeground(new Color(70, 130, 180));
-
-        comboJornada = new JComboBox<>(new String[] { 
-            "1", "2", "3", "4", "5"
-        });
-        comboJornada.setFont(new Font("Arial", Font.PLAIN, 14));
-        comboJornada.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-		        reiniciarPresupuesto();
-				
-			}
-		});
-
-        
-        
-        
-        
-        
-        JButton btnGuardarPlantilla = new JButton("Guardar Plantilla");
-        //btnGuardarPlantilla.addActionListener(this::guardarPlantilla);
-        btnGuardarPlantilla.addActionListener(e -> guardarPlantilla());
-        
 
         topPanel.add(lblPresupuesto);
         panelFormacion.add(lblFormacion);
         panelFormacion.add(formationSelector);
         panelFormacion.setBackground(new Color(196, 238, 255));
         topPanel.add(panelFormacion);
-        topPanel.add(lblJornada);
-        topPanel.add(comboJornada);
-        topPanel.add(btnGuardarPlantilla);
+        
+        JButton btnGuardar = new JButton("Guardar Plantilla");
+        btnGuardar.addActionListener(e -> guardarPlantilla());
+        topPanel.add(btnGuardar);
+
  
         
         
 
         add(topPanel, BorderLayout.NORTH);
-        
 
         // Panel central (Formación del equipo)
         pnlPlantilla = new JPanel();
@@ -147,20 +111,48 @@ public class ManagerPlantilla extends JFrame {
         for (int i = 0; i < 11; i++) {
             playerButtons[i] = crearBotonJugador(null);
         }
-
-     // Configurar formación inicial
-        configurarFormacion("4-3-3");
-
+        
         // Barra de progreso
         progressBar = new JProgressBar(0, 100);
         progressBar.setStringPainted(true);
         progressBar.setPreferredSize(new Dimension(300, 25));
-        progressBar.setVisible(false); // Se muestra solo cuando está trabajando
+        progressBar.setVisible(false); // Ocultarla inicialmente
         JPanel progressPanel = new JPanel();
         progressPanel.setOpaque(false);
         progressPanel.add(progressBar);
         add(progressPanel, BorderLayout.SOUTH);
+
+        // Cargar la plantilla guardada para el usuario
+        String usuario = UserData.getUsername();
+        String[] plantilla = FantasyBD.cargarPlantilla(usuario);
+        if (plantilla != null) {
+            // Cargar formación y jugadores
+            configurarFormacion(plantilla[0]);
+            formationSelector.setSelectedItem(plantilla[0]);
+
+            String[] jugadores = plantilla[1].split(",");
+            double costoTotal = 0;
+
+            for (int i = 0; i < jugadores.length; i++) {
+                if (i < playerButtons.length) {
+                    playerButtons[i].setText(jugadores[i]);
+
+                    // Obtener el costo de cada jugador desde la base de datos
+                    double valorJugador = FantasyBD.obtenerValorJugador(jugadores[i]);
+                    costoTotal += valorJugador;
+                }
+            }
+            
+            presupuesto -= costoTotal;
+            actualizarPresupuesto();
+            
+        }
+
+        
     }
+
+        
+    
 
     private JButton crearBotonJugador(String texto) {
         JButton button = new JButton(texto != null ? texto : "");
@@ -368,57 +360,20 @@ public class ManagerPlantilla extends JFrame {
             pnlPlantilla.add(playerButtons[10]); // Extremo derecho
             
          
-            for (int i = 11; i < playerButtons.length; i++) {
-                SeleccionarJugadorPorPosicion(playerButtons[i], "Banquillo");
-                pnlPlantilla.add(playerButtons[i]);
-            }
+           
         }
  
         pnlPlantilla.revalidate();
         pnlPlantilla.repaint();
     }
-   
 
     private void cambiarFormacion(ActionEvent e) {
-    	reiniciarBotonesFormacion();
-        reiniciarPresupuesto();
-        // Mostrar barra de progreso
-        progressBar.setVisible(true);
+        reiniciarBotonesFormacion();
 
-        // Crear un SwingWorker para cambiar la formación
-        SwingWorker<Void, Integer> worker = new SwingWorker<>() {
-            @Override
-            protected Void doInBackground() throws InterruptedException {
-                String seleccion = (String) formationSelector.getSelectedItem();
-                Thread.sleep(100); // Simula un breve retraso para mostrar la barra de progreso
-
-                for (int i = 0; i <= 100; i++) {
-                    Thread.sleep(30); // Simula un pequeño retraso
-                    publish(i); // Actualiza el progreso
-                }
-
-                Thread.sleep(1500); // Espera de 1,5 segundos (simulación)
-                configurarFormacion(seleccion);
-                return null;
-            }
-
-            @Override
-            protected void process(java.util.List<Integer> chunks) {
-                // Actualiza el progreso de la barra
-                progressBar.setValue(chunks.get(chunks.size() - 1));
-            }
-
-            @Override
-            protected void done() {
-                progressBar.setVisible(false); // Ocultar la barra después de completar
-            }
-        };
-        worker.execute();
+        String seleccion = (String) formationSelector.getSelectedItem();
+        configurarFormacion(seleccion);
     }
-    private void reiniciarPresupuesto() {
-        presupuesto = presupuestoInicial;
-        actualizarPresupuesto();
-    }
+
     
     private void reiniciarBotonesFormacion() {
         for (JButton boton : playerButtons) {
@@ -450,8 +405,40 @@ public class ManagerPlantilla extends JFrame {
 
                         if (presupuesto >= selectedPlayer.getValor()) {
                             presupuesto -= selectedPlayer.getValor();
-                            button.setText(selectedPlayer.getNombre());
-                            actualizarPresupuesto();
+                            
+                            // Mostrar la barra de progreso cuando se añada un jugador
+                            progressBar.setVisible(true);
+
+                            // Crear un SwingWorker para añadir el jugador
+                            SwingWorker<Void, Integer> worker = new SwingWorker<>() {
+                                @Override
+                                protected Void doInBackground() throws InterruptedException {
+                                    // Simula un breve retraso para mostrar la barra de progreso
+                                    Thread.sleep(100); // Simula un retraso breve
+                                    
+                                    for (int i = 0; i <= 100; i++) {
+                                        Thread.sleep(10); // Simula el progreso con un tiempo corto
+                                        publish(i);
+                                    }
+                                    
+                                    // Actualizamos el texto del botón con el nombre del jugador
+                                    button.setText(selectedPlayer.getNombre());
+                                    actualizarPresupuesto(); // Actualizamos el presupuesto
+                                    
+                                    return null;
+                                }
+
+                                @Override
+                                protected void process(java.util.List<Integer> chunks) {
+                                    progressBar.setValue(chunks.get(chunks.size() - 1));
+                                }
+
+                                @Override
+                                protected void done() {
+                                    progressBar.setVisible(false); // Ocultar después de completar
+                                }
+                            };
+                            worker.execute();
                         } else {
                             JOptionPane.showMessageDialog(this, 
                                 "Presupuesto insuficiente para este jugador.", 
@@ -468,89 +455,13 @@ public class ManagerPlantilla extends JFrame {
             }
         });
     }
-    
-    private void guardarPlantilla() {
-        String jornadaSeleccionada = (String) comboJornada.getSelectedItem();
-        if (jornadaSeleccionada == null) {
-            JOptionPane.showMessageDialog(this, "Por favor selecciona una jornada para guardar.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String nombreUsuario = UserData.getUsername(); 
-
-        // Obtener la lista de jugadores seleccionados
-        ArrayList<String> jugadoresSeleccionados = new ArrayList<>();
-        for (JButton boton : playerButtons) {
-            if (boton.getText() != null && !boton.getText().isEmpty()) {
-                jugadoresSeleccionados.add(boton.getText());
-            }
-        }
-
-        // Guardar la plantilla en el archivo CSV
-        guardarPlantillaEnCSV(nombreUsuario, jornadaSeleccionada, jugadoresSeleccionados);
-
-        JOptionPane.showMessageDialog(this, "Plantilla guardada para la jornada: " + jornadaSeleccionada, "Guardado", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void guardarPlantillaEnCSV(String nombreUsuario, String jornada, ArrayList<String> jugadores) {
-        String filePath = "resources/data/guardarPlantillas.csv"; 
-
-        try (FileWriter fw = new FileWriter(filePath, true);
-                 BufferedWriter bw = new BufferedWriter(fw)) {
-
-            // Comprobar si el archivo está vacío para añadir el encabezado
-            if (new File(filePath).length() == 0) {
-                bw.write("usuario,jornada,jugador1,jugador2,jugador3,jugador4,jugador5,jugador6,jugador7,jugador8,jugador9,jugador10,jugador11");
-                bw.newLine();
-            }
-
-            // Crear una copia de la lista de jugadores y unirlos en una cadena
-            StringBuilder jugadoresString = new StringBuilder();
-            for (String jugador : new ArrayList<>(jugadores)) {
-                jugadoresString.append(jugador).append(",");
-            }
-            // Eliminar la última coma si es necesario
-            if (jugadoresString.length() > 0) {
-                jugadoresString.deleteCharAt(jugadoresString.length() - 1);
-            }
-
-            // Construir la línea completa
-            String linea = nombreUsuario + "," + jornada + "," + jugadoresString;
-            bw.write(linea);
-            bw.newLine();
-
-        } catch (IOException e) {
-            System.err.println("Error al guardar la plantilla: " + e.getMessage());
-        }
-    }
-    
-
-    // Método auxiliar para buscar la línea del usuario en el archivo CSV
-    private String buscarLineaUsuario(String filePath, String nombreUsuario) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
-                if (datos[0].equals(nombreUsuario)) {
-                    return linea;
-                }
-            }
-        } catch (IOException e) {
-            System.err.println("Error al leer el archivo CSV: " + e.getMessage());
-        }
-        return null;
-    }
-
-    
-    
-
 
 
 
 
 
     private void actualizarPresupuesto() {
-        lblPresupuesto.setText("Presupuesto: $" + String.format("%.2f", presupuesto));
+        lblPresupuesto.setText("Presupuesto: $" + presupuesto);
     }
 
     private void buscarJugador(String textoBuscar) {
@@ -590,6 +501,19 @@ public class ManagerPlantilla extends JFrame {
         }
     }
     
+    private void guardarPlantilla() {
+        String usuario = UserData.getUsername(); // Método para obtener el usuario actual
+        String formacion = (String) formationSelector.getSelectedItem();
+        StringBuilder jugadores = new StringBuilder();
+        for (JButton button : playerButtons) {
+            jugadores.append(button.getText()).append(",");
+        }
+        String jugadoresStr = jugadores.toString().replaceAll(",$", ""); // Eliminar la última coma
+
+        FantasyBD.guardarPlantilla(usuario, formacion, jugadoresStr);
+        JOptionPane.showMessageDialog(this, "Plantilla guardada exitosamente.");
+    }
+
     
     
 
@@ -599,4 +523,4 @@ public class ManagerPlantilla extends JFrame {
             frame.setVisible(true);
         });
     }
-}
+} 

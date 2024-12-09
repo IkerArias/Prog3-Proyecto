@@ -99,6 +99,14 @@ public class FantasyBD {
                 "fecha_nacimiento TEXT NOT NULL" +
                 ");";
         
+        String sqlPlantillas = "CREATE TABLE IF NOT EXISTS Plantillas (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "usuario TEXT NOT NULL UNIQUE," + 
+                "formacion TEXT NOT NULL," +
+                "jugadores TEXT NOT NULL," +
+                "FOREIGN KEY (usuario) REFERENCES Usuarios(email)" +
+                ");";
+
        
 
         try (Connection conn = DriverManager.getConnection(URL);
@@ -108,6 +116,7 @@ public class FantasyBD {
             stmt.execute(sqlPartidos);
             stmt.execute(sqlJugadoresPartidos);
             stmt.execute(sqlUsuarios);
+            stmt.execute(sqlPlantillas);
            
 
             System.out.println("Tablas creadas exitosamente.");
@@ -168,6 +177,38 @@ public class FantasyBD {
             System.out.println("Error al mostrar usuarios: " + e.getMessage());
         }
     }
+    
+    public static void guardarPlantilla(String usuario, String formacion, String jugadores) {
+    	String sql = "INSERT INTO Plantillas (usuario, formacion, jugadores) VALUES (?, ?, ?) " +
+                "ON CONFLICT(usuario) DO UPDATE SET formacion = ?, jugadores = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, usuario);
+            pstmt.setString(2, formacion);
+            pstmt.setString(3, jugadores);
+            pstmt.setString(4, formacion);
+            pstmt.setString(5, jugadores);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error al guardar la plantilla: " + e.getMessage());
+        }
+    }
+
+    public static String[] cargarPlantilla(String usuario) {
+        String sql = "SELECT formacion, jugadores FROM Plantillas WHERE usuario = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, usuario);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return new String[]{rs.getString("formacion"), rs.getString("jugadores")};
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar la plantilla: " + e.getMessage());
+        }
+        return null;
+    }
+
     
     
     // Insertar un equipo
@@ -336,6 +377,22 @@ public class FantasyBD {
             System.out.println("Error al mostrar partidos: " + e.getMessage());
         }
     }
+    
+    public static double obtenerValorJugador(String nombreJugador) {
+        String sql = "SELECT valor FROM Jugadores WHERE nombre = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, nombreJugador);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("valor");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al obtener el valor del jugador: " + e.getMessage());
+        }
+        return 0; // Si no se encuentra el jugador, retorna 0
+    }
+
 
     // Vaciar base de datos
     private static void vaciarBaseDeDatos() {
