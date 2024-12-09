@@ -268,6 +268,7 @@ public class ManagerMercado extends JFrame {
                 int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
                 int tarjetas_rojas = rs.getInt("tarjetas_rojas");
                 
+                
                 resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor,puntos,goles,asistencias,regates,tarjetas_amarillas,tarjetas_rojas));
             }
         } catch (SQLException e) {
@@ -325,18 +326,20 @@ public class ManagerMercado extends JFrame {
                 int regates = rs.getInt("regates");
                 int tarjetas_amarillas = rs.getInt("tarjetas_amarillas");
                 int tarjetas_rojas = rs.getInt("tarjetas_rojas");
-
-                // Calcular los puntos basados en las estadísticas
-                int puntos = calcularPuntos(new Jugador(nombre, equipoNombre, posicion, pais, valor, 0, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas));
+                int puntos = rs.getInt("puntos");
+                
 
                 // Agregar el jugador a la lista con los puntos calculados
                 resultado.add(new Jugador(nombre, equipoNombre, posicion, pais, valor, puntos, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas));
+
+               
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         mostrarResultados();
     }
+
 
 
     
@@ -622,43 +625,7 @@ public class ManagerMercado extends JFrame {
 
 
 
-    private int calcularPuntos(Jugador jugador) {
-        int puntos = 0;
-
-        // Goles
-        puntos += jugador.getGoles() * 8; // +8 puntos por cada gol
-
-        // Asistencias
-        puntos += jugador.getAsistencias() * 5; // +5 puntos por cada asistencia
-
-        // Regates
-        puntos += jugador.getRegates() * 2; // +2 puntos por cada regate
-
-        // Tarjetas amarillas
-        puntos -= jugador.getTarjetas_amarillas() * 2; // -2 puntos por cada tarjeta amarilla
-
-        // Tarjetas rojas
-        puntos -= jugador.getTarjetas_rojas() * 5; // -5 puntos por cada tarjeta roja
-
-        return puntos;
-    }
-
-
-    
-    private void actualizarPuntosEnBD(Jugador jugador) {
-        int puntosCalculados = calcularPuntos(jugador);
-
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
-             PreparedStatement stmt = conn.prepareStatement("UPDATE Jugadores SET puntos = ? WHERE nombre = ?")) {
-
-            stmt.setInt(1, puntosCalculados);
-            stmt.setString(2, jugador.getNombre());
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+  
 
     
 

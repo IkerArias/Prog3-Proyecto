@@ -1,22 +1,16 @@
 package db;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
 
 public class FantasyBD {
-    
+
     private static final String URL = "jdbc:sqlite:futbol_fantasy.db"; 
 
     public static void main(String[] args) {
-    	
-    	vaciarBaseDeDatos();
-    	crearBaseDeDatos();
-    	crearTablas();
+        vaciarBaseDeDatos();
+        crearBaseDeDatos();
+        crearTablas();
         insertarDatos();
-        
         
         // Mostrar los datos
         mostrarEquipos();
@@ -25,7 +19,6 @@ public class FantasyBD {
         
         //CUIDADO!!!!!
         //vaciarBaseDeDatos();
-       
     }
 
     // Crear una nueva base de datos
@@ -38,19 +31,16 @@ public class FantasyBD {
             System.out.println("Error al crear la base de datos: " + e.getMessage());
         }
     }
-    
 
     // Crear las tablas de la base de datos
     private static void crearTablas() {
         // SQL para crear las tablas
-        // Tabla equipo (id, nombre, ciudad y fundacion)
         String sqlEquipos = "CREATE TABLE IF NOT EXISTS Equipos (" +
                 "id INTEGER PRIMARY KEY," +
                 "nombre TEXT NOT NULL," +
                 "ciudad TEXT" +
                 ");";
 
-        // Tabla jugador con estadísticas totales
         String sqlJugadores = "CREATE TABLE IF NOT EXISTS Jugadores (" +
                 "id INTEGER PRIMARY KEY," +
                 "nombre TEXT NOT NULL," +
@@ -67,7 +57,6 @@ public class FantasyBD {
                 "FOREIGN KEY (equipo_id) REFERENCES Equipos(id)" +
                 ");";
 
-        // Tabla partidos
         String sqlPartidos = "CREATE TABLE IF NOT EXISTS Partidos (" +
                 "id INTEGER PRIMARY KEY," +
                 "equipo_local_id INTEGER," +
@@ -79,7 +68,6 @@ public class FantasyBD {
                 "FOREIGN KEY (equipo_visitante_id) REFERENCES Equipos(id)" +
                 ");";
 
-        // Tabla jugadores_partidos (relación entre jugadores y partidos con estadísticas específicas)
         String sqlJugadoresPartidos = "CREATE TABLE IF NOT EXISTS Jugadores_Partidos (" +
                 "id INTEGER PRIMARY KEY," +
                 "jugador_id INTEGER," +
@@ -95,7 +83,6 @@ public class FantasyBD {
 
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
-            // Crear las tablas
             stmt.execute(sqlEquipos);
             stmt.execute(sqlJugadores);
             stmt.execute(sqlPartidos);
@@ -107,8 +94,7 @@ public class FantasyBD {
         }
     }
 
-    
-    // Método para insertar un equipo
+    // Insertar un equipo
     private static void insertarEquipo(String nombre, String ciudad) {
         String sql = "INSERT INTO Equipos (nombre, ciudad) VALUES (?, ?)";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -121,8 +107,8 @@ public class FantasyBD {
             System.out.println("Error al insertar equipo: " + e.getMessage());
         }
     }
-    
-    // Método para insertar un jugador
+
+    // Insertar un jugador
     private static void insertarJugador(String nombre, int equipoId, String posicion, String pais, double valor) {
         String sql = "INSERT INTO Jugadores (nombre, equipo_id, posicion, pais, valor) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -139,7 +125,7 @@ public class FantasyBD {
         }
     }
 
- // Método para insertar un partido
+    // Insertar un partido
     private static void insertarPartido(int equipoLocal, int equipoVisitante, int golesLocal, int golesVisitante, int jornada) {
         String sql = "INSERT INTO Partidos (equipo_local_id, equipo_visitante_id, goles_local, goles_visitante, jornada) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -151,67 +137,76 @@ public class FantasyBD {
             pstmt.setInt(5, jornada);
             pstmt.executeUpdate();
             
-            // Obtener el ID del partido recién insertado
             ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
                 int partidoId = rs.getInt(1);
                 System.out.println("Partido insertado con ID: " + partidoId);
-                
-                // Aquí podrías insertar estadísticas de jugadores en ese partido (esto puede hacerse luego en otro método)
             }
         } catch (SQLException e) {
             System.out.println("Error al insertar partido: " + e.getMessage());
         }
     }
 
-    
- // Método para insertar estadísticas de un jugador en un partido
+    // Insertar estadísticas de un jugador en un partido y actualizar puntos
     private static void insertarEstadisticasPartido(int jugadorId, int partidoId, int goles, int asistencias, int regates, int tarjetasAmarillas, int tarjetasRojas) {
-        // Insertar estadísticas del jugador en el partido
-        String sql = "INSERT INTO Jugadores_Partidos (jugador_id, partido_id, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, jugadorId);
-            pstmt.setInt(2, partidoId);
-            pstmt.setInt(3, goles);
-            pstmt.setInt(4, asistencias);
-            pstmt.setInt(5, regates);
-            pstmt.setInt(6, tarjetasAmarillas);
-            pstmt.setInt(7, tarjetasRojas);
-            pstmt.executeUpdate();
-            System.out.println("Estadísticas del jugador insertadas para el partido " + partidoId);
-            
-            // Ahora, actualizar las estadísticas totales del jugador
-            actualizarEstadisticasJugador(jugadorId, goles, asistencias, regates, tarjetasAmarillas, tarjetasRojas);
+        String sqlInsertarEstadisticas = "INSERT INTO Jugadores_Partidos (jugador_id, partido_id, goles, asistencias, regates, tarjetas_amarillas, tarjetas_rojas) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlActualizarEstadisticas = "UPDATE Jugadores SET goles = goles + ?, asistencias = asistencias + ?, regates = regates + ?, tarjetas_amarillas = tarjetas_amarillas + ?, tarjetas_rojas = tarjetas_rojas + ? WHERE id = ?";
+        String sqlActualizarPuntos = "UPDATE Jugadores SET puntos = puntos + ? WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(URL)) {
+            conn.setAutoCommit(false);  // Deshabilitar auto commit
+
+            try (PreparedStatement pstmtInsertar = conn.prepareStatement(sqlInsertarEstadisticas);
+                 PreparedStatement pstmtActualizarEstadisticas = conn.prepareStatement(sqlActualizarEstadisticas);
+                 PreparedStatement pstmtActualizarPuntos = conn.prepareStatement(sqlActualizarPuntos)) {
+
+                pstmtInsertar.setInt(1, jugadorId);
+                pstmtInsertar.setInt(2, partidoId);
+                pstmtInsertar.setInt(3, goles);
+                pstmtInsertar.setInt(4, asistencias);
+                pstmtInsertar.setInt(5, regates);
+                pstmtInsertar.setInt(6, tarjetasAmarillas);
+                pstmtInsertar.setInt(7, tarjetasRojas);
+                pstmtInsertar.executeUpdate();
+
+                pstmtActualizarEstadisticas.setInt(1, goles);
+                pstmtActualizarEstadisticas.setInt(2, asistencias);
+                pstmtActualizarEstadisticas.setInt(3, regates);
+                pstmtActualizarEstadisticas.setInt(4, tarjetasAmarillas);
+                pstmtActualizarEstadisticas.setInt(5, tarjetasRojas);
+                pstmtActualizarEstadisticas.setInt(6, jugadorId);
+                pstmtActualizarEstadisticas.executeUpdate();
+
+                int puntosJugador = calcularPuntosJugador(goles, asistencias, regates, tarjetasAmarillas, tarjetasRojas);
+                pstmtActualizarPuntos.setInt(1, puntosJugador);
+                pstmtActualizarPuntos.setInt(2, jugadorId);
+                pstmtActualizarPuntos.executeUpdate();
+
+                conn.commit();  // Confirmar la transacción
+                System.out.println("Estadísticas del jugador insertadas y puntos actualizados.");
+            } catch (SQLException e) {
+                conn.rollback();  // Si algo falla, revertir todo
+                System.out.println("Error al insertar estadísticas del jugador: " + e.getMessage());
+            }
         } catch (SQLException e) {
-            System.out.println("Error al insertar estadísticas del jugador: " + e.getMessage());
+            System.out.println("Error al conectar con la base de datos: " + e.getMessage());
         }
     }
 
-    // Método para actualizar las estadísticas totales del jugador
-    private static void actualizarEstadisticasJugador(int jugadorId, int goles, int asistencias, int regates, int tarjetasAmarillas, int tarjetasRojas) {
-        // Actualizar las estadísticas totales del jugador
-        String sql = "UPDATE Jugadores SET goles = goles + ?, asistencias = asistencias + ?, regates = regates + ?, " +
-                     "tarjetas_amarillas = tarjetas_amarillas + ?, tarjetas_rojas = tarjetas_rojas + ? WHERE id = ?";
-        try (Connection conn = DriverManager.getConnection(URL);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, goles);
-            pstmt.setInt(2, asistencias);
-            pstmt.setInt(3, regates);
-            pstmt.setInt(4, tarjetasAmarillas);
-            pstmt.setInt(5, tarjetasRojas);
-            pstmt.setInt(6, jugadorId);
-            pstmt.executeUpdate();
-            System.out.println("Estadísticas del jugador actualizadas");
-        } catch (SQLException e) {
-            System.out.println("Error al actualizar estadísticas del jugador: " + e.getMessage());
-        }
+    // Método para calcular los puntos del jugador
+    private static int calcularPuntosJugador(int goles, int asistencias, int regates, int tarjetasAmarillas, int tarjetasRojas) {
+        int puntos = 0;
+
+        puntos += goles * 6;  // 6 punto por cada gol
+        puntos += asistencias * 3;  // 3 punto por cada asistencia
+        puntos += regates * 1;  // 1 puntos por cada regate
+        puntos -= tarjetasAmarillas * 1;  // -1 punto por cada tarjeta amarilla
+        puntos -= tarjetasRojas * 2;  // -2 puntos por cada tarjeta roja
+
+        return puntos;
     }
 
-
-    
-    //Metodo para mostrar los equipos
+    // Mostrar equipos
     private static void mostrarEquipos() {
         String sql = "SELECT * FROM Equipos";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -226,9 +221,8 @@ public class FantasyBD {
             System.out.println("Error al mostrar equipos: " + e.getMessage());
         }
     }
-    
-    
-    //Metodo para mostrar todos los jugadores
+
+    // Mostrar jugadores
     private static void mostrarJugadores() {
         String sql = "SELECT * FROM Jugadores";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -247,8 +241,8 @@ public class FantasyBD {
             System.out.println("Error al mostrar jugadores: " + e.getMessage());
         }
     }
-    
-    // Método para mostrar todos los partidos
+
+    // Mostrar partidos
     private static void mostrarPartidos() {
         String sql = "SELECT * FROM Partidos";
         try (Connection conn = DriverManager.getConnection(URL);
@@ -259,33 +253,26 @@ public class FantasyBD {
                 System.out.println("ID: " + rs.getInt("id") + ", Equipo Local ID: " + rs.getInt("equipo_local_id") + 
                                    ", Equipo Visitante ID: " + rs.getInt("equipo_visitante_id") + 
                                    ", Jornada: " + rs.getInt("jornada") + 
-                                   ", Goles Local: " + rs.getInt("goles_local") + 
+                                   ", Goles Local: " + rs.getInt("goles_local") +
                                    ", Goles Visitante: " + rs.getInt("goles_visitante"));
             }
         } catch (SQLException e) {
             System.out.println("Error al mostrar partidos: " + e.getMessage());
         }
     }
-    
-    //CUIDADO!!!!!!!!
-    // Método para vaciar todas las tablas
-    private static void vaciarBaseDeDatos() {
-        String sqlVaciarEquipos = "DELETE FROM Equipos";
-        String sqlVaciarJugadores = "DELETE FROM Jugadores";
-        String sqlVaciarPartidos = "DELETE FROM Partidos";
 
+    // Vaciar base de datos
+    private static void vaciarBaseDeDatos() {
+        String sql = "DROP TABLE IF EXISTS Jugadores_Partidos; DROP TABLE IF EXISTS Partidos; DROP TABLE IF EXISTS Jugadores; DROP TABLE IF EXISTS Equipos;";
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement()) {
-            // Eliminar todos los datos de cada tabla
-            stmt.execute(sqlVaciarEquipos);
-            stmt.execute(sqlVaciarJugadores);
-            stmt.execute(sqlVaciarPartidos);
-            
-            System.out.println("Base de datos vaciada exitosamente.");
+            stmt.execute(sql);
+            System.out.println("Base de datos vaciada.");
         } catch (SQLException e) {
             System.out.println("Error al vaciar la base de datos: " + e.getMessage());
         }
     }
+
 
 
     // Método para insertar datos de prueba
@@ -985,12 +972,6 @@ public class FantasyBD {
     	insertarEstadisticasPartido(296, 20, 2, 1, 4, 0, 0); // Isi Palazón (Rayo) - 2 goles, 1 asistencia, 4 regates
 
 
-
-    	
-
-    	
-
-    	
     	
     }
     
