@@ -3,6 +3,8 @@ package gui;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import domain.Tema;
+import domain.Tema.Theme;
 import domain.UserData;
 
 import java.awt.*;
@@ -12,7 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class ManagerPerfil extends JFrame {
+public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,6 +24,7 @@ public class ManagerPerfil extends JFrame {
         setTitle("MI PERFIL");
         setLocationRelativeTo(null);
         setResizable(false);
+        
 
         String username = UserData.getUsername();
 
@@ -50,6 +53,7 @@ public class ManagerPerfil extends JFrame {
             JOptionPane.showMessageDialog(this, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        Tema.addListener(this);
         
         //Cambiar foto de la ventana
         try {
@@ -346,6 +350,12 @@ public class ManagerPerfil extends JFrame {
             frame.setVisible(true);
         });
     }
+
+	@Override
+	public void onThemeChanged(Tema.Theme theme) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 

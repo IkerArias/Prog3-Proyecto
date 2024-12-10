@@ -4,89 +4,105 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ManagerForo extends JFrame {
+import domain.Tema;
+
+public class ManagerForo extends JFrame implements Tema.CambiarTema {
 
     private static final long serialVersionUID = 1L;
     private JTextArea messageArea;
     private JTextField messageInput;
-    private static final String FILE_NAME = "resources/data/foro_mensajes.txt"; // Nombre del archivo para almacenar mensajes
+    private static final String FILE_NAME = "resources/data/foro_mensajes.txt";
+    private JPanel mainPanel;
 
     public ManagerForo() {
         setTitle("Foro/Chat");
         setSize(600, 400);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); // No cerrar directamente
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
-        
+
+        // Registrar la clase como listener para cambios en el tema
+        Tema.addListener(this);
+
         // Configuración del panel principal
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        
-        // Área de texto para mostrar los mensajes
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new BorderLayout());
+
+        // Área de texto para mostrar mensajes
         messageArea = new JTextArea();
         messageArea.setEditable(false);
         messageArea.setLineWrap(true);
         messageArea.setWrapStyleWord(true);
         JScrollPane scrollPane = new JScrollPane(messageArea);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
         // Panel para la entrada de mensajes
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BorderLayout());
-        
-        
-      //Cambiar foto de la ventana
+
+        // Cambiar foto de la ventana
         try {
             Image icono = ImageIO.read(new File("resources/imagenes/logo.png"));
             setIconImage(icono);
         } catch (IOException e) {
             System.out.println("No se pudo cargar el icono: " + e.getMessage());
         }
-        
+
         messageInput = new JTextField();
         inputPanel.add(messageInput, BorderLayout.CENTER);
-        
+
         JButton sendButton = new JButton("Enviar");
-        sendButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                enviarMensaje();
+        sendButton.addActionListener(e -> enviarMensaje());
+        inputPanel.add(sendButton, BorderLayout.EAST);
+
+        mainPanel.add(inputPanel, BorderLayout.SOUTH);
+
+        // Crear el ComboBox para seleccionar el tema
+        JComboBox<String> themeComboBox = new JComboBox<>(new String[]{"Claro", "Oscuro"});
+        themeComboBox.setSelectedItem(Tema.getTemaActual() == Tema.Theme.CLARO ? "Claro" : "Oscuro");
+        themeComboBox.addActionListener(e -> {
+            String selectedTheme = (String) themeComboBox.getSelectedItem();
+            if ("Claro".equals(selectedTheme)) {
+                Tema.setTema(Tema.Theme.CLARO);
+            } else {
+                Tema.setTema(Tema.Theme.OSCURO);
             }
         });
-        
-        inputPanel.add(sendButton, BorderLayout.EAST);
-        panel.add(inputPanel, BorderLayout.SOUTH);
-        
-        add(panel);
-        
+
+        // Agregar el ComboBox en la parte superior
+        JPanel topPanel = new JPanel();
+        topPanel.add(new JLabel("Seleccionar Tema:"));
+        topPanel.add(themeComboBox);
+
+        mainPanel.add(topPanel, BorderLayout.NORTH);
+
+        add(mainPanel);
+
         // Cargar mensajes al iniciar
         cargarMensajes();
 
-        // Listener para manejar el cierre de la ventana
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 mostrarVentanaAnterior();
             }
         });
+
+        // Aplicar el tema al iniciar la ventana
+        applyTheme();
     }
 
     private void enviarMensaje() {
         String mensaje = messageInput.getText();
         if (!mensaje.trim().isEmpty()) {
-            // Obtener la fecha y la hora actual
             String fechaHora = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
-            // Añadir el mensaje al área de texto
             messageArea.append("[" + fechaHora + "] " + mensaje + "\n");
-            messageInput.setText(""); // Limpiar el campo de entrada
-            
-            // Guardar mensaje en el archivo
+            messageInput.setText("");
             guardarMensaje("[" + fechaHora + "] " + mensaje);
         } else {
             JOptionPane.showMessageDialog(this, "Por favor, escribe un mensaje.", "Mensaje vacío", JOptionPane.WARNING_MESSAGE);
@@ -117,17 +133,29 @@ public class ManagerForo extends JFrame {
     }
 
     private void mostrarVentanaAnterior() {
-        // Cierra la ventana actual
         dispose();
-        // Crea y muestra la ventana anterior
-        ManagerWelcome v = new ManagerWelcome(); 
+        ManagerWelcome v = new ManagerWelcome();
         v.setVisible(true);
     }
 
+    private void applyTheme() {
+        if (Tema.getTemaActual() == Tema.Theme.OSCURO) {
+            mainPanel.setBackground(Color.DARK_GRAY);
+            messageArea.setBackground(Color.DARK_GRAY);
+            messageArea.setForeground(Color.WHITE);
+        } else {
+            mainPanel.setBackground(Color.WHITE);
+            messageArea.setBackground(Color.WHITE);
+            messageArea.setForeground(Color.BLACK);
+        }
+    }
+
+    @Override
+    public void onThemeChanged(Tema.Theme theme) {
+        applyTheme();
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            ManagerForo foroFrame = new ManagerForo();
-            foroFrame.setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new ManagerForo());
     }
 }
