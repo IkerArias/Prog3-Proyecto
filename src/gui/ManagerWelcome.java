@@ -6,12 +6,17 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import domain.Noticia;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class ManagerWelcome extends JFrame {
@@ -246,37 +251,36 @@ public class ManagerWelcome extends JFrame {
         panelCentral.add(panelPartidosClasificacion);
         
         // Panel para noticias
-        JPanel panelNoticias = new JPanel();
+        JPanel panelNoticias = new JPanel(new FlowLayout());
         panelNoticias.setLayout(new BorderLayout());
         panelNoticias.setBorder(new EmptyBorder(10, 10, 10, 10)); 
         panelNoticias.setBackground(new Color(196, 238, 255));
         
+        JComboBox<String> comboJornada = new JComboBox<String>();
+        for (int i = 1; i <= 38; i++) {
+            comboJornada.addItem("Jornada " + i);
+        }
+        
+        JPanel panelNoticiasNorte = new JPanel(new FlowLayout());
         JLabel labelNoticias = new JLabel("Noticias", SwingConstants.CENTER);
         labelNoticias.setFont(new Font("Serif", Font.BOLD, 20));
-        panelNoticias.add(labelNoticias, BorderLayout.NORTH);
+        panelNoticias.add(panelNoticiasNorte, BorderLayout.NORTH);
+        panelNoticiasNorte.add(labelNoticias);
+        panelNoticiasNorte.add(comboJornada);
         
         // Usar JTextPane para que el texto se ajuste automáticamente al ancho
         JTextPane noticiasArea = new JTextPane();
+        iniciarHiloNoticiasInicial(noticiasArea);
+        configurarComboBox(comboJornada, noticiasArea);    
         noticiasArea.setContentType("text/html"); 
         noticiasArea.setEditable(false);
         noticiasArea.setFocusable(false);
         
         // Crear el contenido de noticias con separadores
-        String noticiasHTML = "<html>" +
-                "<p><strong>Bellingham es baja durante dos semanas:</strong> Jude Bellingham, la joven estrella del Real Madrid, ha sufrido una lesión en el muslo durante el partido contra el FC Barcelona. El club anunciará más detalles en los próximos días, pero los aficionados ya están preocupados por su ausencia en los partidos clave.</p>" +
-                "<hr>" +  
-                "<p><strong>Partido atrasado entre Osasuna y Las Palmas:</strong> El partido atrasado entre Osasuna y Las Palmas se disputará este miércoles en el Estadio El Sadar.</p>" +
-                "<hr>" +  
-                "<p><strong>Destitución del entrenador del Leganés:</strong> El CD Leganés ha decidido destituir a su entrenador tras una serie de resultados decepcionantes que han dejado al equipo en la parte baja de la clasificación.</p>" +
-                "<hr>" +  
-                "<p><strong>Haaland logra nuevo récord de goles en la Premier League:</strong> Erling Haaland ha alcanzado los 45 goles en una sola temporada, rompiendo el récord anterior. Su rendimiento sigue asombrando a los aficionados y expertos por igual.</p>" +
-                "<hr>" +  
-                "<p><strong>La FIFA anuncia cambios en las reglas del VAR:</strong> A partir de la próxima temporada, la FIFA implementará modificaciones en el uso del VAR para hacer el proceso más eficiente y reducir los tiempos de espera.</p>" +
-                "<hr>" +  
-                "<p><strong>Nuevo fichaje del Barcelona:</strong> El FC Barcelona ha confirmado el fichaje de una joven promesa brasileña, que se unirá al equipo en la próxima ventana de transferencias. Los fanáticos esperan que sea el futuro de la delantera del club.</p>" +
-                "</html>";
         
-        noticiasArea.setText(noticiasHTML);
+                
+        
+        
         JScrollPane noticiasScrollPane = new JScrollPane(noticiasArea);
         panelNoticias.add(noticiasScrollPane, BorderLayout.CENTER);
          
@@ -365,6 +369,93 @@ public class ManagerWelcome extends JFrame {
         
         add(panelPrincipal);
     }
+    
+    public void cargarNoticiasPorJornada(JTextPane noticiasArea, String jornadaSeleccionada) {
+        ArrayList<Noticia> noticias = new ArrayList<>();
+        File f = new File("resources/data/noticias_liga.csv");
+        StringBuilder noticiasHTML = new StringBuilder("<html>");
+
+        try {
+            Scanner sc = new Scanner(f);
+
+            if (sc.hasNextLine()) {
+                sc.nextLine(); // Saltar la primera línea (encabezado)
+            }
+
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                String[] campos = linea.split(";");
+
+                if (campos.length >= 3) {
+                    try {
+                        String jornadaCSV = campos[0].trim(); // Limpieza de espacios
+                        String noticia = campos[2].trim(); // Limpieza de espacios
+
+                        // Depurar los valores leídos
+                        System.out.println("Procesando línea: " + linea);
+                        System.out.println("Jornada CSV: " + jornadaCSV);
+                        System.out.println("Jornada seleccionada: " + jornadaSeleccionada);
+
+                        if (jornadaSeleccionada.equals(jornadaCSV)) { // Comparar las jornadas limpias
+                            noticiasHTML.append("<p><strong>")
+                                        .append("Jornada ").append(jornadaCSV).append(": </strong>")
+                                        .append(noticia)
+                                        .append("</p><hr>");
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Error procesando línea: " + linea);
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            sc.close();
+        } catch (FileNotFoundException e) {
+            noticiasHTML.append("<p><strong>Error:</strong> No se encontró el archivo de noticias.</p>");
+            e.printStackTrace();
+        }
+
+        noticiasHTML.append("</html>");
+
+        // Depurar el contenido de noticiasHTML
+        System.out.println("Noticias cargadas para la jornada: " + jornadaSeleccionada);
+        System.out.println("HTML generado: ");
+        System.out.println(noticiasHTML.toString());
+
+        noticiasArea.setText(noticiasHTML.toString());
+    }
+
+
+
+
+
+    public void cargarNoticiasConHilo(JTextPane noticiasArea, String jornadaSeleccionada) {
+        SwingWorker<Void, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() {
+                System.out.println("Cargando noticias para la jornada: " + jornadaSeleccionada);
+                cargarNoticiasPorJornada(noticiasArea, jornadaSeleccionada);
+                return null;
+            }
+        };
+        worker.execute();
+    }
+
+ // Configuración inicial del hilo para la primera jornada
+    public void iniciarHiloNoticiasInicial(JTextPane noticiasArea) {
+        new Thread(() -> cargarNoticiasConHilo(noticiasArea, "1")).start();
+    }
+
+    // Configuración del ActionListener del JComboBox
+    public void configurarComboBox(JComboBox<String> comboJornada, JTextPane noticiasArea) {
+        comboJornada.addActionListener(e -> {
+            String jornadaSeleccionada = comboJornada.getSelectedItem().toString().replace("Jornada ", "").trim();
+            System.out.println("ComboBox cambiado a: Jornada " + jornadaSeleccionada);
+            cargarNoticiasConHilo(noticiasArea, jornadaSeleccionada);
+        });
+    }
+
+
     
     // Método para implementar el diseño estándar de los botones
     private void disenyiarBotones(JButton button) {
