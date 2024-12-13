@@ -8,9 +8,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import domain.Tema;
+import domain.UserData;
+import gui.ManagerClasificacion.Usuario;
 
 public class ManagerForo extends JFrame implements Tema.CambiarTema {
 
@@ -25,7 +30,9 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
-
+        
+        
+        
         // Registrar la clase como listener para cambios en el tema
         Tema.addListener(this);
 
@@ -96,12 +103,14 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         // Aplicar el tema al iniciar la ventana
         applyTheme();
     }
+    
+    
 
     private void enviarMensaje() {
         String mensaje = messageInput.getText();
         if (!mensaje.trim().isEmpty()) {
-            String fechaHora = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date());
-            messageArea.append("[" + fechaHora + "] " + mensaje + "\n");
+            String fechaHora = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
+            messageArea.append("[" + fechaHora + "] " + UserData.getName() + " " + mensaje + "\n");
             messageInput.setText("");
             guardarMensaje("[" + fechaHora + "] " + mensaje);
         } else {
@@ -124,7 +133,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
             try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
                 String linea;
                 while ((linea = reader.readLine()) != null) {
-                    messageArea.append(linea + "\n");
+                    messageArea.append( linea + "\n");
                 }
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error al cargar los mensajes.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -134,7 +143,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
 
     private void mostrarVentanaAnterior() {
         dispose();
-        ManagerWelcome v = new ManagerWelcome();
+        ManagerClasificacion v = new ManagerClasificacion();
         v.setVisible(true);
     }
 
@@ -149,6 +158,38 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
             messageArea.setForeground(Color.BLACK);
         }
     }
+    
+    
+    private List<Usuario> obtenerUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String filePath = "resources/data/usuarios.csv";
+
+        Random random = new Random();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] datos = line.split(";");
+                if (datos.length >= 2) {
+                    String username = datos[0];
+                    int puntos = random.nextInt(50) + 1;
+
+                    try {
+                        puntos = Integer.parseInt(datos[1]);
+                    } catch (NumberFormatException e) {
+                        // Mantener valor aleatorio
+                    }
+                    usuarios.add(new Usuario(username, puntos));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al leer el archivo de usuarios", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        return usuarios;
+    }
+
 
     @Override
     public void onThemeChanged(Tema.Theme theme) {

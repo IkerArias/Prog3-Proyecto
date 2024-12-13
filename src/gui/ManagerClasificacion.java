@@ -1,5 +1,6 @@
 package gui;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -21,6 +22,20 @@ public class ManagerClasificacion extends JFrame {
         setTitle("Clasificación");
         setResizable(false);
         setLocationRelativeTo(null);
+
+        // Cambiar logo de la ventana
+        try {
+            File file = new File("resources/imagenes/logo.png");
+            if (file.exists()) {
+                Image icono = ImageIO.read(file);
+                setIconImage(icono);
+            } else {
+                System.err.println("El archivo de logo no existe en la ruta especificada: " + file.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            System.err.println("Error al intentar cargar el icono desde la ruta: resources/imagenes/logo.png");
+            e.printStackTrace();
+        }
 
         String username = UserData.getUsername();
         List<Usuario> usuarios = obtenerUsuarios();
@@ -102,7 +117,16 @@ public class ManagerClasificacion extends JFrame {
             dispose();
             new ManagerWelcome().setVisible(true);
         });
+
+        JButton btnForo = new JButton("Foro");
+        btnForo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        btnForo.addActionListener(e -> {     	
+            dispose();
+            new ManagerForo().setVisible(true);
+        });
+
         panelInferior.add(btnAtras);
+        panelInferior.add(btnForo);
         mainPanel.add(panelInferior, BorderLayout.SOUTH);
 
         add(mainPanel);
@@ -162,7 +186,6 @@ public class ManagerClasificacion extends JFrame {
 
         return usuarios;
     }
-    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
