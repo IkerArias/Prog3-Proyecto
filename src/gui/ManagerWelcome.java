@@ -263,10 +263,12 @@ public class ManagerWelcome extends JFrame {
         
         JPanel panelNoticiasNorte = new JPanel(new FlowLayout());
         JLabel labelNoticias = new JLabel("Noticias", SwingConstants.CENTER);
+        JButton btnCrearNoticia = new JButton("Crear noticia");
         labelNoticias.setFont(new Font("Serif", Font.BOLD, 20));
         panelNoticias.add(panelNoticiasNorte, BorderLayout.NORTH);
         panelNoticiasNorte.add(labelNoticias);
         panelNoticiasNorte.add(comboJornada);
+        panelNoticiasNorte.add(btnCrearNoticia);
         
         // Usar JTextPane para que el texto se ajuste automáticamente al ancho
         JTextPane noticiasArea = new JTextPane();
@@ -275,6 +277,9 @@ public class ManagerWelcome extends JFrame {
         noticiasArea.setContentType("text/html"); 
         noticiasArea.setEditable(false);
         noticiasArea.setFocusable(false);
+        
+        
+        
         
         // Crear el contenido de noticias con separadores
         
@@ -321,6 +326,18 @@ public class ManagerWelcome extends JFrame {
                
             }
         });
+        
+        btnCrearNoticia.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				dispose();
+				ManagerCrearNoticia crearNoticia = new ManagerCrearNoticia();
+				crearNoticia.setVisible(true);
+				
+			}
+		});
 
         btnPlantilla.addActionListener(new ActionListener() {
         	@Override
