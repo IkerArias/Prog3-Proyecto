@@ -39,8 +39,9 @@ public class ManagerClasificacion extends JFrame {
 
         String username = UserData.getUsername();
         List<Usuario> usuarios = obtenerUsuarios();
+        ordenarUsuarios(usuarios, usuarios.size());
 
-        Collections.sort(usuarios, (u1, u2) -> Integer.compare(u2.getPuntos(), u1.getPuntos()));
+
 
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
@@ -186,6 +187,31 @@ public class ManagerClasificacion extends JFrame {
 
         return usuarios;
     }
+    
+ // Método recursivo para ordenar la lista de usuarios por puntos 
+    private void ordenarUsuarios(List<Usuario> usuarios, int n) {
+      
+        if (n <= 1) {
+            return;
+        }
+
+
+        ordenarUsuarios(usuarios, n - 1);
+
+       
+        Usuario ultimo = usuarios.get(n - 1);
+        int j = n - 2;
+
+      
+        while (j >= 0 && usuarios.get(j).getPuntos() < ultimo.getPuntos()) {
+            usuarios.set(j + 1, usuarios.get(j));
+            j--;
+        }
+
+        
+        usuarios.set(j + 1, ultimo);
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

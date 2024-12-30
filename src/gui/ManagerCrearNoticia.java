@@ -1,7 +1,10 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +14,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -34,6 +38,7 @@ public class ManagerCrearNoticia extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
+        
 
         String username = UserData.getUsername(); 
         System.out.println(username);
@@ -62,8 +67,10 @@ public class ManagerCrearNoticia extends JFrame {
             comboJornada.addItem("Jornada " + i);
         }
         JTextArea area = new JTextArea("Escriba su noticia");
-        JButton btnGuardar = new JButton("Guardar noticia");
+        JButton btnGuardar = new JButton("Guardar noticia");   
         JButton btnAtras = new JButton("Atrás");
+        disenyiarBotones(btnGuardar);
+        disenyiarBotones(btnAtras);
 
         // Añadir componentes a sus paneles
         panelCentro.add(area, BorderLayout.CENTER);
@@ -123,6 +130,16 @@ public class ManagerCrearNoticia extends JFrame {
                 }
             }
         });
+    }
+    
+    
+    //Metodo personalizar Botones
+    private void disenyiarBotones(JButton button) {
+        button.setFont(new Font("Serif", Font.BOLD, 16));
+        button.setPreferredSize(new Dimension(120, 40)); 
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
+        button.setBackground(Color.WHITE);
+        button.setOpaque(true);
     }
 
     // Metodo para guardar la noticia en un archivo CSV
