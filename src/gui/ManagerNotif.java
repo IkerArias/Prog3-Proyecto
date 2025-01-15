@@ -15,6 +15,8 @@ public class ManagerNotif extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public ManagerNotif() {
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setSize(600, 600);
         setTitle("Notificaciones");
         setResizable(false);

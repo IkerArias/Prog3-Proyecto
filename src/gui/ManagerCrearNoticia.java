@@ -32,14 +32,15 @@ public class ManagerCrearNoticia extends JFrame {
     private JPanel panelPrincipal;
 
     public ManagerCrearNoticia() {
-        // Configuración de la ventana principal
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setTitle("Fantasy Manager - Crear Noticia");
         setSize(1100, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(true);
-        
+        setResizable(true);       
 
+        //Obtencion del usuario actual
         String username = UserData.getUsername(); 
         System.out.println(username);
 

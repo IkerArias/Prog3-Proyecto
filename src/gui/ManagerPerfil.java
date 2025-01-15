@@ -19,6 +19,8 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
     private static final long serialVersionUID = 1L;
 
     public ManagerPerfil() {
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(600, 400);
         setTitle("MI PERFIL");
@@ -26,6 +28,7 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         setResizable(false);
         
 
+        //Obtener los datos del usaurio actual
         String username = UserData.getUsername();
 
         // Panel principal
@@ -256,6 +259,7 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         }
     }
 
+    //CMetodo para cargar los datos del usuario
     private String[] cargarDatosUsuario(String username) {
         String filePath = "resources/data/usuarios.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -273,6 +277,7 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         return null;
     }
 
+    //Metodo para obetener la contraseña actual
     private String obtenerContraseñaActual(String username) {
         String filePath = "usuarios.csv";
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -289,6 +294,8 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         }
         return null;
     }
+    
+    //Metodo para guardar el nombre d ela plantilla
     private void guardarNombreEnGuardarPlantillas(String username) {
         String filePath = "resources/data/guardarPlantillas.csv";
 
@@ -305,6 +312,7 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
     }
 
 
+    //Metodo para actualizar contraseñas
     private boolean actualizarContraseña(String username, String nuevaContraseña) {
         String filePath = "resources/data/usuarios.csv";
         File archivoOriginal = new File(filePath);

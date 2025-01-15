@@ -68,6 +68,7 @@ public class ManagerMercado extends JFrame {
     
 
     public ManagerMercado() {
+    	
         // Configuración de la ventana principal
         setSize(1100, 750);
         setTitle("Mercado");
@@ -243,6 +244,7 @@ public class ManagerMercado extends JFrame {
     }
     
 
+    //Metodo para buscar jugadores
     private void buscarJugador(String textoBuscar) {
         resultado = new ArrayList<>();
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:futbol_fantasy.db");
@@ -417,6 +419,7 @@ public class ManagerMercado extends JFrame {
     
   
     
+    //Metodo para mostrar reusltados
     private void mostrarResultados() {
         panelResultados.removeAll(); 
 
@@ -531,7 +534,7 @@ public class ManagerMercado extends JFrame {
     }
     
     
-    
+    //Render del encabezado
     TableCellRenderer headerRenderer = (table, value, isSelected, hasFocus, row, column) -> {
         JLabel result = new JLabel(value != null ? value.toString() : "");
 
@@ -563,7 +566,9 @@ public class ManagerMercado extends JFrame {
         result.setOpaque(true);
         return result;
     };
+    
 
+    //Render de las celdas
     TableCellRenderer cellRenderer = (table, value, isSelected, hasFocus, row, column) -> {
         JLabel result = new JLabel(value != null ? value.toString() : "");
         
@@ -622,12 +627,6 @@ public class ManagerMercado extends JFrame {
         result.setOpaque(true);  // Necesario para que el color de fondo se vea
         return result;
     };
-
-
-
-  
-
-    
 
 
     // Clase interna ComboItem para almacenar nombres y IDs en el JComboBox

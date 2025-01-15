@@ -100,7 +100,7 @@ public class ManagerLogin extends JFrame {
         });
     
 
-        // Boton inciar sesion: Valirdar que el usuario esta regustrado en fiuchero csv
+        // Boton inciar sesion: Validar que el usuario esta regustrado en fiuchero csv
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -124,6 +124,7 @@ public class ManagerLogin extends JFrame {
             }
         });
         
+        //Key listenner para el apartado de la contraseña
         passwordText.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) { }
@@ -155,6 +156,7 @@ public class ManagerLogin extends JFrame {
             public void keyReleased(KeyEvent e) { }
         });
 
+        //Action listenner para registrar los datos 
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

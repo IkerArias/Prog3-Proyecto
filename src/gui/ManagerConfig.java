@@ -21,6 +21,8 @@ public class ManagerConfig extends JFrame implements CambiarTema {
     private JComboBox<String> themeComboBox;
 
     public ManagerConfig(String username) {
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setTitle("Configuración del Gestor de Plantillas");
         setSize(600, 500);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -125,6 +127,7 @@ public class ManagerConfig extends JFrame implements CambiarTema {
         });
     }
 
+    //Metodo para cambiar la contraseña
     private void cambiarContraseña(String username) {
         String nuevaContraseña = JOptionPane.showInputDialog(this, "Introduce la nueva contraseña:");
         if (nuevaContraseña != null && !nuevaContraseña.isEmpty()) {
@@ -132,6 +135,7 @@ public class ManagerConfig extends JFrame implements CambiarTema {
         }
     }
 
+    //Metodo para aplicar el tema seleccionado
     private void applyTheme() {
         if (Tema.getTemaActual() == Tema.Theme.OSCURO) {
             mainPanel.setBackground(Color.DARK_GRAY);

@@ -16,14 +16,17 @@ import java.util.List;
 public class ManagerClasificacion extends JFrame {
 
     private static final long serialVersionUID = 1L;
-
+    
+  
     public ManagerClasificacion() {
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setSize(600, 600);
         setTitle("Clasificación");
         setResizable(false);
         setLocationRelativeTo(null);
 
-        // Cambiar logo de la ventana
+        // Logica para cambiar el logo de la ventana
         try {
             File file = new File("resources/imagenes/logo.png");
             if (file.exists()) {
@@ -36,17 +39,19 @@ public class ManagerClasificacion extends JFrame {
             System.err.println("Error al intentar cargar el icono desde la ruta: resources/imagenes/logo.png");
             e.printStackTrace();
         }
+        
 
+        //Obtencion de los datos del usuario actual y ordenar la lista de usuarios
         String username = UserData.getUsername();
         List<Usuario> usuarios = obtenerUsuarios();
         ordenarUsuarios(usuarios, usuarios.size());
 
-
-
+        //Configuracion del panel principal
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout(10, 10));
         mainPanel.setBackground(new Color(196, 238, 255));
 
+        //Configuracion de la etiqueta del titulo 
         JLabel labelTitulo = new JLabel("Clasificación", JLabel.CENTER);
         labelTitulo.setFont(new Font("SansSerif", Font.BOLD, 26));
         labelTitulo.setOpaque(true);
@@ -55,6 +60,7 @@ public class ManagerClasificacion extends JFrame {
         labelTitulo.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         mainPanel.add(labelTitulo, BorderLayout.NORTH);
 
+        //Creacion de la tabla de clasificacion
         String[] columnNames = {"Foto", "Usuario", "Puntos"};
         Object[][] data = new Object[usuarios.size()][3];
 
@@ -91,7 +97,7 @@ public class ManagerClasificacion extends JFrame {
             return label;
         });
 
-        // Renderizador para la columna de imágenes
+        // Renderizado para la columna de imágenes de la tabla clasificacion
         tablaClasificacion.getColumnModel().getColumn(0).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -104,21 +110,27 @@ public class ManagerClasificacion extends JFrame {
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
         });
+        
 
+        //Añadir el scrollpane a la tabla de clasificacion y añadirlo al panel
         JScrollPane scrollPane = new JScrollPane(tablaClasificacion);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
+        //Creacion del panel inferior y el boton atras, asi como ciertas caracteristicas del boton
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
         panelInferior.setBackground(new Color(196, 238, 255));
         JButton btnAtras = new JButton("Atrás");
         btnAtras.setFont(new Font("SansSerif", Font.PLAIN, 16));
         btnAtras.setToolTipText("Volver a la ventana principal");
+        
+        //Action listener del boton atras 
         btnAtras.addActionListener(e -> {
             dispose();
             new ManagerWelcome().setVisible(true);
         });
 
+        //Creacion del boton foro, caracteristicas y action listener
         JButton btnForo = new JButton("Foro");
         btnForo.setFont(new Font("SansSerif", Font.PLAIN, 16));
         btnForo.addActionListener(e -> {     	
@@ -140,7 +152,9 @@ public class ManagerClasificacion extends JFrame {
             }
         });
     }
+    
 
+    //Metodo para escalar una imagen a un tamaño especifico
     private ImageIcon escalarImagen(String ruta, int ancho, int alto) {
         ImageIcon icono = new ImageIcon(ruta);
         Image imagen = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
@@ -157,7 +171,9 @@ public class ManagerClasificacion extends JFrame {
             return escalarImagen("resources/imagenes/usuario.png", 30, 30);
         }
     }
+    
 
+    //Metodo para obetner los usuarios
     private List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String filePath = "resources/data/usuarios.csv";
@@ -220,6 +236,7 @@ public class ManagerClasificacion extends JFrame {
         });
     }
 
+    //Creacion de la clase usuario 
     static class Usuario {
         private String username;
         private int puntos;

@@ -26,12 +26,11 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
     private JPanel mainPanel;
 
     public ManagerForo() {
+    	//Configuracion inicial de la ventana con componentes basicos
         setTitle("Foro/Chat");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);
-        
-        
+        setLocationRelativeTo(null);   
         
         // Registrar la clase como listener para cambios en el tema
         Tema.addListener(this);
@@ -106,6 +105,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
     
     
 
+    //Metodo para enviar mensajes
     private void enviarMensaje() {
         String mensaje = messageInput.getText();
         if (!mensaje.trim().isEmpty()) {
@@ -118,6 +118,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
+    //Metodo para guardar mensajes
     private void guardarMensaje(String mensaje) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             writer.write(mensaje);
@@ -127,6 +128,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
+    //metodo para cargar mensajes
     private void cargarMensajes() {
         File archivo = new File(FILE_NAME);
         if (archivo.exists()) {
@@ -141,12 +143,14 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
+    //Metodo para mostrar la ventana anterior
     private void mostrarVentanaAnterior() {
         dispose();
         ManagerClasificacion v = new ManagerClasificacion();
         v.setVisible(true);
     }
 
+    //Metodo para aplciar el tema seleccionado
     private void applyTheme() {
         if (Tema.getTemaActual() == Tema.Theme.OSCURO) {
             mainPanel.setBackground(Color.DARK_GRAY);
@@ -159,7 +163,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
     
-    
+    //Metodo para obtener los usuarios
     private List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String filePath = "resources/data/usuarios.csv";

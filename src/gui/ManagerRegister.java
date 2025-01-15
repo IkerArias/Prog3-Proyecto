@@ -24,6 +24,8 @@ public class ManagerRegister extends JFrame {
     private static final long serialVersionUID = 1L;
 
     public ManagerRegister() {
+    	
+    	//Configuracion inicial de la ventana con componentes basicos
         setTitle("Fantasy Manager - Crear Cuenta");
         setSize(800, 800);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -385,6 +387,7 @@ public class ManagerRegister extends JFrame {
             e.printStackTrace();
         }
     }
+    //Metodo para cargar fotos
     private void cargarFoto() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Selecciona una foto de perfil");

@@ -10,14 +10,16 @@ import domain.Jugador;
 public class ManagerJugador extends JFrame{
 	
 	public ManagerJugador(Jugador jugador) {
+		//Configuracion inicial de la ventana con componentes basicos
         setTitle("Ficha del Jugador");
         setSize(400, 300);
         setLocationRelativeTo(null);
         
+        //Creacion del panel principal
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         
-        
+        //Creacion de etiquetas sobre los atributos de jugadores
         panel.add(new JLabel("Nombre: " + jugador.getNombre()));
         panel.add(new JLabel("Equipo: " + jugador.getEquipoNombre()));
         panel.add(new JLabel("Posición: " + jugador.getPosicion()));

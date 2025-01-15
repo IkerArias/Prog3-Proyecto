@@ -30,6 +30,7 @@ public class ManagerPlantilla extends JFrame {
     private JProgressBar progressBar; // Barra de progreso
 
     public ManagerPlantilla() {
+    	
         // Configuración básica
         setSize(700, 700);
         setTitle("Gestión de Plantilla");
