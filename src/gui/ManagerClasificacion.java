@@ -120,8 +120,19 @@ public class ManagerClasificacion extends JFrame {
         JPanel panelInferior = new JPanel();
         panelInferior.setLayout(new FlowLayout(FlowLayout.CENTER, 15, 10));
         panelInferior.setBackground(new Color(196, 238, 255));
+        
+        Color softColor = new Color(0, 51, 102); 
+        
         JButton btnAtras = new JButton("Atrás");
-        btnAtras.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        
+        btnAtras.setFont(new Font("Arial", Font.BOLD, 16));
+        btnAtras.setForeground(Color.white);
+        btnAtras.setBackground(softColor);
+        btnAtras.setFocusPainted(false);
+        btnAtras.setPreferredSize(new Dimension(120, 40)); 
+        btnAtras.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnAtras.setOpaque(true);
         btnAtras.setToolTipText("Volver a la ventana principal");
         
         //Action listener del boton atras 
@@ -132,7 +143,14 @@ public class ManagerClasificacion extends JFrame {
 
         //Creacion del boton foro, caracteristicas y action listener
         JButton btnForo = new JButton("Foro");
-        btnForo.setFont(new Font("SansSerif", Font.PLAIN, 16));
+        btnForo.setFont(new Font("Arial", Font.BOLD, 16));
+        btnForo.setForeground(Color.white);
+        btnForo.setBackground(softColor);
+        btnForo.setFocusPainted(false);
+        btnForo.setPreferredSize(new Dimension(120, 40)); 
+        btnForo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnForo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnForo.setOpaque(true);
         btnForo.addActionListener(e -> {     	
             dispose();
             new ManagerForo().setVisible(true);

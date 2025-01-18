@@ -74,6 +74,9 @@ public class ManagerConfig extends JFrame implements CambiarTema {
 
         // Botón Atrás
         JButton btnAtras = new JButton("Atrás");
+        
+        
+        
         btnAtras.addActionListener(e -> {
             dispose();
             ManagerPerfil perfil = new ManagerPerfil();

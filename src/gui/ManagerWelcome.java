@@ -257,6 +257,11 @@ public class ManagerWelcome extends JFrame {
         panelNoticias.setBackground(new Color(196, 238, 255));
         
         JComboBox<String> comboJornada = new JComboBox<String>();
+        comboJornada.setFont(new Font("Arial",Font.BOLD,13));
+        comboJornada.setForeground(Color.black);
+        comboJornada.setPreferredSize(new Dimension(95,25));
+        comboJornada.setBackground(Color.white); 
+        comboJornada.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         for (int i = 1; i <= 38; i++) {
             comboJornada.addItem("Jornada " + i);
         }
@@ -264,6 +269,15 @@ public class ManagerWelcome extends JFrame {
         JPanel panelNoticiasNorte = new JPanel(new FlowLayout());
         JLabel labelNoticias = new JLabel("Noticias", SwingConstants.CENTER);
         JButton btnCrearNoticia = new JButton("Crear noticia");
+        btnCrearNoticia.setFont(new Font("Arial",Font.BOLD,13));
+        btnCrearNoticia.setForeground(Color.black);
+        btnCrearNoticia.setPreferredSize(new Dimension(95,25));
+        btnCrearNoticia.setBackground(new Color(255, 239, 108)); 
+        btnCrearNoticia.setFocusPainted(false);
+        btnCrearNoticia.setBorder(BorderFactory.createLineBorder(Color.GRAY)); 
+        
+        
+        
         labelNoticias.setFont(new Font("Serif", Font.BOLD, 20));
         panelNoticias.add(panelNoticiasNorte, BorderLayout.NORTH);
         panelNoticiasNorte.add(labelNoticias);
@@ -287,6 +301,7 @@ public class ManagerWelcome extends JFrame {
         
         
         JScrollPane noticiasScrollPane = new JScrollPane(noticiasArea);
+        
         panelNoticias.add(noticiasScrollPane, BorderLayout.CENTER);
          
         
@@ -302,17 +317,49 @@ public class ManagerWelcome extends JFrame {
         panelBotones.setBorder(new EmptyBorder(10, 10, 10, 10));  
         panelBotones.setBackground(new Color(196, 238, 255));
         
+        
+        Color softColor = new Color(0, 51, 102); 
+        
         // Crear botones
         JButton btnClasificacion = new JButton("Clasificación");
+        btnClasificacion.setFont(new Font("Arial", Font.BOLD, 16));
+        btnClasificacion.setForeground(Color.white);
+        btnClasificacion.setBackground(softColor);
+        btnClasificacion.setFocusPainted(false);
+        btnClasificacion.setPreferredSize(new Dimension(120, 40)); 
+        btnClasificacion.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnClasificacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnClasificacion.setOpaque(true);
         JButton btnPlantilla = new JButton("Mi Plantilla");
+        btnPlantilla.setFont(new Font("Arial", Font.BOLD, 16));
+        btnPlantilla.setForeground(Color.white);
+        btnPlantilla.setBackground(softColor);
+        btnPlantilla.setFocusPainted(false);
+        btnPlantilla.setPreferredSize(new Dimension(120, 40)); 
+        btnPlantilla.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnPlantilla.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPlantilla.setOpaque(true);
         JButton btnMercado = new JButton("Mercado");
+        btnMercado.setFont(new Font("Arial", Font.BOLD, 16));
+        btnMercado.setForeground(Color.white);
+        btnMercado.setBackground(softColor);
+        btnMercado.setFocusPainted(false);
+        btnMercado.setPreferredSize(new Dimension(120, 40)); 
+        btnMercado.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnMercado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnMercado.setOpaque(true);
         JButton btnPerfil = new JButton("Perfil");
+        btnPerfil.setFont(new Font("Arial", Font.BOLD, 16));
+        btnPerfil.setForeground(Color.white);
+        btnPerfil.setBackground(softColor);
+        btnPerfil.setFocusPainted(false);
+        btnPerfil.setPreferredSize(new Dimension(120, 40)); 
+        btnPerfil.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnPerfil.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnPerfil.setOpaque(true);
         
         // Ajustar tamaño y borde de los botones
-        disenyiarBotones(btnClasificacion);
-        disenyiarBotones(btnPlantilla);
-        disenyiarBotones(btnMercado);
-        disenyiarBotones(btnPerfil);
+        
         
 
         // Añadir listeners a los botones
@@ -478,14 +525,8 @@ public class ManagerWelcome extends JFrame {
 
 
     
-    // Método para implementar el diseño estándar de los botones
-    private void disenyiarBotones(JButton button) {
-        button.setFont(new Font("Serif", Font.BOLD, 16));
-        button.setPreferredSize(new Dimension(120, 40)); 
-        button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 2)); 
-        button.setBackground(Color.WHITE);
-        button.setOpaque(true);
-    }
+
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
