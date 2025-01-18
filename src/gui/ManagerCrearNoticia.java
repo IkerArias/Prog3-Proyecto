@@ -90,6 +90,25 @@ public class ManagerCrearNoticia extends JFrame {
         });
 
         // Evento guardar noticia con hilo integrado
+      //IAG (herramienta: ChatGPT, Gemini ...)
+      // ADAPTADO (Hemos incorporado un hilo para que se guarden cada 5 segundos.)
+      /*  btnGuardar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String jornadaSeleccionada = (String) comboJornada.getSelectedItem();
+                String noticia = area.getText().trim();
+
+                // Extraer el número de la jornada
+                int numeroJornada = Integer.parseInt(jornadaSeleccionada.split(" ")[1]);
+
+                if (!noticia.isEmpty() && !noticia.equals("Escriba su noticia")) {
+                    guardarNoticia(numeroJornada, username, noticia);
+                } else {
+                    System.out.println("Debe escribir una noticia válida.");
+                }
+            }
+        });
+    }*/
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

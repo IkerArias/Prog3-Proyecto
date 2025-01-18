@@ -59,7 +59,7 @@ public class ManagerMercado extends JFrame {
     private ArrayList<Jugador> resultado;
     private String equipoFiltro = "";
     private String posicionFiltro = "";
-    private JButton btnAñadirJugador;
+    private JButton btnCambiarTema;
     private JButton btnBuscar;
     private JButton btnFiltro;
     private JButton btnAtras;
@@ -124,15 +124,15 @@ public class ManagerMercado extends JFrame {
         btnFiltro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnFiltro.setOpaque(true);
         
-        btnAñadirJugador = new JButton("Añadir Jugador a la plantilla");
-        btnAñadirJugador.setFont(new Font("Arial", Font.BOLD, 16));
-        btnAñadirJugador.setForeground(Color.WHITE);
-        btnAñadirJugador.setBackground(softColor); 
-        btnAñadirJugador.setFocusPainted(false);
-        btnAñadirJugador.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        btnAñadirJugador.setPreferredSize(new Dimension(220, 50)); 
-        btnAñadirJugador.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnAñadirJugador.setOpaque(true);
+        btnCambiarTema = new JButton("Cambiar tema de la tabla");
+        btnCambiarTema.setFont(new Font("Arial", Font.BOLD, 16));
+        btnCambiarTema.setForeground(Color.WHITE);
+        btnCambiarTema.setBackground(softColor); 
+        btnCambiarTema.setFocusPainted(false);
+        btnCambiarTema.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnCambiarTema.setPreferredSize(new Dimension(220, 50)); 
+        btnCambiarTema.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnCambiarTema.setOpaque(true);
         
         btnAtras = new JButton("Atras");
         btnAtras.setFont(new Font("Arial", Font.BOLD, 16));
@@ -146,7 +146,7 @@ public class ManagerMercado extends JFrame {
         
         add(btnBuscar);
         add(btnFiltro);
-        add(btnAñadirJugador);
+        add(btnCambiarTema);
         add(btnAtras);  
        
 
@@ -167,7 +167,7 @@ public class ManagerMercado extends JFrame {
         panelSuperior.add(btnBuscar, gbc);
         
         gbc.gridx = 3;
-        panelSuperior.add(btnAñadirJugador,gbc);
+        panelSuperior.add(btnCambiarTema,gbc);
         
         gbc.gridx = 4;
         panelSuperior.add(btnAtras);
@@ -184,7 +184,7 @@ public class ManagerMercado extends JFrame {
         panelInferior = new JPanel(new GridLayout(1,2,10,10));
         panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         panelInferior.add(btnAtras);
-        panelInferior.add(btnAñadirJugador);
+        panelInferior.add(btnCambiarTema);
         add(panelInferior,BorderLayout.SOUTH);
         
         

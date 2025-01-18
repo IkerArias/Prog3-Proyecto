@@ -387,6 +387,10 @@ public class ManagerWelcome extends JFrame {
         add(panelPrincipal);
     }
     
+  //FUENTE-EXTERNA
+  //URL: (Chatgpt)
+  //ADAPTADO (ChatGPT ha ayudado a implementar la parte de comprobar si la joranda seleccionada es la misma que la de 
+  //  la noticia. La mayoria de codigo es reciclado de los metodos de cargarDatos vistos en programacion 2)
     public void cargarNoticiasPorJornada(JTextPane noticiasArea, String jornadaSeleccionada) {
         ArrayList<Noticia> noticias = new ArrayList<>();
         File f = new File("resources/data/noticias_liga.csv");

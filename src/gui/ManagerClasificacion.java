@@ -210,21 +210,13 @@ public class ManagerClasificacion extends JFrame {
         if (n <= 1) {
             return;
         }
-
-
         ordenarUsuarios(usuarios, n - 1);
-
-       
         Usuario ultimo = usuarios.get(n - 1);
         int j = n - 2;
-
-      
         while (j >= 0 && usuarios.get(j).getPuntos() < ultimo.getPuntos()) {
             usuarios.set(j + 1, usuarios.get(j));
             j--;
         }
-
-        
         usuarios.set(j + 1, ultimo);
     }
 

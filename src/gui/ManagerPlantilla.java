@@ -383,7 +383,9 @@ public class ManagerPlantilla extends JFrame {
         }
     }
 
-
+  //FUENTE-EXTERNA
+  //URL: (ChatGPT)
+  //SIN-CAMBIOS
     private void SeleccionarJugadorPorPosicion(JButton button, String posicion) {
         button.setText(posicion); // Establece el texto predeterminado como el nombre de la posición
         button.addActionListener(e -> {
