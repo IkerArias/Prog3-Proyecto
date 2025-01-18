@@ -65,6 +65,7 @@ public class ManagerMercado extends JFrame {
     private JButton btnAtras;
     private JPanel panelInferior;
     private ArrayList<String> listaEquipos;
+    private Boolean oscuro = false;
     
 
     public ManagerMercado() {
@@ -238,10 +239,10 @@ public class ManagerMercado extends JFrame {
 				
 				
 			}});
-        
-    
+         
     
     }
+         
     
 
     //Metodo para buscar jugadores
@@ -277,6 +278,42 @@ public class ManagerMercado extends JFrame {
             e.printStackTrace();
         }
         mostrarResultados();
+    }
+    
+    //Metodo que actualizado el color del encabezado para la logica del boton cambiar tema
+    private void actualizarEncabezado(JTable table, boolean isDarkMode) {
+        TableCellRenderer headerRenderer = (table1, value, isSelected, hasFocus, row, column) -> {
+            JLabel result = new JLabel(value != null ? value.toString() : "");
+            result.setFont(new Font("Arial", Font.BOLD, 14));  // Establecer la fuente en negrita para los títulos de las columnas
+            result.setHorizontalAlignment(SwingConstants.CENTER); // Alinear el texto al centro
+            
+            //Establecer el toolTipText
+            if(value!= null) {
+            	 result.setToolTipText(value.toString());
+            }
+
+            if (column == 9) {  // Columna de tarjetas amarillas
+                result.setText(""); // No texto, solo la imagen
+                result.setHorizontalAlignment(JLabel.CENTER);
+                ImageIcon yellowIcon = new ImageIcon("resources/imagenes/amarilla.png");
+                Image yellowImage = yellowIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                result.setIcon(new ImageIcon(yellowImage));
+            } else if (column == 10) {  // Columna de tarjetas rojas
+                result.setText(""); // No texto, solo la imagen
+                result.setHorizontalAlignment(JLabel.CENTER);
+                ImageIcon redIcon = new ImageIcon("resources/imagenes/roja.png");
+                Image redImage = redIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+                result.setIcon(new ImageIcon(redImage));
+            }
+
+            result.setBackground(isDarkMode ? Color.DARK_GRAY : Color.LIGHT_GRAY); 
+            result.setForeground(isDarkMode ? Color.WHITE : Color.BLACK);
+            result.setOpaque(true);
+            return result;
+        };
+
+        table.getTableHeader().setDefaultRenderer(headerRenderer);
+        table.getTableHeader().repaint(); // Forzar la actualización visual
     }
 
 
@@ -476,6 +513,23 @@ public class ManagerMercado extends JFrame {
             tabla.setAutoCreateRowSorter(true);
             
             tabla.setAutoCreateRowSorter(true);
+            
+            //Action listenner del btnCambiarTema que cambia el tema del encabezado y multiples botones
+            btnCambiarTema.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    oscuro = !oscuro;
+
+                 
+                    btnAtras.setBackground(oscuro ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+                    btnFiltro.setBackground(oscuro ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+                    btnCambiarTema.setBackground(oscuro ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+                    btnBuscar.setBackground(oscuro ? Color.DARK_GRAY : Color.LIGHT_GRAY);
+                    actualizarEncabezado(tabla, oscuro); 
+                }
+            });
+            
+            
 
          // Configuración del TableRowSorter
          RowSorter<? extends TableModel> sorter = tabla.getRowSorter();
@@ -585,6 +639,7 @@ public class ManagerMercado extends JFrame {
         }
         
         
+        
         //Establecer el toolTipText
         if(value!= null) {
        	 result.setToolTipText(value.toString());
@@ -601,12 +656,13 @@ public class ManagerMercado extends JFrame {
             result.setFont(new Font("Arial", Font.PLAIN, 14));  // Otras celdas con fuente normal
             result.setHorizontalAlignment(SwingConstants.CENTER);  // Alinear al centro
         }
+       
 
         // Definir color de fondo alternado
-        if (row % 2 == 0) {  // Fila par
-            result.setBackground(new Color(240, 248, 255));  // Color claro
+        if (oscuro) {  // Fila par
+            result.setBackground(Color.black);  // Color claro
         } else {  // Fila impar
-            result.setBackground(new Color(255, 255, 255));  // Color blanco
+            result.setBackground(Color.white);  // Color blanco
         }
 
         // Color de fondo para la selección
