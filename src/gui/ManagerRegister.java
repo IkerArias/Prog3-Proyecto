@@ -52,13 +52,13 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el nombre de usuario
         JLabel userLabel = new JLabel("Nombre de Usuario:");
-        userLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        userLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(userLabel, gbc);
 
         JTextField userField = new JTextField(20);
-        userField.setFont(new Font("Arial", Font.BOLD, 16));
+        userField.setFont(new Font("Arial", Font.BOLD, 14));
         userField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -66,13 +66,13 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el correo electrónico
         JLabel emailLabel = new JLabel("Correo Electrónico:");
-        emailLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        emailLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 2; // Cambiar a nueva fila
         panel.add(emailLabel, gbc);
 
         JTextField emailField = new JTextField(20);
-        emailField.setFont(new Font("Arial", Font.BOLD, 16));
+        emailField.setFont(new Font("Arial", Font.BOLD, 14));
         emailField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 2;
@@ -80,7 +80,7 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para la fecha de nacimiento
         JLabel birthDateLabel = new JLabel("Fecha de Nacimiento:");
-        birthDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        birthDateLabel.setFont(new Font("Arial", Font.BOLD, 14));
         
         gbc.gridx = 0;
         gbc.gridy = 3; // Cambiar a nueva fila
@@ -89,6 +89,8 @@ public class ManagerRegister extends JFrame {
         // Configuración del selector de fecha de nacimiento con JSpinner
         JSpinner dateSpinner = new JSpinner(new SpinnerDateModel());
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "dd-MM-yyyy");
+        dateSpinner.setFont(new Font("Arial", Font.BOLD, 14));
+        dateEditor.setPreferredSize(new Dimension(90, 25));
         dateSpinner.setEditor(dateEditor);
         dateSpinner.setValue(new Date()); // Establece la fecha actual
         gbc.gridx = 1;
@@ -97,13 +99,13 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el número de teléfono
         JLabel phoneLabel = new JLabel("Número de Teléfono:");
-        phoneLabel.setFont(new Font("Arial", Font.BOLD, 16));;
+        phoneLabel.setFont(new Font("Arial", Font.BOLD, 14));;
         gbc.gridx = 0;
         gbc.gridy = 4; // Cambiar a nueva fila
         panel.add(phoneLabel, gbc);
 
         JTextField phoneField = new JTextField(20);
-        phoneField.setFont(new Font("Arial", Font.BOLD, 16));
+        phoneField.setFont(new Font("Arial", Font.BOLD, 14));
         phoneField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 4;
@@ -111,13 +113,13 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para la dirección
         JLabel addressLabel = new JLabel("Dirección:");
-        addressLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        addressLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 5; // Cambiar a nueva fila
         panel.add(addressLabel, gbc);
 
         JTextField addressField = new JTextField(20);
-        addressField.setFont(new Font("Arial", Font.BOLD, 16));
+        addressField.setFont(new Font("Arial", Font.BOLD, 14));
         addressField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 5;
@@ -125,13 +127,13 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el código postal
         JLabel postalCodeLabel = new JLabel("Código Postal:");
-        postalCodeLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        postalCodeLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 6; // Cambiar a nueva fila
         panel.add(postalCodeLabel, gbc);
 
         JTextField postalCodeField = new JTextField(20);
-        postalCodeField.setFont(new Font("Arial", Font.BOLD, 16));
+        postalCodeField.setFont(new Font("Arial", Font.BOLD, 14));
         postalCodeField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -139,7 +141,7 @@ public class ManagerRegister extends JFrame {
         
      // Etiqueta y campo para la foto de usuario 
         JLabel imagenLabel1 = new JLabel("Foto de usuario:");
-        imagenLabel1.setFont(new Font("Arial", Font.BOLD, 16));
+        imagenLabel1.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 7;
         panel.add(imagenLabel1, gbc);
@@ -149,12 +151,12 @@ public class ManagerRegister extends JFrame {
    
         JButton cargarFotoButton = new JButton("Cargar Foto");
         
-        cargarFotoButton.setFont(new Font("Arial", Font.BOLD, 16));
+        cargarFotoButton.setFont(new Font("Arial", Font.BOLD, 14));
         cargarFotoButton.setForeground(Color.WHITE);
         cargarFotoButton.setBackground(softColor); 
         cargarFotoButton.setFocusPainted(false);
         cargarFotoButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        cargarFotoButton.setPreferredSize(new Dimension(120, 50));
+        cargarFotoButton.setPreferredSize(new Dimension(100, 30));
         cargarFotoButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         cargarFotoButton.setOpaque(true);
         
@@ -171,28 +173,33 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para la contraseña
         JLabel passLabel = new JLabel("Contraseña:");
+        passLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 8; // Cambiar a nueva fila
         panel.add(passLabel, gbc);
 
         JPasswordField passField = new JPasswordField(20);
+        passField.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 1;
         gbc.gridy = 8;
         panel.add(passField, gbc);
 
         // Etiqueta y campo para confirmar la contraseña
         JLabel confirmPassLabel = new JLabel("Confirmar Contraseña:");
+        confirmPassLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 9; // Cambiar a nueva fila
         panel.add(confirmPassLabel, gbc);
 
         JPasswordField confirmPassField = new JPasswordField(20);
+        confirmPassField.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 1;
         gbc.gridy = 9;
         panel.add(confirmPassField, gbc);
 
         // Etiqueta y JComboBox para el equipo favorito
         JLabel teamLabel = new JLabel("Equipo Favorito:");
+        teamLabel.setFont(new Font("Arial", Font.BOLD, 14));
         gbc.gridx = 0;
         gbc.gridy = 10; // Cambiar a nueva fila
         panel.add(teamLabel, gbc);
@@ -207,17 +214,32 @@ public class ManagerRegister extends JFrame {
             "Elche", "UD Las Palmas", "Cadiz"
         };
         JComboBox<String> teamComboBox = new JComboBox<>(equipos);
+        teamComboBox.setFont(new Font("Arial", Font.BOLD, 14));
+        teamComboBox.setForeground(Color.black);
+        teamComboBox.setPreferredSize(new Dimension(120,25));
+        teamComboBox.setBackground(Color.white); 
+        teamComboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         gbc.gridx = 1;
         gbc.gridy = 10;
         panel.add(teamComboBox, gbc);
 
-        // Botón de Crear Cuenta
+     // Botón de Crear Cuenta
+     // Botón de Crear Cuenta
         JButton createAccountButton = new JButton("Crear Cuenta");
-        gbc.gridx = 0;
-        gbc.gridy = 11;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.CENTER;
+        createAccountButton.setFont(new Font("Arial", Font.BOLD, 16));
+        createAccountButton.setForeground(Color.BLACK);
+        createAccountButton.setBackground(new Color(255, 239, 108)); 
+        createAccountButton.setFocusPainted(false);
+        createAccountButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        createAccountButton.setPreferredSize(new Dimension(120, 40)); // Tamaño uniforme
+
+        
+        
+        gbc.gridx = 1; 
+        gbc.gridy = 12; 
+        gbc.insets = new Insets(10, 20, 10, 20); 
         panel.add(createAccountButton, gbc);
+
         
         
       //Cambiar foto de la ventana
@@ -308,19 +330,21 @@ public class ManagerRegister extends JFrame {
         
         
         
-        // Botón de Volver
+     // Botón de Atrás
         JButton backButton = new JButton("Atrás");
-        
         backButton.setFont(new Font("Arial", Font.BOLD, 16));
         backButton.setForeground(Color.WHITE);
-        backButton.setBackground(softColor); 
+        backButton.setBackground(new Color(0, 51, 102)); // Azul oscuro
         backButton.setFocusPainted(false);
         backButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        backButton.setPreferredSize(new Dimension(100, 40));
+        backButton.setPreferredSize(new Dimension(120, 40)); // Tamaño uniforme
         backButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         backButton.setOpaque(true);
+
         
-        gbc.gridy = 12; // Nueva fila para el botón Atrás
+        gbc.gridx = 0; 
+        gbc.gridy = 12; 
+        gbc.insets = new Insets(10, 20, 10, 20); 
         panel.add(backButton, gbc);
         
         // Acción para el botón Atrás
@@ -347,8 +371,10 @@ public class ManagerRegister extends JFrame {
     // Método para mostrar la ventana de consentimiento
     private void showConsentDialog() {
         JDialog consentDialog = new JDialog(this, "Consentimiento del Tutor Legal", true);
-        consentDialog.setSize(400, 300);
+        
+        consentDialog.setSize(600, 220);
         consentDialog.setLayout(new BorderLayout());
+        consentDialog.setBackground(new Color(196, 238, 255));
 
         // Texto de términos y condiciones
         JTextArea termsArea = new JTextArea("Autorización para el uso de la cuenta:\n\n"
@@ -366,23 +392,38 @@ public class ManagerRegister extends JFrame {
         consentDialog.add(termsArea, BorderLayout.CENTER);
 
         // Panel para el checkbox y botón de aceptar
+     // Panel para el checkbox y botón de aceptar
         JPanel consentPanel = new JPanel();
-        consentPanel.setLayout(new BoxLayout(consentPanel, BoxLayout.Y_AXIS));
+        // Cambiar a FlowLayout con alineación centrada
+        consentPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        consentPanel.setBackground(new Color(196, 238, 255));
 
         // Casilla de verificación para el consentimiento
         JCheckBox consentCheckBox = new JCheckBox("Confirmo que soy el tutor legal y acepto los términos.");
-        consentPanel.add(consentCheckBox); // Añadir checkbox al panel
+        consentCheckBox.setBackground(new Color(196, 238, 255));
 
-        // Botón para aceptar (más pequeño y centrado)
+        // Añadir checkbox al panel
+        consentPanel.add(consentCheckBox);
+
+        // Botón para aceptar (centrado)
         JButton acceptButton = new JButton("Aceptar");
-        acceptButton.setPreferredSize(new Dimension(100, 30)); // Ajusta el tamaño del botón
+        acceptButton.setFont(new Font("Arial", Font.BOLD, 14));
+        acceptButton.setForeground(Color.WHITE);
+        acceptButton.setBackground(new Color(0, 51, 102));
+        acceptButton.setFocusPainted(false);
+        acceptButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        acceptButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        acceptButton.setOpaque(true);
+
+        // Ajusta el tamaño del botón
+        acceptButton.setPreferredSize(new Dimension(110, 35)); 
         acceptButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (consentCheckBox.isSelected()) {
                     JOptionPane.showMessageDialog(consentDialog, "Cuenta creada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     consentDialog.dispose(); // Cerrar el diálogo de consentimiento
-                    dispose();
+                    dispose(); // Cerrar la ventana actual
                     ManagerLogin v = new ManagerLogin();
                     v.setVisible(true);
                 } else {
@@ -391,9 +432,12 @@ public class ManagerRegister extends JFrame {
             }
         });
 
-        // Añadir checkbox y botón al panel de consentimiento
+        // Añadir el botón centrado al panel
         consentPanel.add(acceptButton);
+
+        // Añadir el panel de consentimiento al sur del diálogo
         consentDialog.add(consentPanel, BorderLayout.SOUTH);
+
         
         consentDialog.setLocationRelativeTo(this);
         consentDialog.setVisible(true); // Muestra el diálogo

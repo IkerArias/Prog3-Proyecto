@@ -63,8 +63,8 @@ public class ManagerLogin extends JFrame {
         loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         loginButton.setOpaque(true);
         
-        registerButton.setForeground(Color.WHITE);
-        registerButton.setBackground(softColor); 
+        registerButton.setForeground(Color.black);
+        registerButton.setBackground(new Color(255, 239, 108)); 
         registerButton.setFocusPainted(false);
         registerButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         registerButton.setPreferredSize(new Dimension(120, 50));
