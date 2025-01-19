@@ -13,6 +13,8 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -101,7 +103,9 @@ public class ManagerMercado extends JFrame {
         textField.setForeground(new Color(50, 50, 50)); 
         textField.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 2)); 
         textField.setCaretColor(Color.GRAY);
-
+        
+        Color ycolor = new Color(255,239,108);
+        
         // Botones
         btnBuscar = new JButton("Buscar");
         btnBuscar.setFont(new Font("Arial", Font.BOLD, 16));
@@ -144,6 +148,58 @@ public class ManagerMercado extends JFrame {
         btnAtras.setPreferredSize(new Dimension(120, 50));
         btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnAtras.setOpaque(true);
+        
+		btnBuscar.addMouseListener(new MouseAdapter() {
+		    		
+		        	
+		            @Override
+		            public void mouseEntered(MouseEvent e) {
+		                btnBuscar.setBackground(ycolor.brighter()); // Hacer el color más claro
+		            }
+		
+		            @Override
+		            public void mouseExited(MouseEvent e) {
+		                btnBuscar.setBackground(ycolor); // Volver al color original
+		            }
+		    
+		    
+		    });
+		
+		btnAtras.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnAtras.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnAtras.setBackground(softColor); // Volver al color original
+            }
+        });
+		
+		btnCambiarTema.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnCambiarTema.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnCambiarTema.setBackground(softColor); // Volver al color original
+            }
+        });
+		
+		btnFiltro.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnFiltro.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnFiltro.setBackground(softColor); // Volver al color original
+            }
+        });
         
         add(btnBuscar);
         add(btnFiltro);

@@ -4,6 +4,8 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -26,12 +28,12 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
     private JPanel mainPanel;
 
     public ManagerForo() {
-    	//Configuracion inicial de la ventana con componentes basicos
+        // Configuración inicial de la ventana con componentes básicos
         setTitle("Foro/Chat");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);   
-        
+        setLocationRelativeTo(null);
+
         // Registrar la clase como listener para cambios en el tema
         Tema.addListener(this);
 
@@ -41,9 +43,11 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
 
         // Área de texto para mostrar mensajes
         messageArea = new JTextArea();
-        messageArea.setEditable(false);
+        messageArea.setEditable(false);  // Desactivar la edición
         messageArea.setLineWrap(true);
+        messageArea.setCaretColor(new Color(0, 0, 0, 0)); // Establece un color transparente para el caret (cursor)
         messageArea.setWrapStyleWord(true);
+        messageArea.setFont(new Font("Arial", Font.PLAIN, 12)); // Establecer fuente para los mensajes
         JScrollPane scrollPane = new JScrollPane(messageArea);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -62,8 +66,29 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         messageInput = new JTextField();
         inputPanel.add(messageInput, BorderLayout.CENTER);
 
+        Color ycolor = new Color(255, 239, 108);
+
         JButton sendButton = new JButton("Enviar");
+        sendButton.setFont(new Font("Arial", Font.BOLD, 13));
+        sendButton.setForeground(Color.black);
+        sendButton.setPreferredSize(new Dimension(80, 28));
+        sendButton.setBackground(ycolor);
+        sendButton.setFocusPainted(false);
+        sendButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        sendButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         sendButton.addActionListener(e -> enviarMensaje());
+
+        sendButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                sendButton.setBackground(ycolor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                sendButton.setBackground(ycolor); // Volver al color original
+            }
+        });
         inputPanel.add(sendButton, BorderLayout.EAST);
 
         mainPanel.add(inputPanel, BorderLayout.SOUTH);
@@ -71,6 +96,11 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         // Crear el ComboBox para seleccionar el tema
         JComboBox<String> themeComboBox = new JComboBox<>(new String[]{"Claro", "Oscuro"});
         themeComboBox.setSelectedItem(Tema.getTemaActual() == Tema.Theme.CLARO ? "Claro" : "Oscuro");
+        themeComboBox.setFont(new Font("Arial", Font.BOLD, 13));
+        themeComboBox.setForeground(Color.black);
+        themeComboBox.setPreferredSize(new Dimension(95, 25));
+        themeComboBox.setBackground(Color.white);
+        themeComboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         themeComboBox.addActionListener(e -> {
             String selectedTheme = (String) themeComboBox.getSelectedItem();
             if ("Claro".equals(selectedTheme)) {
@@ -82,7 +112,10 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
 
         // Agregar el ComboBox en la parte superior
         JPanel topPanel = new JPanel();
-        topPanel.add(new JLabel("Seleccionar Tema:"));
+        JLabel lbltitulo = new JLabel("Seleccionar Tema :");
+        lbltitulo.setFont(new Font("Arial", Font.BOLD, 13));
+
+        topPanel.add(lbltitulo);
         topPanel.add(themeComboBox);
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -102,10 +135,8 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         // Aplicar el tema al iniciar la ventana
         applyTheme();
     }
-    
-    
 
-    //Metodo para enviar mensajes
+    // Método para enviar mensajes
     private void enviarMensaje() {
         String mensaje = messageInput.getText();
         if (!mensaje.trim().isEmpty()) {
@@ -118,7 +149,7 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
-    //Metodo para guardar mensajes
+    // Método para guardar mensajes
     private void guardarMensaje(String mensaje) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             writer.write(mensaje);
@@ -128,14 +159,14 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
-    //metodo para cargar mensajes
+    // Método para cargar mensajes
     private void cargarMensajes() {
         File archivo = new File(FILE_NAME);
         if (archivo.exists()) {
             try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
                 String linea;
                 while ((linea = reader.readLine()) != null) {
-                    messageArea.append( linea + "\n");
+                    messageArea.append(linea + "\n");
                 }
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this, "Error al cargar los mensajes.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -143,27 +174,33 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         }
     }
 
-    //Metodo para mostrar la ventana anterior
+    // Método para mostrar la ventana anterior
     private void mostrarVentanaAnterior() {
         dispose();
         ManagerClasificacion v = new ManagerClasificacion();
         v.setVisible(true);
     }
 
-    //Metodo para aplciar el tema seleccionado
+    // Método para aplicar el tema seleccionado
     private void applyTheme() {
+        // Colores personalizados para cada tema
+        Color claroColor = new Color(196, 238, 255); // Modo claro
+        Color oscuroColor = Color.DARK_GRAY; // Modo oscuro
+
         if (Tema.getTemaActual() == Tema.Theme.OSCURO) {
-            mainPanel.setBackground(Color.DARK_GRAY);
-            messageArea.setBackground(Color.DARK_GRAY);
+            // Modo oscuro
+            mainPanel.setBackground(oscuroColor);
+            messageArea.setBackground(oscuroColor);
             messageArea.setForeground(Color.WHITE);
         } else {
-            mainPanel.setBackground(Color.WHITE);
-            messageArea.setBackground(Color.WHITE);
+            // Modo claro
+            mainPanel.setBackground(claroColor);
+            messageArea.setBackground(claroColor);
             messageArea.setForeground(Color.BLACK);
         }
     }
-    
-    //Metodo para obtener los usuarios
+
+    // Método para obtener los usuarios
     private List<Usuario> obtenerUsuarios() {
         List<Usuario> usuarios = new ArrayList<>();
         String filePath = "resources/data/usuarios.csv";
@@ -194,13 +231,15 @@ public class ManagerForo extends JFrame implements Tema.CambiarTema {
         return usuarios;
     }
 
-
     @Override
     public void onThemeChanged(Tema.Theme theme) {
         applyTheme();
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new ManagerForo());
+        SwingUtilities.invokeLater(() -> {
+            ManagerForo managerForo = new ManagerForo();
+            managerForo.setVisible(true); // Esto muestra la ventana
+        });
     }
 }

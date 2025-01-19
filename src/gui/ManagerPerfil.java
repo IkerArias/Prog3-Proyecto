@@ -8,6 +8,8 @@ import domain.Tema.Theme;
 import domain.UserData;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -103,6 +105,9 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
 
         // Botón para cambiar la foto
         JButton btnCambiarFoto = new JButton("Cambiar Foto");
+        
+        Color softColor = new Color(0, 51, 102); 
+        
         styleButton(btnCambiarFoto);
         btnCambiarFoto.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -126,6 +131,18 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
                 }
             }
         });
+        
+        btnCambiarFoto.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnCambiarFoto.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnCambiarFoto.setBackground(softColor); // Volver al color original
+            }
+        });
 
         // Añadir componentes al panel de foto
         panelFoto.add(lblFoto, BorderLayout.CENTER);
@@ -140,6 +157,7 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         JPanel panelIzquierda = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelIzquierda.setBackground(new Color(230, 240, 250));
         JButton btnConfiguracion = createIconButton("resources/imagenes/avatar-de-usuario.png");
+        
         btnConfiguracion.addActionListener(e -> {
             dispose();
             new ManagerConfig("UsurioEjemplo").setVisible(true);
@@ -152,6 +170,19 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
 
         JButton btnAtras = new JButton("Atrás");
         styleButton(btnAtras);
+        
+        btnAtras.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnAtras.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnAtras.setBackground(softColor); // Volver al color original
+            }
+        });
+
         btnAtras.addActionListener(e -> {
             dispose();
             new ManagerWelcome().setVisible(true);
@@ -165,6 +196,19 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         JPanel panelDerecha = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         panelDerecha.setBackground(new Color(230, 240, 250));
         JButton btnNotificaciones = createIconButton("resources/imagenes/icono_notif_transparent.png");
+        
+        btnNotificaciones.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnNotificaciones.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnNotificaciones.setBackground(softColor); // Volver al color original
+            }
+        });
+        
         btnNotificaciones.addActionListener(e -> {
             dispose();
             new ManagerNotif().setVisible(true);
@@ -207,18 +251,24 @@ public class ManagerPerfil extends JFrame implements Tema.CambiarTema {
         dataPanel.add(lblData, BorderLayout.CENTER);
         return dataPanel;
     }
+    
+    Color softColor = new Color(0, 51, 102); 
 
     // Método para estilizar botones
     private void styleButton(JButton button) {
-        button.setForeground(Color.BLACK);
-        button.setBackground(new Color(63, 81, 181)); // Azul vibrante para botones
+        button.setForeground(Color.WHITE);
+        button.setBackground(softColor); // Azul vibrante para botones
         button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
         button.setFocusPainted(false);
+        button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     }
+    
+    
 
     // Crear botón con icono
     private JButton createIconButton(String iconPath) {
         JButton button = new JButton();
+        button.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         File imageFile = new File(iconPath);
         if (!imageFile.exists()) {
             System.err.println("Image not found: " + iconPath);

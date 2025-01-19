@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -98,16 +100,34 @@ public class ManagerPlantilla extends JFrame {
         panelFormacion.setBackground(new Color(196, 238, 255));
         topPanel.add(panelFormacion);
         
+        Color ycolor = new Color(255,239,108);
+        
         JButton btnGuardar = new JButton("Guardar Plantilla");
         
         btnGuardar.setFont(new Font("Arial", Font.BOLD, 12));
         btnGuardar.setForeground(Color.black);
-        btnGuardar.setBackground(new Color(255, 239, 108));
+        btnGuardar.setBackground(ycolor);
         btnGuardar.setFocusPainted(false);
         btnGuardar.setPreferredSize(new Dimension(120, 30)); 
         btnGuardar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnGuardar.setOpaque(true);
+        
+		btnGuardar.addMouseListener(new MouseAdapter() {
+		    		
+		        	
+		            @Override
+		            public void mouseEntered(MouseEvent e) {
+		                btnGuardar.setBackground(ycolor.brighter()); // Hacer el color más claro
+		            }
+		
+		            @Override
+		            public void mouseExited(MouseEvent e) {
+		                btnGuardar.setBackground(ycolor); // Volver al color original
+		            }
+		    
+		    
+		    });
         
         btnGuardar.addActionListener(e -> guardarPlantilla());
         topPanel.add(btnGuardar);
