@@ -33,6 +33,7 @@ public class ManagerLogin extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2, 10, 10)); 
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Márgenes
+        panel.setBackground(new Color(196, 238, 255));
 
         // Componentes de la ventana
         JLabel userLabel = new JLabel("Usuario o Email:");
@@ -43,14 +44,32 @@ public class ManagerLogin extends JFrame {
         JPasswordField passwordText = new JPasswordField(20);
         passwordText.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
 
+       
+        
+        
         JButton loginButton = new JButton("Iniciar sesión");
+        
         JButton registerButton = new JButton("Crear cuenta");
 
         // Estilo de los botones
-        loginButton.setForeground(Color.BLACK);
-        loginButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1)); 
-        registerButton.setForeground(Color.BLACK);
-        registerButton.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+        
+        Color softColor = new Color(0, 51, 102); 
+        
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setBackground(softColor); 
+        loginButton.setFocusPainted(false);
+        loginButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        loginButton.setPreferredSize(new Dimension(120, 50));
+        loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        loginButton.setOpaque(true);
+        
+        registerButton.setForeground(Color.WHITE);
+        registerButton.setBackground(softColor); 
+        registerButton.setFocusPainted(false);
+        registerButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        registerButton.setPreferredSize(new Dimension(120, 50));
+        registerButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        registerButton.setOpaque(true);
 
         // Añadiendo componentes al panel
         panel.add(userLabel);

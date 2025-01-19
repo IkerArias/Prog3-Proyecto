@@ -35,8 +35,9 @@ public class ManagerRegister extends JFrame {
         // Configuración del panel principal
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
+        panel.setBackground(new Color(196, 238, 255));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacio entre componentes
+        gbc.insets = new Insets(8, 8, 8, 8); // Espacio entre componentes
         
      // Título de la ventana
         JLabel titleLabel = new JLabel("Registro de Usuario");
@@ -51,28 +52,36 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el nombre de usuario
         JLabel userLabel = new JLabel("Nombre de Usuario:");
+        userLabel.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(userLabel, gbc);
 
         JTextField userField = new JTextField(20);
+        userField.setFont(new Font("Arial", Font.BOLD, 16));
+        userField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 1;
         panel.add(userField, gbc);
 
         // Etiqueta y campo para el correo electrónico
         JLabel emailLabel = new JLabel("Correo Electrónico:");
+        emailLabel.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 2; // Cambiar a nueva fila
         panel.add(emailLabel, gbc);
 
         JTextField emailField = new JTextField(20);
+        emailField.setFont(new Font("Arial", Font.BOLD, 16));
+        emailField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 2;
         panel.add(emailField, gbc);
 
         // Etiqueta y campo para la fecha de nacimiento
         JLabel birthDateLabel = new JLabel("Fecha de Nacimiento:");
+        birthDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        
         gbc.gridx = 0;
         gbc.gridy = 3; // Cambiar a nueva fila
         panel.add(birthDateLabel, gbc);
@@ -88,45 +97,67 @@ public class ManagerRegister extends JFrame {
 
         // Etiqueta y campo para el número de teléfono
         JLabel phoneLabel = new JLabel("Número de Teléfono:");
+        phoneLabel.setFont(new Font("Arial", Font.BOLD, 16));;
         gbc.gridx = 0;
         gbc.gridy = 4; // Cambiar a nueva fila
         panel.add(phoneLabel, gbc);
 
         JTextField phoneField = new JTextField(20);
+        phoneField.setFont(new Font("Arial", Font.BOLD, 16));
+        phoneField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 4;
         panel.add(phoneField, gbc);
 
         // Etiqueta y campo para la dirección
         JLabel addressLabel = new JLabel("Dirección:");
+        addressLabel.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 5; // Cambiar a nueva fila
         panel.add(addressLabel, gbc);
 
         JTextField addressField = new JTextField(20);
+        addressField.setFont(new Font("Arial", Font.BOLD, 16));
+        addressField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 5;
         panel.add(addressField, gbc);
 
         // Etiqueta y campo para el código postal
         JLabel postalCodeLabel = new JLabel("Código Postal:");
+        postalCodeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 6; // Cambiar a nueva fila
         panel.add(postalCodeLabel, gbc);
 
         JTextField postalCodeField = new JTextField(20);
+        postalCodeField.setFont(new Font("Arial", Font.BOLD, 16));
+        postalCodeField.setPreferredSize(new Dimension(100,25));
         gbc.gridx = 1;
         gbc.gridy = 6;
         panel.add(postalCodeField, gbc);
         
      // Etiqueta y campo para la foto de usuario 
         JLabel imagenLabel1 = new JLabel("Foto de usuario:");
+        imagenLabel1.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = 0;
         gbc.gridy = 7;
         panel.add(imagenLabel1, gbc);
+        
+        Color softColor = new Color(0, 51, 102);
 
    
         JButton cargarFotoButton = new JButton("Cargar Foto");
+        
+        cargarFotoButton.setFont(new Font("Arial", Font.BOLD, 16));
+        cargarFotoButton.setForeground(Color.WHITE);
+        cargarFotoButton.setBackground(softColor); 
+        cargarFotoButton.setFocusPainted(false);
+        cargarFotoButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        cargarFotoButton.setPreferredSize(new Dimension(120, 50));
+        cargarFotoButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        cargarFotoButton.setOpaque(true);
+        
         cargarFotoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -274,10 +305,21 @@ public class ManagerRegister extends JFrame {
                 }
             }
         });
-
+        
+        
         
         // Botón de Volver
         JButton backButton = new JButton("Atrás");
+        
+        backButton.setFont(new Font("Arial", Font.BOLD, 16));
+        backButton.setForeground(Color.WHITE);
+        backButton.setBackground(softColor); 
+        backButton.setFocusPainted(false);
+        backButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        backButton.setPreferredSize(new Dimension(100, 40));
+        backButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        backButton.setOpaque(true);
+        
         gbc.gridy = 12; // Nueva fila para el botón Atrás
         panel.add(backButton, gbc);
         
