@@ -82,6 +82,13 @@ public class ManagerPlantilla extends JFrame {
             "3-4-3"
         });
         formationSelector.addActionListener(this::cambiarFormacion);
+        
+        formationSelector.setFont(new Font("Arial",Font.BOLD,13));
+        formationSelector.setForeground(Color.black);
+        formationSelector.setPreferredSize(new Dimension(95,25));
+        formationSelector.setBackground(Color.white); 
+        formationSelector.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        
         formationSelector.setFont(new Font("Arial", Font.PLAIN, 14));
         
 
@@ -92,6 +99,16 @@ public class ManagerPlantilla extends JFrame {
         topPanel.add(panelFormacion);
         
         JButton btnGuardar = new JButton("Guardar Plantilla");
+        
+        btnGuardar.setFont(new Font("Arial", Font.BOLD, 12));
+        btnGuardar.setForeground(Color.black);
+        btnGuardar.setBackground(new Color(255, 239, 108));
+        btnGuardar.setFocusPainted(false);
+        btnGuardar.setPreferredSize(new Dimension(120, 30)); 
+        btnGuardar.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        btnGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardar.setOpaque(true);
+        
         btnGuardar.addActionListener(e -> guardarPlantilla());
         topPanel.add(btnGuardar);
 

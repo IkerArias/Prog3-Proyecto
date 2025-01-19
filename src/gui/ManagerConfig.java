@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManagerConfig extends JFrame implements CambiarTema {
 
@@ -19,6 +21,7 @@ public class ManagerConfig extends JFrame implements CambiarTema {
     private JPanel mainPanel;
     private JLabel headerLabel;
     private JComboBox<String> themeComboBox;
+    private List<JLabel> labels; // Lista para almacenar los JLabel
 
     public ManagerConfig(String username) {
         setTitle("Configuración del Gestor de Plantillas");
@@ -29,6 +32,8 @@ public class ManagerConfig extends JFrame implements CambiarTema {
 
         Tema.addListener(this);
 
+        labels = new ArrayList<>(); // Inicializar la lista de JLabel
+
         mainPanel = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -37,25 +42,33 @@ public class ManagerConfig extends JFrame implements CambiarTema {
             }
         };
         mainPanel.setLayout(new GridBagLayout());
+        mainPanel.setBackground(new Color(196, 238, 255)); // Establecer el color de fondo claro
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(15, 15, 15, 15);
 
         headerLabel = new JLabel("Configuración del Gestor", JLabel.CENTER);
-        headerLabel.setFont(new Font("Verdana", Font.BOLD, 24));
+        headerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         mainPanel.add(headerLabel, gbc);
+        labels.add(headerLabel); // Añadir a la lista
 
         JLabel themeLabel = new JLabel("Seleccionar Tema:");
-        themeLabel.setFont(new Font("Verdana", Font.PLAIN, 18));
+        themeLabel.setFont(new Font("Arial", Font.BOLD, 18));
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         mainPanel.add(themeLabel, gbc);
+        labels.add(themeLabel); // Añadir a la lista
 
         themeComboBox = new JComboBox<>(new String[]{"Claro", "Oscuro"});
-        themeComboBox.setFont(new Font("Verdana", Font.PLAIN, 16));
+        themeComboBox.setFont(new Font("Arial", Font.BOLD, 16));
+        themeComboBox.setBackground(Color.white);
+        themeComboBox.setForeground(Color.BLACK);
+        themeComboBox.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
         themeComboBox.setSelectedItem(Tema.getTemaActual() == Tema.Theme.CLARO ? "Claro" : "Oscuro");
         themeComboBox.addActionListener(e -> {
             String selectedTheme = (String) themeComboBox.getSelectedItem();
@@ -72,13 +85,13 @@ public class ManagerConfig extends JFrame implements CambiarTema {
         });
 
         // Botón Atrás y Guardar Cambios en la parte inferior
-        addBottomButton("Atrás", gbc, 0, 4, new Color(64, 64, 64), e -> {
+        addBottomButton("Atrás", gbc, 0, 4, new Color(0, 51, 102), e -> {
             dispose();
             ManagerPerfil perfil = new ManagerPerfil();
             perfil.setVisible(true);
         });
 
-        addBottomButton("Guardar Cambios", gbc, 1, 4, new Color(128, 128, 128), e -> {
+        addBottomButton("Guardar Cambios", gbc, 1, 4, new Color(0, 51, 102), e -> {
             JOptionPane.showMessageDialog(mainPanel, "Configuración guardada correctamente.");
         });
 
@@ -97,13 +110,14 @@ public class ManagerConfig extends JFrame implements CambiarTema {
 
     private void addLabelWithButton(String labelText, String buttonText, GridBagConstraints gbc, int x, int y, ActionListener action) {
         JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Verdana", Font.PLAIN, 16));
+        label.setFont(new Font("Arial", Font.BOLD, 16));
         gbc.gridx = x;
         gbc.gridy = y;
         mainPanel.add(label, gbc);
+        labels.add(label); // Añadir a la lista
 
         JButton button = new JButton(buttonText);
-        button.setFont(new Font("Verdana", Font.PLAIN, 14));
+        button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setBackground(new Color(153, 204, 255));
         button.setOpaque(true);
         button.setBorderPainted(false);
@@ -114,7 +128,7 @@ public class ManagerConfig extends JFrame implements CambiarTema {
 
     private void addBottomButton(String text, GridBagConstraints gbc, int x, int y, Color color, ActionListener action) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Verdana", Font.BOLD, 14));
+        button.setFont(new Font("Arial", Font.BOLD, 14));
         button.setBackground(color);
         button.setOpaque(true);
         button.setBorderPainted(false);
@@ -147,9 +161,15 @@ public class ManagerConfig extends JFrame implements CambiarTema {
         if (Tema.getTemaActual() == Tema.Theme.OSCURO) {
             mainPanel.setBackground(Color.DARK_GRAY);
             headerLabel.setForeground(Color.WHITE);
+            for (JLabel label : labels) {
+                label.setForeground(Color.WHITE); // Cambiar texto a blanco
+            }
         } else {
-            mainPanel.setBackground(Color.WHITE);
+            mainPanel.setBackground(new Color(196, 238, 255));
             headerLabel.setForeground(Color.BLACK);
+            for (JLabel label : labels) {
+                label.setForeground(Color.BLACK); // Cambiar texto a negro
+            }
         }
     }
 
