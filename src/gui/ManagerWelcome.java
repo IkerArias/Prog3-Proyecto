@@ -276,6 +276,13 @@ public class ManagerWelcome extends JFrame {
         btnCrearNoticia.setFocusPainted(false);
         btnCrearNoticia.setBorder(BorderFactory.createLineBorder(Color.GRAY)); 
         
+        JButton btnBuscarNoticias = new JButton("Buscar Noticias");
+        btnBuscarNoticias.setFont(new Font("Arial",Font.BOLD,13));
+        btnBuscarNoticias.setForeground(Color.black);
+        btnBuscarNoticias.setPreferredSize(new Dimension(95,25));
+        btnBuscarNoticias.setBackground(new Color(255, 239, 108)); 
+        btnBuscarNoticias.setFocusPainted(false);
+        btnBuscarNoticias.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         
         labelNoticias.setFont(new Font("Serif", Font.BOLD, 20));
@@ -283,6 +290,7 @@ public class ManagerWelcome extends JFrame {
         panelNoticiasNorte.add(labelNoticias);
         panelNoticiasNorte.add(comboJornada);
         panelNoticiasNorte.add(btnCrearNoticia);
+        panelNoticiasNorte.add(btnBuscarNoticias);
         
         // Usar JTextPane para que el texto se ajuste automáticamente al ancho
         JTextPane noticiasArea = new JTextPane();
@@ -385,6 +393,21 @@ public class ManagerWelcome extends JFrame {
 				
 			}
 		});
+        
+        btnBuscarNoticias.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<String> resultados = new ArrayList<>();
+                File directorioNoticias = new File("resources/data"); // Carpeta donde se encuentran los archivos
+                String palabraClave = JOptionPane.showInputDialog("Ingrese palabra clave para buscar noticias:");
+
+                if (palabraClave != null && !palabraClave.trim().isEmpty()) {
+                    buscarNoticiasRecursivamente(directorioNoticias, palabraClave.trim().toLowerCase(), resultados);
+                    String mensaje = resultados.isEmpty() ? "No se encontraron noticias." : String.join("\n", resultados);
+                    JOptionPane.showMessageDialog(null, mensaje, "Resultados de Búsqueda", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
 
         btnPlantilla.addActionListener(new ActionListener() {
         	@Override
@@ -524,7 +547,35 @@ public class ManagerWelcome extends JFrame {
     }
 
 
-    
+    public void buscarNoticiasRecursivamente(File directorio, String palabraClave, ArrayList<String> resultados) {
+        if (directorio.isDirectory()) {
+            for (File archivo : directorio.listFiles()) {
+                if (archivo.isDirectory()) {
+                    buscarNoticiasRecursivamente(archivo, palabraClave, resultados);
+                } else if (archivo.isFile() && archivo.getName().endsWith(".csv")) {
+                    leerArchivoNoticiasCSV(archivo, palabraClave, resultados);
+                }
+            }
+        }
+    }
+
+    public void leerArchivoNoticiasCSV(File archivo, String palabraClave, ArrayList<String> resultados) {
+        try (Scanner sc = new Scanner(archivo, "UTF-8")) {
+            if (sc.hasNextLine()) {
+                sc.nextLine();
+            }
+            while (sc.hasNextLine()) {
+                String linea = sc.nextLine();
+                if (linea.toLowerCase().contains(palabraClave)) {
+                    resultados.add("Archivo: " + archivo.getName() + " - " + linea);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Archivo no encontrado: " + archivo.getAbsolutePath());
+        }
+    }
+
+
 
 
 
