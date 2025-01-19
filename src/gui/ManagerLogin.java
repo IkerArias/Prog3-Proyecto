@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -63,13 +65,47 @@ public class ManagerLogin extends JFrame {
         loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         loginButton.setOpaque(true);
         
+        loginButton.addMouseListener(new MouseAdapter() {
+		
+        	
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    loginButton.setBackground(softColor.brighter()); // Hacer el color más claro
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    loginButton.setBackground(softColor); // Volver al color original
+                }
+        
+        
+        });
+        Color yColor = new Color(255, 239, 108);
+        
         registerButton.setForeground(Color.black);
-        registerButton.setBackground(new Color(255, 239, 108)); 
+        registerButton.setBackground(yColor); 
         registerButton.setFocusPainted(false);
         registerButton.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         registerButton.setPreferredSize(new Dimension(120, 50));
         registerButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         registerButton.setOpaque(true);
+        
+        registerButton.addMouseListener(new MouseAdapter() {
+    		
+        	
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                registerButton.setBackground(yColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                registerButton.setBackground(yColor); // Volver al color original
+            }
+    
+    
+    });
+        
 
         // Añadiendo componentes al panel
         panel.add(userLabel);

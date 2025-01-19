@@ -7,6 +7,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import domain.UserData;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -135,6 +137,18 @@ public class ManagerClasificacion extends JFrame {
         btnAtras.setOpaque(true);
         btnAtras.setToolTipText("Volver a la ventana principal");
         
+        btnAtras.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnAtras.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnAtras.setBackground(softColor); // Volver al color original
+            }
+        });
+        
         //Action listener del boton atras 
         btnAtras.addActionListener(e -> {
             dispose();
@@ -151,6 +165,19 @@ public class ManagerClasificacion extends JFrame {
         btnForo.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnForo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnForo.setOpaque(true);
+        
+        btnForo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnForo.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnForo.setBackground(softColor); // Volver al color original
+            }
+        });
+        
         btnForo.addActionListener(e -> {     	
             dispose();
             new ManagerForo().setVisible(true);

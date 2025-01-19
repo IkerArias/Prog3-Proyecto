@@ -11,12 +11,16 @@ import domain.Noticia;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 
 public class ManagerWelcome extends JFrame {
@@ -266,22 +270,27 @@ public class ManagerWelcome extends JFrame {
             comboJornada.addItem("Jornada " + i);
         }
         
+        
+        Color ycolor = new Color(255,239,108);
+        
         JPanel panelNoticiasNorte = new JPanel(new FlowLayout());
         JLabel labelNoticias = new JLabel("Noticias", SwingConstants.CENTER);
         JButton btnCrearNoticia = new JButton("Crear noticia");
         btnCrearNoticia.setFont(new Font("Arial",Font.BOLD,13));
         btnCrearNoticia.setForeground(Color.black);
-        btnCrearNoticia.setPreferredSize(new Dimension(95,25));
-        btnCrearNoticia.setBackground(new Color(255, 239, 108)); 
+        btnCrearNoticia.setPreferredSize(new Dimension(105,25));
+        btnCrearNoticia.setBackground(ycolor); 
         btnCrearNoticia.setFocusPainted(false);
+        btnCrearNoticia.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCrearNoticia.setBorder(BorderFactory.createLineBorder(Color.GRAY)); 
         
         JButton btnBuscarNoticias = new JButton("Buscar Noticias");
         btnBuscarNoticias.setFont(new Font("Arial",Font.BOLD,13));
         btnBuscarNoticias.setForeground(Color.black);
-        btnBuscarNoticias.setPreferredSize(new Dimension(95,25));
-        btnBuscarNoticias.setBackground(new Color(255, 239, 108)); 
+        btnBuscarNoticias.setPreferredSize(new Dimension(105,25));
+        btnBuscarNoticias.setBackground(ycolor); 
         btnBuscarNoticias.setFocusPainted(false);
+        btnBuscarNoticias.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnBuscarNoticias.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         
@@ -328,6 +337,7 @@ public class ManagerWelcome extends JFrame {
         
         Color softColor = new Color(0, 51, 102); 
         
+        
         // Crear botones
         JButton btnClasificacion = new JButton("Clasificación");
         btnClasificacion.setFont(new Font("Arial", Font.BOLD, 16));
@@ -338,6 +348,20 @@ public class ManagerWelcome extends JFrame {
         btnClasificacion.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnClasificacion.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnClasificacion.setOpaque(true);
+
+        // Cambiar color al pasar el ratón por encima
+        btnClasificacion.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnClasificacion.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnClasificacion.setBackground(softColor); // Volver al color original
+            }
+        });
+
         JButton btnPlantilla = new JButton("Mi Plantilla");
         btnPlantilla.setFont(new Font("Arial", Font.BOLD, 16));
         btnPlantilla.setForeground(Color.white);
@@ -347,6 +371,20 @@ public class ManagerWelcome extends JFrame {
         btnPlantilla.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnPlantilla.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPlantilla.setOpaque(true);
+
+        // Cambiar color al pasar el ratón por encima
+        btnPlantilla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnPlantilla.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnPlantilla.setBackground(softColor); // Volver al color original
+            }
+        });
+
         JButton btnMercado = new JButton("Mercado");
         btnMercado.setFont(new Font("Arial", Font.BOLD, 16));
         btnMercado.setForeground(Color.white);
@@ -356,6 +394,20 @@ public class ManagerWelcome extends JFrame {
         btnMercado.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnMercado.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnMercado.setOpaque(true);
+
+        // Cambiar color al pasar el ratón por encima
+        btnMercado.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnMercado.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnMercado.setBackground(softColor); // Volver al color original
+            }
+        });
+
         JButton btnPerfil = new JButton("Perfil");
         btnPerfil.setFont(new Font("Arial", Font.BOLD, 16));
         btnPerfil.setForeground(Color.white);
@@ -365,6 +417,20 @@ public class ManagerWelcome extends JFrame {
         btnPerfil.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         btnPerfil.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnPerfil.setOpaque(true);
+
+        // Cambiar color al pasar el ratón por encima
+        btnPerfil.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnPerfil.setBackground(softColor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnPerfil.setBackground(softColor); // Volver al color original
+            }
+        });
+
         
         // Ajustar tamaño y borde de los botones
         
@@ -393,7 +459,21 @@ public class ManagerWelcome extends JFrame {
 				
 			}
 		});
-        
+		btnCrearNoticia.addMouseListener(new MouseAdapter() {
+		    		
+		        	
+		            @Override
+		            public void mouseEntered(MouseEvent e) {
+		                btnCrearNoticia.setBackground(ycolor.brighter()); // Hacer el color más claro
+		            }
+		
+		            @Override
+		            public void mouseExited(MouseEvent e) {
+		                btnCrearNoticia.setBackground(ycolor); // Volver al color original
+		            }
+		    
+		    
+		    });        
         btnBuscarNoticias.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -408,6 +488,22 @@ public class ManagerWelcome extends JFrame {
                 }
             }
         });
+        
+        btnBuscarNoticias.addMouseListener(new MouseAdapter() {
+    		
+        	
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                btnBuscarNoticias.setBackground(ycolor.brighter()); // Hacer el color más claro
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                btnBuscarNoticias.setBackground(ycolor); // Volver al color original
+            }
+    
+    
+    }); 
 
         btnPlantilla.addActionListener(new ActionListener() {
         	@Override

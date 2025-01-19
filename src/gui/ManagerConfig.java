@@ -8,6 +8,8 @@ import domain.Tema.CambiarTema;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
@@ -84,8 +86,8 @@ public class ManagerConfig extends JFrame implements CambiarTema {
             new ManagerLogin().setVisible(true);
         });
 
-        // Botón Atrás y Guardar Cambios en la parte inferior
-        addBottomButton("Atrás", gbc, 0, 4, new Color(0, 51, 102), e -> {
+        // Botón Atrás con tooltip
+        addBackButtonWithTooltip("Atrás", gbc, 0, 4, new Color(0, 51, 102), e -> {
             dispose();
             ManagerPerfil perfil = new ManagerPerfil();
             perfil.setVisible(true);
@@ -134,6 +136,46 @@ public class ManagerConfig extends JFrame implements CambiarTema {
         button.setBorderPainted(false);
         button.setForeground(Color.WHITE);
         button.addActionListener(action);
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        mainPanel.add(button, gbc);
+    }
+
+    private void addBackButtonWithTooltip(String text, GridBagConstraints gbc, int x, int y, Color color, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setBackground(color);
+        button.setOpaque(true);
+        button.setBorderPainted(false);
+        button.setForeground(Color.WHITE);
+        button.addActionListener(action);
+
+        // Crear y configurar el JToolTip
+        JToolTip tooltip = new JToolTip();
+        tooltip.setTipText("Volver"); // Texto por defecto
+        tooltip.setBackground(Color.GRAY); // Fondo gris
+        tooltip.setForeground(Color.WHITE); // Texto en blanco
+
+        // Añadir MouseListener para cambiar el tooltip y el color cuando el ratón pasa por encima
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                // Cambiar texto y color del tooltip cuando el ratón entra
+                tooltip.setTipText("Volver");
+                tooltip.setBackground(Color.LIGHT_GRAY);  // Fondo más claro
+                tooltip.setForeground(Color.BLACK); // Cambiar texto a negro
+                tooltip.setLocation(button.getLocationOnScreen().x, button.getLocationOnScreen().y - tooltip.getPreferredSize().height);
+                tooltip.setVisible(true);  // Mostrar el tooltip
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                tooltip.setVisible(false);  // Ocultar el tooltip cuando el ratón sale
+            }
+        });
+
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.gridwidth = 1;
